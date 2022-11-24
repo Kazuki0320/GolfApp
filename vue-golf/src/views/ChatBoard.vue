@@ -111,10 +111,16 @@ import Sidebar from '@/components/layouts/Sidebar'
 			const user_id = this.$route.query.user_id;
 			console.log("user_id", user_id);
 
-			const roomRef = firebase.firestore().collection("rooms")
-			console.log("roomRef", roomRef);
+			//firebaseから、ドキュメントを取得
+			const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
+			console.log("roomRef", roomRef)
+			const roomDoc = await roomRef.get()
+			console.log("roomDoc", roomDoc)
+			const room = roomDoc.data()
+			console.log("room", room);
 
-			const snapshot = await roomRef.doc().collection("messages").get()
+			//メッセージをfirestoreから取得する
+			const snapshot = await roomRef.collection("messages").get()
 			snapshot.forEach(doc => {
 				console.log(doc.data())
 				this.messages.push(doc.data())
