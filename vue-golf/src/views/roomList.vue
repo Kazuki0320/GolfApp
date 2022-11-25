@@ -22,7 +22,12 @@
 			:key="room.id"
 			cols="4"
 			>
-
+			<!--this.roomsがpushした後にどういうデータが入っているか？
+				[{id: doc.id},{id: doc.id}]-->
+				
+			<!--ここで/chatのパスのqueryとして、idを設定している
+			↓pathとqueryで、room_idを取得してきてる。（ここがChatBoard.vueの$routerと紐づいてる)
+			-->
 			<router-link :to="{ path: '/chat', query: { room_id: room.id }}">
 				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
@@ -66,12 +71,31 @@ export default {
 			this.rooms = []
 			const roomRef = firebase.firestore().collection("rooms")
 			const snapshot = await roomRef.get()
-			console.log("snapshot call", snapshot);
 
 			snapshot.forEach(doc => {
-				console.log(doc.data())
-				this.rooms.push(doc.data())
+				let data = {
+					id: doc.id
+				}
+				// console.log(data)
+				this.rooms.push(data)
+				console.log("this.room call", this.rooms)
+
+				//this.roomsがpushした後にどういうデータが入っているか？
+				// [{id: doc.id},{id: doc.id}]
 		})
+
+		// snapshot.docs.map(doc => {
+		// 	// const data = {
+		// 	// 	name: doc.data().name,
+		// 	// 	thumbnailUrl: doc.data().thumbnailUrl,
+		// 	// 	createAt: doc.data().createAt
+		// 	// }
+
+		// 	const data = {...doc.data()}
+		// 	data.id = doc.id
+		// 	console.log(data)
+		// 	this.rooms.push(data)
+		// })
 
 		},
 	}
