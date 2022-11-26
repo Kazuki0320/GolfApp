@@ -43,9 +43,9 @@
 		drawer: null,
 		links: [
 		['mdi-inbox-arrow-down', 'rooms','/'],
-		['mdi-send', 'Send','/about'],
-		['mdi-delete', 'Trash','/about'],
-		['mdi-alert-octagon', 'Spam','/about'],
+		['mdi-send', 'users','/user'],
+		['mdi-delete', 'messages','/about'],
+		['mdi-alert-octagon', 'Logout','/about'],
 		],
 	}),
 	}
