@@ -5,7 +5,7 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>ユーザー一覧</v-toolbar-title>
+		<v-toolbar-title>マイプロフィール</v-toolbar-title>
 
 		<v-spacer></v-spacer>
 
@@ -25,6 +25,9 @@
 			<!--this.friendsがpushした後にどういうデータが入っているか？
 				[{id: doc.id},{id: doc.id}]-->
 				
+			<!--ここで/chatのパスのqueryとして、idを設定している
+			↓pathとqueryで、friend_idを取得してきてる。
+			-->
 			<router-link :to="{ path: '/profile', query: { user_id: user.id }}">
 			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>

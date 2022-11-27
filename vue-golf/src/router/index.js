@@ -4,6 +4,7 @@ import roomList from '../views/roomList.vue'
 import ChatBoard from '../views/ChatBoard.vue'
 import UsersList from '../views/UsersList.vue'
 import UserProfile from '../views/UserProfile.vue'
+import MyProfile from '../views/MyProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -35,7 +36,12 @@ const routes = [
     path: '/profile',
     name: 'UserProfile',
     component: UserProfile
-  }
+  },
+  {
+    path: '/myProfile',
+    name: 'MyProfile',
+    component: MyProfile
+  },
 ]
 
 const router = new VueRouter({

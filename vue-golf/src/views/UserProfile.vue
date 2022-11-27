@@ -25,23 +25,8 @@ export default {
 	components: {
 		Sidebar
 	},
-	created() {
+	async created() {
 		console.log("created call");
-	},
-	data: () => ({
-		users:[]
-	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
-	mounted() {
-		this.getUsers()
-	},
-	methods: {
-		//ここの処理をcreatedの中に書き換える←明日やる
-		async getUsers() {
 			this.users = []
 			console.log("userId call", this.userId)//userID取得確認OK
 			const userRef = firebase.firestore().collection("users").doc(this.userId)
@@ -54,8 +39,17 @@ export default {
 		// 		console.log(doc.data())
 		// 		this.users.push(doc.data())
 		// 	// 	console.log("this.users call", this.users)
-
-		// 		//this.friendsがpushした後にどういうデータが入っているか？
+	},
+	data: () => ({
+		users:[]
+	}),
+	computed: {
+		userId () {
+		return 	this.$route.query.user_id;
+		},
+	},
+	methods: {
+				// 		//this.friendsがpushした後にどういうデータが入っているか？
 		// 		// [{id: doc.id},{id: doc.id}]
 		// })
 
@@ -71,7 +65,6 @@ export default {
 		// 	console.log(data)
 		// 	this.rooms.push(data)
 		// })
-		},
 	}
 }
 </script>
