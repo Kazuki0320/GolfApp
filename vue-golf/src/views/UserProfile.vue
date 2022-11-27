@@ -26,15 +26,13 @@ export default {
 		Sidebar
 	},
 	async created() {
-		console.log("created call");
 			this.users = []
-			console.log("userId call", this.userId)//userID取得確認OK
+			// console.log("userId call", this.userId)//userID取得確認OK
 			const userRef = firebase.firestore().collection("users").doc(this.userId)
 			const userDoc = await userRef.get()
 			const user = userDoc.data()
 			console.log("user", user);
 
-		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
 		// 		console.log(doc.data())
 		// 		this.users.push(doc.data())
@@ -49,9 +47,6 @@ export default {
 		},
 	},
 	methods: {
-				// 		//this.friendsがpushした後にどういうデータが入っているか？
-		// 		// [{id: doc.id},{id: doc.id}]
-		// })
 
 		// snapshot.docs.map(doc => {
 		// 	// const data = {

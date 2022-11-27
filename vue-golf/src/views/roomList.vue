@@ -9,9 +9,13 @@
 
 		<v-spacer></v-spacer>
 
-		<v-btn icon>
-		<v-icon>mdi-dots-vertical</v-icon>
-		</v-btn>
+		<v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
+		<!-- <v-icon
+			dark
+			right
+		>
+			mdi-checkbox-marked-circle
+		</v-icon> ←チョンマークを表示してくれるv-iconディレクティブ-->
 	</v-app-bar>
 
 	<v-main>
