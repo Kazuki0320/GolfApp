@@ -48,7 +48,7 @@ import firebase from "@/firebase/firebase"
 	data: () => ({
 		drawer: null,
 		links: [
-		['mdi-group', 'rooms','/'],
+		['mdi-door-open', 'rooms','/'],
 		['mdi-account-multiple', 'users','/user'],
 		['mdi-message', 'messages','/about'],
 		['mdi-logout', 'Logout','/about'],

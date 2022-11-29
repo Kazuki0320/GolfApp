@@ -5,7 +5,7 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>ユーザー一覧</v-toolbar-title>
+		<v-toolbar-title>ユーザープロフィール</v-toolbar-title>
 
 		<v-spacer></v-spacer>
 
@@ -27,9 +27,10 @@ export default {
 	},
 	async created() {
 			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
+			console.log("userId call", this.userId)//userID
 			const userRef = firebase.firestore().collection("users").doc(this.userId)
 			const userDoc = await userRef.get()
+			console.log("userDoc call", userDoc);
 			const user = userDoc.data()
 			console.log("user", user);
 

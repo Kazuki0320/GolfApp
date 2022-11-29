@@ -19,7 +19,9 @@
 		<v-btn @click="clear">
 			clear
 		</v-btn> -->
-		<v-btn class="ma-2" color="primary" dark @click="edit">編集完了</v-btn>
+		<router-link to="/myProfile">
+			<v-btn class="ma-2" color="primary" dark @click="edit">編集完了</v-btn>
+		</router-link>
 	</v-main>
 	</v-app>
 </template>

@@ -24,7 +24,7 @@
 			>
 			<!--this.friendsがpushした後にどういうデータが入っているか？
 				[{id: doc.id},{id: doc.id}]-->
-				
+			
 			<router-link :to="{ path: '/profile', query: { user_id: user.id }}">
 			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
