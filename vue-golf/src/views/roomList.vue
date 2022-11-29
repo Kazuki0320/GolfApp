@@ -9,13 +9,10 @@
 
 		<v-spacer></v-spacer>
 
-		<v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
-		<!-- <v-icon
-			dark
-			right
-		>
-			mdi-checkbox-marked-circle
-		</v-icon> ←チョンマークを表示してくれるv-iconディレクティブ-->
+		<router-link to="/ConfirmedOrUndetermined">
+			<v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
+		<!-- <v-icon dark right>mdi-checkbox-marked-circle</v-icon> ←チョンマークを表示してくれるv-iconディレクティブ-->
+		</router-link>
 	</v-app-bar>
 
 	<v-main>

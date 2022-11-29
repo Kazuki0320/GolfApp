@@ -1,10 +1,19 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import roomList from '../views/roomList.vue'
+import Login from '../views/Login.vue'
 import ChatBoard from '../views/ChatBoard.vue'
 import UsersList from '../views/UsersList.vue'
 import UserProfile from '../views/UserProfile.vue'
 import MyProfile from '../views/MyProfile.vue'
+import EditProfile from '../views/EditProfile.vue'
+import ConfirmedOrUndetermined from '../views/ConfirmedOrUndetermined.vue'
+import RoomCreateConfirmed from '../views/RoomCreateConfirmed.vue'
+import RoomCreateUndetermined from '../views/RoomCreateUndetermined.vue'
+import MemberConfirmed from '../views/MemberConfirmed.vue'
+import MemberUndetermined from '../views/MemberUndetermined.vue'
+import RoomJoinConfirmed from '../views/RoomJoinConfirmed.vue'
+import RoomJoinUndetermined from '../views/RoomJoinUndetermined.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +30,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
   },
   {
     path: '/chat',
@@ -41,6 +55,46 @@ const routes = [
     path: '/myProfile',
     name: 'MyProfile',
     component: MyProfile
+  },
+  {
+    path: '/editProfile',
+    name: 'EditProfile',
+    component: EditProfile
+  },
+  {
+    path: '/confirmedOrUndetermined',
+    name: 'ConfirmedOrUndetermined',
+    component: ConfirmedOrUndetermined
+  },
+  {
+    path: '/roomCreateConfirmed',
+    name: 'RoomCreateConfirmed',
+    component: RoomCreateConfirmed
+  },
+  {
+    path: '/roomCreateUndetermined',
+    name: 'RoomCreateUndetermined',
+    component: RoomCreateUndetermined
+  },
+  {
+    path: '/memberConfirmed',
+    name: 'MemberConfirmed',
+    component: MemberConfirmed
+  },
+  {
+    path: '/memberUndetermined',
+    name: 'MemberUndetermined',
+    component: MemberUndetermined
+  },
+  {
+    path:'/roomJoinConfirmed',
+    name: 'RoomJoinConfirmed',
+    component: RoomJoinConfirmed
+  },
+  {
+    path: '/roomJoinUndetermined',
+    name: 'RoomJoinUndetermined',
+    component: RoomJoinUndetermined
   },
 ]
 

@@ -5,11 +5,25 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>マイプロフィール</v-toolbar-title>
+		<v-toolbar-title>マイページ</v-toolbar-title>
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<v-btn class="ma-2" color="primary" dark>マイプロフィール編集</v-btn>
+		<!-- <v-btn
+			class="mr-4"
+			type="submit"
+			:disabled="invalid"
+			@click="submit"
+		>
+			submit
+		</v-btn>
+		<v-btn @click="clear">
+			clear
+		</v-btn> -->
+		<router-link to="/editProfile"><!--ここはuserIdを取得する必要がある-->
+			<v-btn class="ma-2" color="primary" dark @click="edit">マイページ編集</v-btn>
+		</router-link>
+
 	</v-main>
 	</v-app>
 </template>
@@ -44,20 +58,5 @@ export default {
 		return 	this.$route.query.user_id;
 		},
 	},
-	methods: {
-
-		// snapshot.docs.map(doc => {
-		// 	// const data = {
-		// 	// 	name: doc.data().name,
-		// 	// 	thumbnailUrl: doc.data().thumbnailUrl,
-		// 	// 	createAt: doc.data().createAt
-		// 	// }
-
-		// 	const data = {...doc.data()}
-		// 	data.id = doc.id
-		// 	console.log(data)
-		// 	this.rooms.push(data)
-		// })
-	}
 }
 </script>
