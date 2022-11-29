@@ -36,6 +36,17 @@
 			ログイン
 		</v-btn>
 
+
+		<v-alert
+			dense
+			text
+			type="success"
+			v-if="message"
+			class="success-message"
+			>
+			{{ message }}
+		</v-alert>
+
 		</v-form>
 		</v-card>
 	</div>
@@ -57,7 +68,14 @@ data: () => ({
 	v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
 		],
 		password: '',
+		message: ''
 }),
+mounted() {
+	if(localStorage.message) {
+		this.message = localStorage.message
+		localStorage.message = ''
+	}
+},
 computed:	{
 	isValid() {
 		console.log("isValid", this.valid);
@@ -96,5 +114,9 @@ methods: {
 
 .login-btn {
 	margin-left: 20px; 
+}
+
+.success-message {
+	margin-top: 20px;
 }
 </style>

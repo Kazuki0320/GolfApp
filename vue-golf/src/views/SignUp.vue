@@ -107,6 +107,8 @@ methods: {
 				);
 				console.log("updateUser", result.user)
 
+				localStorage.message = "新規作成に成功しました"
+
 				this.$router.push('/login')
 
 			})
