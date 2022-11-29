@@ -32,6 +32,7 @@
 		<v-btn
 			color="#4DD0E1"
 			class="login-btn"
+			@click="submit"
 			:disabled="isValid">
 			ログイン
 		</v-btn>
@@ -47,6 +48,17 @@
 			{{ message }}
 		</v-alert>
 
+
+		<v-alert
+			dense
+			outlined
+			type="error"
+			v-if="errorMessage"
+			class="error-message"
+			>
+			{{ errorMessage }}
+		</v-alert>
+
 		</v-form>
 		</v-card>
 	</div>
@@ -54,6 +66,8 @@
 </template>
 
 <script>
+import firebase from "@/firebase/firebase"
+
 	export default {
 data: () => ({
 		valid: true,
@@ -68,6 +82,7 @@ data: () => ({
 	v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
 		],
 		password: '',
+		errorMessage: "",
 		message: ''
 }),
 mounted() {
@@ -92,6 +107,23 @@ methods: {
 		resetValidation () {
 	this.$refs.form.resetValidation()
 		},
+		submit () {
+			console.log("submit call");
+			firebase.auth()
+				.signInWithEmailAndPassword(this.email, this.password)
+				.then((result) => {
+					console.log("success", result)
+					console.log("user", result.user)
+
+					this.$router.push('/')
+				})
+				.catch((error) => {
+					console.log("fail", error)
+
+					this.errorMessage = "ユーザーのログインに失敗しました"
+				})
+
+		}
 },
 	}
 </script>
@@ -117,6 +149,10 @@ methods: {
 }
 
 .success-message {
+	margin-top: 20px;
+}
+
+.error-message {
 	margin-top: 20px;
 }
 </style>
