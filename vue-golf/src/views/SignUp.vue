@@ -40,6 +40,7 @@
 		<v-btn
 			color="#4DD0E1"
 			class="login-btn"
+			@click="submit"
 			:disabled="isValid">
 			新規登録
 		</v-btn>
@@ -51,6 +52,8 @@
 </template>
 
 <script>
+import firebase from "@/firebase/firebase"
+
 	export default {
 data: () => ({
 		valid: true,
@@ -82,6 +85,22 @@ methods: {
 		resetValidation () {
 	this.$refs.form.resetValidation()
 		},
+		submit() {
+			console.log("submit call")
+			firebase.auth()
+			.createUserWithEmailAndPassword(this.email, this.password)
+			.then(async(result) => {
+				console.log("success", result)
+				await result.user.updateProfile(
+					{displayName: this.name}
+				);
+				console.log("updateUser", this.user)
+
+			})
+			.catch((error) => {
+				console.log("fail", error)
+			})
+		}
 },
 	}
 </script>
