@@ -45,6 +45,16 @@
 			新規登録
 		</v-btn>
 
+		<v-alert
+			dense
+			outlined
+			type="error"
+			v-if="errorMessage"
+			class="error-message"
+			>
+			{{ errorMessage }}
+		</v-alert>
+
 		</v-form>
 		</v-card>
 	</div>
@@ -68,6 +78,7 @@ data: () => ({
 	v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
 		],
 		password: '',
+		errorMessage: "",
 }),
 computed:	{
 	isValid() {
@@ -94,11 +105,14 @@ methods: {
 				await result.user.updateProfile(
 					{displayName: this.name}
 				);
-				console.log("updateUser", this.user)
+				console.log("updateUser", result.user)
+
+				this.$router.push('/login')
 
 			})
 			.catch((error) => {
 				console.log("fail", error)
+				this.errorMessage = "ユーザーの新規作成に失敗しました。";
 			})
 		}
 },
@@ -123,5 +137,9 @@ methods: {
 
 .login-btn {
 	margin-left: 20px; 
+}
+
+.error-message {
+	margin-top: 20px;
 }
 </style>
