@@ -15,6 +15,7 @@ import MemberConfirmed from '../views/MemberConfirmed.vue'
 import MemberUndetermined from '../views/MemberUndetermined.vue'
 import RoomJoinConfirmed from '../views/RoomJoinConfirmed.vue'
 import RoomJoinUndetermined from '../views/RoomJoinUndetermined.vue'
+// import firebase from "@/firebase/firebase"
 
 Vue.use(VueRouter)
 
@@ -22,7 +23,8 @@ const routes = [
   {
     path: '/',
     name: 'roomList',
-    component: roomList
+    component: roomList,
+    meta: { requiresAuth: true }
   },
   {
     path: '/about',
@@ -108,6 +110,46 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+// router.beforeEach((to, from, next) => {
+//     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+// 	console.log("requiresAuth", requiresAuth);
+// 	if(requiresAuth) {
+// 		firebase.auth().onAuthStateChanged((user) => {
+// 			if (!user) {
+// 				next({
+// 					path: '/login',
+// 					query: { redirect: to.fullPath }
+// 				})
+// 			} else {
+// 				next()
+// 			}
+// 		})
+// 	}else {
+// 		next()
+// 	}
+// 	})
+	
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  if (requiresAuth) {
+    const user = sessionStorage.getItem('user')
+    console.log(JSON.parse(user))//userを文字列からオブジェクトに変換するには、parseを使用する。
+
+    if (!user) {
+          next({
+            path: '/login',
+            query: { redirect: to.fullPath }
+          })
+      } else {
+            next()
+      }
+  }
+  else {
+		next()
+	}
 })
 
 export default router

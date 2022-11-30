@@ -18,7 +18,7 @@
 			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 		</router-link>
 
-			<div class="username">test</div>
+			<div class="username">{{ auth && auth.displayName }}</div>
 
 		</v-sheet>
 
@@ -37,6 +37,16 @@
 			<v-list-item-title>{{ text }}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
+		<v-list-item @click="logout">
+			<v-list-item-icon>
+				<v-icon color="blue">
+					mdi-logout
+				</v-icon>
+			</v-list-item-icon>
+			<v-list-item-content>
+				<v-list-item-title>Logout</v-list-item-title>
+			</v-list-item-content>
+		</v-list-item>
 		</v-list>
 	</v-navigation-drawer>
 </template>
@@ -45,24 +55,26 @@
 import firebase from "@/firebase/firebase"
 
 	export default {
+	mounted() {
+		this.getUser()
+
+		this.auth = JSON.parse(sessionStorage.getItem('user'))
+	},
 	data: () => ({
 		drawer: null,
 		links: [
 		['mdi-door-open', 'rooms','/'],
 		['mdi-account-multiple', 'users','/user'],
 		['mdi-message', 'messages','/about'],
-		['mdi-logout', 'Logout','/about'],
 		],
 		user:[],
+		auth: null
 	}),
 	// computed: {
 	// 	userId () {
 	// 	return 	this.$route.query.user_id;
 	// 	}
 	// },
-	mounted() {
-		this.getUser()
-	},
 	methods: {
 		async getUser() {
 			this.user = []
@@ -79,10 +91,24 @@ import firebase from "@/firebase/firebase"
 				console.log(data)
 				this.user.push(data)
 
-				//this.friendsがpushした後にどういうデータが入っているか？
-				// [{id: doc.id},{id: doc.id}]
-				})
-			},
+			//this.friendsがpushした後にどういうデータが入っているか？
+			// [{id: doc.id},{id: doc.id}]
+			})
 		},
+		logout() {
+			console.log("logout call")
+			firebase.auth()
+				.signOut()
+				.then(() => {
+					localStorage.message = "ログアウトに成功しました"
+					this.$router.push('/login')
+				})
+				.catch((error) => {
+					console.log(error)
+				})
+		}
+	},
+
+
 	}
 </script>
