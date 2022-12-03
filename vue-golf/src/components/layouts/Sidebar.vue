@@ -88,7 +88,6 @@ import firebase from "@/firebase/firebase"
 				let data = {
 					id: doc.id
 				}
-				console.log(data)
 				this.user.push(data)
 
 			//this.friendsがpushした後にどういうデータが入っているか？

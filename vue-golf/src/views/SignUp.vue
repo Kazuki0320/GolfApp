@@ -109,7 +109,7 @@ methods: {
 
 				localStorage.message = "新規作成に成功しました"
 
-				this.$router.push('/login')
+				this.$router.push('/')
 
 			})
 			.catch((error) => {

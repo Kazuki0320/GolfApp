@@ -82,7 +82,7 @@ import Sidebar from '@/components/layouts/Sidebar'
 			const user_id = this.$route.query.user_id;
 			console.log("user_id", user_id);
 
-			console.log("roomId call", this.roomId)
+			// console.log("roomId call", this.roomId)
 			//firebaseから、ドキュメントを取得
 			const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
 			// console.log("roomRef", roomRef)
@@ -92,7 +92,7 @@ import Sidebar from '@/components/layouts/Sidebar'
 			console.log("room", room);
 
 			//メッセージをfirestoreから取得する
-			const snapshot = await roomRef.collection("messages").get()
+			const snapshot = await roomRef.collection("messages").orderBy("createdAt", "asc").get()
 			snapshot.forEach(doc => {
 				console.log(doc.data())
 				this.messages.push(doc.data())
@@ -105,6 +105,10 @@ import Sidebar from '@/components/layouts/Sidebar'
 			// 	this.messages.unshift(doc.data())
 			// })
 
+		},
+		mounted () {
+			this.auth = JSON.parse(sessionStorage.getItem('user'))
+			console.log(this.auth);
 		},
 		data: () => ({
 			messages: [
@@ -123,6 +127,7 @@ import Sidebar from '@/components/layouts/Sidebar'
 			['mdi-delete', 'Trash'],
 			['mdi-alert-octagon', 'Spam'],
 			],
+			auth: null,
 		}),
 		computed: {
 			invalid() {
@@ -137,13 +142,28 @@ import Sidebar from '@/components/layouts/Sidebar'
 		},
 		methods: {
 			clear()	{
-				console.log("clear Ok");
 				this.body = "";
 			},
 			submit() {
-				console.log("submit call", this.body)
-				this.messages.unshift({ message: this.body });
-				this.body = "";
+				// console.log("submit call", this.body)
+				// this.messages.unshift({ message: this.body });
+				// this.body = "";
+
+				const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
+				roomRef.collection('messages').add({
+					message: this.body,
+					name: this.auth.displayName,
+					// photoURL: this.auth.photoURL,
+					createdAt: firebase.firestore.Timestamp.now()
+				})
+				.then((result) => {
+					console.log('success', result);
+					this.body = ""
+				})
+				.catch((error) => {
+					console.log('fail', error);
+					alert('メッセージの送信に失敗しました')
+				})
 			}
 		}
 	}

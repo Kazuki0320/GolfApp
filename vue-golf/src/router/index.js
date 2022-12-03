@@ -15,6 +15,11 @@ import MemberConfirmed from '../views/MemberConfirmed.vue'
 import MemberUndetermined from '../views/MemberUndetermined.vue'
 import RoomJoinConfirmed from '../views/RoomJoinConfirmed.vue'
 import RoomJoinUndetermined from '../views/RoomJoinUndetermined.vue'
+import SurveyEdit from '../views/SurveyEdit.vue'
+import SurveyConfirmed from '../views/SurveyConfirmed.vue'
+import SurveyAnswer from '../views/SurveyAnswer.vue'
+
+
 // import firebase from "@/firebase/firebase"
 
 Vue.use(VueRouter)
@@ -25,6 +30,21 @@ const routes = [
     name: 'roomList',
     component: roomList,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/surveyEdit',
+    name: 'SurveyEdit',
+    component: SurveyEdit
+  },
+  {
+    path: '/surveyConfirmed',
+    name: 'SurveyConfirmed',
+    component: SurveyConfirmed
+  },
+  {
+    path: '/surveyAnswer',
+    name: 'SurveyAnswer',
+    component: SurveyAnswer
   },
   {
     path: '/about',
