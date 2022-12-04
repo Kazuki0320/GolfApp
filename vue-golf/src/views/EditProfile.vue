@@ -20,7 +20,7 @@
 			clear
 		</v-btn> -->
 		<router-link to="/myProfile">
-			<v-btn class="ma-2" color="primary" dark @click="edit">編集完了</v-btn>
+			<v-btn color="primary">編集完了</v-btn>
 		</router-link>
 	</v-main>
 	</v-app>

@@ -21,7 +21,7 @@
 			clear
 		</v-btn> -->
 		<router-link to="/editProfile"><!--ここはuserIdを取得する必要がある-->
-			<v-btn class="ma-2" color="primary" dark @click="edit">マイページ編集</v-btn>
+			<v-btn color="primary" dark>マイページ編集</v-btn>
 		</router-link>
 
 	</v-main>
@@ -36,6 +36,14 @@ export default {
 	components: {
 		Sidebar
 	},
+	mounted() {
+		this.auth = JSON.parse(sessionStorage.getItem('user'))
+		console.log("auth call", this.auth);
+	},
+	data: () => ({
+		users:[],
+		auth: null
+	}),
 	async created() {
 			this.users = []
 			// console.log("userId call", this.userId)//userID取得確認OK
@@ -50,9 +58,7 @@ export default {
 		// 		this.users.push(doc.data())
 		// 	// 	console.log("this.users call", this.users)
 	},
-	data: () => ({
-		users:[]
-	}),
+
 	computed: {
 		userId () {
 		return 	this.$route.query.user_id;

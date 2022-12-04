@@ -18,6 +18,7 @@ import RoomJoinUndetermined from '../views/RoomJoinUndetermined.vue'
 import SurveyEdit from '../views/SurveyEdit.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
 import SurveyAnswer from '../views/SurveyAnswer.vue'
+import UsersSearch from '../views/UsersSearch.vue'
 
 
 // import firebase from "@/firebase/firebase"
@@ -45,6 +46,11 @@ const routes = [
     path: '/surveyAnswer',
     name: 'SurveyAnswer',
     component: SurveyAnswer
+  },
+  {
+    path: '/usersSearch',
+    name: 'UsersSearch',
+    component: UsersSearch
   },
   {
     path: '/about',

@@ -9,12 +9,14 @@
 
 		<v-spacer></v-spacer>
 
-		<v-btn icon>
-		</v-btn>
 	</v-app-bar>
-
-	
+	<v-main>
+		<router-link to="/user">
+			<v-btn class="ma-2" color="primary" dark>戻る</v-btn>
+		</router-link>
+	</v-main>
 	</v-app>
+	
 </template>
 
 <script>

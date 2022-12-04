@@ -10,9 +10,10 @@
 		<v-spacer></v-spacer>
 
 			<!--vue-hamburger-menuを追加したいけど、上手くライブラリからimportできてない-->
-			<v-btn class="menu-btn" color="blue" @click="open=!open">
+			<button type="button" class="menu-btn" color="blue" @click="open=!open">
+				<span></span>
 				<i class="fa fa-bars" aria-hidden="true"></i>
-			</v-btn>
+			</button >
 			<div class="menu" v-bind:class="{'is-active' : open }">
 
 				<router-link to="/ConfirmedOrUndetermined">
@@ -76,13 +77,17 @@ export default {
 	components: {
 		Sidebar
 	},
-	data: () => ({
-		rooms:[],
-		open: false
-	}),
 	mounted() {
 		this.getRooms()
+
+		this.auth = JSON.parse(sessionStorage.getItem('user'))
+		// console.log("auth call", this.auth);
 	},
+	data: () => ({
+		rooms:[],
+		open: false,
+		auth: null
+	}),
 	methods: {
 		async getRooms() {
 			this.rooms = []
@@ -134,9 +139,25 @@ export default {
 	justify-content: center;
 	align-items: center;
 	background: #333;
-	color: blue;
 }
 
+.menu-btn span,
+.menu-btn span:before,
+.menu-btn span:after {
+    content: '';
+    display: block;
+    height: 3px;
+    width: 25px;
+    border-radius: 3px;
+    background-color: #ffffff;
+    position: absolute;
+}
+.menu-btn span:before {
+    bottom: 8px;
+}
+.menu-btn span:after {
+    top: 8px;
+}
 /*----------------------------
 * メニュー本体
 *----------------------------*/

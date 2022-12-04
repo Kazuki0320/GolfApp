@@ -5,13 +5,16 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>ユーザー一覧</v-toolbar-title>
+		<v-toolbar-title>ユーザー</v-toolbar-title>
 
 		<v-spacer></v-spacer>
 
-		<v-btn icon>
+		<!-- <v-btn icon>
 		<v-icon>mdi-dots-vertical</v-icon>
-		</v-btn>
+		</v-btn> -->
+		<router-link to="/usersSearch">
+			<v-btn class="ma-2" color="primary" dark>ユーザー追加</v-btn>
+		</router-link>
 	</v-app-bar>
 
 	<v-main>
