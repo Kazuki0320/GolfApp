@@ -20,7 +20,6 @@
 			cols="12"
 			>
 			<v-card>
-				<v-subheader>{{ card }}</v-subheader>
 
 				<v-list two-line>
 				<div v-for="(data, index) in messages" :key="index">
