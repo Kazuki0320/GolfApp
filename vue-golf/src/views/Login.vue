@@ -99,21 +99,20 @@ computed:	{
 },
 methods: {
 		validate () {
-	this.$refs.form.validate()
+			this.$refs.form.validate()
 		},
 		reset () {
-	this.$refs.form.reset()
+			this.$refs.form.reset()
 		},
 		resetValidation () {
-	this.$refs.form.resetValidation()
+			this.$refs.form.resetValidation()
 		},
 		submit () {
-			console.log("submit call");
 			firebase.auth()
 				.signInWithEmailAndPassword(this.email, this.password)
 				.then((result) => {
-					console.log("success", result)
-					console.log("user", result.user)
+					// console.log("success", result)
+					// console.log("user", result.user)
 
 					const auth = {
 						displayName: result.user.displayName,

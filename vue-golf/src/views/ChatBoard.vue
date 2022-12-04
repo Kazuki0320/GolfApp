@@ -108,7 +108,7 @@ import Sidebar from '@/components/layouts/Sidebar'
 		},
 		mounted () {
 			this.auth = JSON.parse(sessionStorage.getItem('user'))
-			console.log(this.auth);
+			console.log("auth call", this.auth);
 		},
 		data: () => ({
 			messages: [

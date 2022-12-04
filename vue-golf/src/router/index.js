@@ -138,26 +138,6 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
-//     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-// 	console.log("requiresAuth", requiresAuth);
-// 	if(requiresAuth) {
-// 		firebase.auth().onAuthStateChanged((user) => {
-// 			if (!user) {
-// 				next({
-// 					path: '/login',
-// 					query: { redirect: to.fullPath }
-// 				})
-// 			} else {
-// 				next()
-// 			}
-// 		})
-// 	}else {
-// 		next()
-// 	}
-// 	})
-	
-
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   if (requiresAuth) {

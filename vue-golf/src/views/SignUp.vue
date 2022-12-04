@@ -69,13 +69,13 @@ data: () => ({
 		valid: true,
 		name: '',
 		nameRules: [
-	v => !!v || 'ユーザー名を入力してください',
-	v => (v && v.length <= 10) || 'ユーザー名が間違えてます',
+			v => !!v || 'ユーザー名を入力してください',
+			v => (v && v.length <= 10) || 'ユーザー名が間違えてます',
 		],
 		email: '',
 		emailRules: [
-	v => !!v || 'メッセージを入力してください',
-	v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
+			v => !!v || 'メッセージを入力してください',
+			v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
 		],
 		password: '',
 		errorMessage: "",
@@ -109,8 +109,21 @@ methods: {
 
 				localStorage.message = "新規作成に成功しました"
 
+			firebase.auth()
+			.signInWithEmailAndPassword(this.email, this.password)
+			.then((result) => {
+				console.log("success result", result)
+				// console.log("user", result.user)
+				const auth = {
+					displayName: result.user.displayName,
+					email: result.user.email,
+					uid: result.user.uid,
+					refreshToken: result.user.refreshToken
+				}
+				//sessionStorageに保存する値は、文字列にする必要があるので、JSON.stringifyで指定
+				sessionStorage.setItem('user', JSON.stringify(auth))
 				this.$router.push('/')
-
+				})
 			})
 			.catch((error) => {
 				console.log("fail", error)

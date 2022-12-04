@@ -3,24 +3,23 @@
 		v-model="drawer"
 		app
 	>
+	
 		<v-sheet
-		color="grey lighten-4"
-		class="pa-4"
-		>
-		
-		<!-- <v-col
+			color="grey lighten-4"
+			class="pa-4"
 			v-for="user in users"
 			:key="user.id"
 			cols="4"
-			></v-col>
-		</v-row> -->
-		<router-link :to="{ path: '/myProfile', query: { user_id: user.id }}">
+		>
+			
+		
+			<router-link :to="{ path: '/myProfile', query: { user_id: user.id }}">
 			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
-		</router-link>
-
+			</router-link>
 			<div class="username">{{ auth && auth.displayName }}</div>
-
 		</v-sheet>
+
+		
 
 		<v-list>
 		<v-list-item
@@ -56,7 +55,7 @@ import firebase from "@/firebase/firebase"
 
 	export default {
 	mounted() {
-		this.getUser()
+		this.getUsers()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))
 	},
@@ -67,7 +66,7 @@ import firebase from "@/firebase/firebase"
 		['mdi-account-multiple', 'users','/user'],
 		['mdi-message', 'messages','/about'],
 		],
-		user:[],
+		users:[],
 		auth: null
 	}),
 	// computed: {
@@ -76,26 +75,22 @@ import firebase from "@/firebase/firebase"
 	// 	}
 	// },
 	methods: {
-		async getUser() {
-			this.user = []
-			// console.log("userId call", this.userId);//userIdの取得確認できず。
+		async getUsers() {
+			this.users = []
 			const userRef = firebase.firestore().collection("users")
-			const userDoc = await userRef.get()//←userDocはconsole上で、確認済
-			const user = userDoc.data
-			console.log(user);/*←【課題】userIdが取得できていない。この場合、userIDはどこから受け取り、どこで取得するのか？
-			アイコンをクリックし、マイプロフィールへ画面遷移はできた。*/
-			userDoc.forEach(doc => {
+			const snapshot = await userRef.get()
+
+			snapshot.forEach(doc => {
 				let data = {
 					id: doc.id
 				}
-				this.user.push(data)
-
-			//this.friendsがpushした後にどういうデータが入っているか？
-			// [{id: doc.id},{id: doc.id}]
+				// console.log("data call", data);
+				this.users.push(data);
+				// this.roomsがpushした後にどういうデータが入っているか？
+				// [{id: doc.id},{id: doc.id}]
 			})
 		},
 		logout() {
-			console.log("logout call")
 			firebase.auth()
 				.signOut()
 				.then(() => {
@@ -105,9 +100,7 @@ import firebase from "@/firebase/firebase"
 				.catch((error) => {
 					console.log(error)
 				})
-		}
-	},
-
-
+			}
+		},
 	}
 </script>

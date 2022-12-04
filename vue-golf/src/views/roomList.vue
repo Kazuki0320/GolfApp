@@ -81,7 +81,7 @@ export default {
 		this.getRooms()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))
-		// console.log("auth call", this.auth);
+		// console.log("auth call roomlist", this.auth);
 	},
 	data: () => ({
 		rooms:[],
