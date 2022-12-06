@@ -4,20 +4,17 @@
 		app
 	>
 	
-		<v-sheet
-			color="grey lighten-4"
-			class="pa-4"
-			v-for="user in users"
-			:key="user.id"
-			cols="4"
-		>
+		<v-sheet color="grey lighten-4" class="pa-4">
 			<router-link :to="{ path: '/myProfile', query: { user_id: user.id }}">
-			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
+				<v-avatar color="indigo">
+					<v-icon dark>
+						mdi-account-circle
+					</v-icon>
+				</v-avatar>
 			</router-link>
-			<div class="username">{{ auth && auth.displayName }}</div>
+			<div class="username">test</div><!--ログイン情報を受け取って、そのユーザーの名前を表示させたい-->
 		</v-sheet>
 
-		
 
 		<v-list>
 		<v-list-item
@@ -53,9 +50,17 @@ import firebase from "@/firebase/firebase"
 
 	export default {
 	mounted() {
-		this.getUsers()
+		this.getUser()
 
-		this.auth = JSON.parse(sessionStorage.getItem('user'))
+		const auth = JSON.parse(sessionStorage.getItem('user'))
+		console.log("auth call", auth);// JSONからオブジェクトに変換
+		if(!auth) {
+			sessionStorage.removeItem(auth)
+			this.$router.push('/login')
+		}
+		// this.auth = JSON.parse(sessionStorage.getItem('user'))
+		// const email = this.auth.email;
+		// console.log("email call", email);
 	},
 	data: () => ({
 		drawer: null,
@@ -64,17 +69,22 @@ import firebase from "@/firebase/firebase"
 		['mdi-account-multiple', 'users','/user'],
 		// ['mdi-message', 'messages','/about'],
 		],
-		users:[],
+		user:[],
 		auth: null
 	}),
-	// computed: {
-	// 	userId () {
-	// 	return 	this.$route.query.user_id;
-	// 	}
-	// },
+	computed: {
+		userId () {
+		return 	this.$route.query.user_id;
+		}
+	},
 	methods: {
-		async getUsers() {
-			this.users = []
+		getAuth() {
+			return firebase.auth().onAuthStateChanged((user) => {
+				return user
+			})
+		},
+		async getUser() {
+			this.user = []
 			const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()
 
@@ -82,8 +92,7 @@ import firebase from "@/firebase/firebase"
 				let data = {
 					id: doc.id
 				}
-				// console.log("data call", data);
-				this.users.push(data);
+				this.user.push(data);
 				// this.roomsがpushした後にどういうデータが入っているか？
 				// [{id: doc.id},{id: doc.id}]
 			})

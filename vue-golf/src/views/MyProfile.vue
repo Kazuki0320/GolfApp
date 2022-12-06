@@ -12,7 +12,9 @@
 	②プロフィール画面では表示のみで、編集画面で入力できるようにする。
 	-->
 	<v-main>
-		<v-simple-table>
+		<v-simple-table
+		v-if="auth"
+		>
 			<template v-slot:default>
 				<thead>
 					<tr>
@@ -31,6 +33,7 @@
 				>
 				<td>{{ auth.displayName }}</td>
 				<td>{{ auth.email }}</td>
+				<td>{{ auth.uid }}</td>
 				</tr>
 			</tbody>
 			</template>
@@ -39,10 +42,10 @@
 		<v-container>
 			<v-row>
 				<v-col>
-					<v-text-field
+					<!-- <v-text-field
 						label="ユーザーネーム（工事中）"
 						clearable
-					></v-text-field>
+					></v-text-field> -->
 					<router-link to="/editProfile">
 						<v-btn color="primary" dark>マイページ編集</v-btn>
 					</router-link>
@@ -81,7 +84,7 @@ export default {
 			const user = userDoc.data()
 			console.log("user info", user);
 
-			// userRef.collection('users').add({←コメントアウトするとこ
+			// userRef.collection('users').add({//←コメントアウトするとこ
 			// 	name: this.auth.user.displayName,
 			// 	email: this.auth.user.email,
 			// 	uid: this.auth.user.uid,
@@ -97,7 +100,7 @@ export default {
 		this.auth = JSON.parse(sessionStorage.getItem('user'))
 		console.log("auth call", this.auth);
 
-		// const userRef = await firebase.firestore().collection('users').add({←コメントアウトするとこ
+		// const userRef = await firebase.firestore().collection('users').add({//←コメントアウトするとこ
 		// 		auth: this.auth
 		// })
 		// const userDoc = await userRef.get()
@@ -110,14 +113,6 @@ export default {
 		{
 			name: 'Frozen Yogurt',
 			calories: 159,
-		},
-		{
-			name: 'Ice cream sandwich',
-			calories: 237,
-		},
-		{
-			name: 'Eclair',
-			calories: 262,
 		}]
 	}),
 	computed: {

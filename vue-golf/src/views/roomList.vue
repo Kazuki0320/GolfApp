@@ -47,6 +47,7 @@
 			<router-link :to="{ path: '/chat', query: { room_id: room.id }}">
 				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
+			<div>グループ1</div>
 			
 			</v-col>
 		</v-row>

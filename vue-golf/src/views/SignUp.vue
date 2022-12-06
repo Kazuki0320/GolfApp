@@ -109,6 +109,17 @@ methods: {
 
 				localStorage.message = "新規作成に成功しました"
 
+			// firebase.firestore().collection('users')
+			// .createUserWithEmailAndPassword(this.email, this.password)
+			// .then(async(result1) => {
+			// 	console.log("success firestore", result1)
+			// 	await result1.user.updateProfile(
+			// 		{displayName: this.name}
+			// 	);
+			// 	console.log("updateUser call", result1.user);
+			// })
+
+			//→firebaseのusersの中にログイン情報を持ったIDドキュメントを作成する。
 			firebase.auth()
 			.signInWithEmailAndPassword(this.email, this.password)
 			.then((result) => {

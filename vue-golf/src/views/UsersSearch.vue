@@ -13,6 +13,7 @@
 				<v-col cols="6">
 					<v-text-field
 					label="ユーザー検索"
+					clearable
 					v-model="keyword">
 					</v-text-field>
 				</v-col>
@@ -28,7 +29,7 @@
 				<v-col cols="3">
 					<v-btn
 						color="primary"
-						@click="search(keyword)">
+						@click="search(keyword)"><!--firestoreで、検索した時の処理をmethodで書く必要がある-->
 						検索する
 					</v-btn>
 				</v-col>
