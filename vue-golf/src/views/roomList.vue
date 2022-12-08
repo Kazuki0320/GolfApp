@@ -14,15 +14,14 @@
 				<span></span>
 				<i class="fa fa-bars" aria-hidden="true"></i>
 			</button >
-			<div class="menu" v-bind:class="{'is-active' : open }">
+				<div class="menu" v-bind:class="{'is-active' : open }">
 
-				<router-link to="/ConfirmedOrUndetermined">
-					<div class="menu__item">ルーム作成</div>
-				</router-link>
-
-				<router-link to="/surveyEdit">
-					<div class="menu__item">フレンドを誘う</div>
-				</router-link>
+			<router-link to="/ConfirmedOrUndetermined">
+				<div class="menu__item">ルーム作成</div>
+			</router-link>
+			<router-link to="/surveyEdit">
+				<div class="menu__item">フレンドを誘う</div>
+			</router-link>
 
 			</div>
 			
@@ -68,7 +67,7 @@
 	</v-main>
 	</v-app>
 </template>
-<script src="https://cdn.jsdelivr.net/npm/vue-burger-menu@2.0.3/dist/vue-burger-menu.umd.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue-burger-menu@2.0.3/dist/vue-burger-menu.umd.js"></script> -->
 
 <script>
 import Sidebar from '@/components/layouts/Sidebar'
@@ -81,7 +80,7 @@ export default {
 	mounted() {
 		this.getRooms()
 
-		this.auth = JSON.parse(sessionStorage.getItem('user'))
+		// this.auth = JSON.parse(sessionStorage.getItem('user'))
 		// console.log("auth call roomlist", this.auth);
 	},
 	data: () => ({

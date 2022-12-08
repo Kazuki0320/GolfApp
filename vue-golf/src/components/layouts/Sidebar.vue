@@ -12,7 +12,7 @@
 					</v-icon>
 				</v-avatar>
 			</router-link>
-			<div class="username">test</div><!--ログイン情報を受け取って、そのユーザーの名前を表示させたい-->
+			<div class="username">{{ auth && auth.displayName }}</div>
 		</v-sheet>
 
 
@@ -49,18 +49,28 @@
 import firebase from "@/firebase/firebase"
 
 	export default {
-	mounted() {
+	async mounted() {
 		this.getUser()
 
-		const auth = JSON.parse(sessionStorage.getItem('user'))
-		console.log("auth call", auth);// JSONからオブジェクトに変換
-		if(!auth) {
-			sessionStorage.removeItem(auth)
-			this.$router.push('/login')
-		}
-		// this.auth = JSON.parse(sessionStorage.getItem('user'))
+		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+		// this.email = this.auth.email
+		// const userRef = await firebase.firestore().collection('users').add({
+		// 		email: this.email
+		// })
+		// console.log("email call", userRef);//ログイン情報と紐づくようになった。
+		
+		// console.log("auth call", this.auth);
 		// const email = this.auth.email;
 		// console.log("email call", email);
+		// const displayName = this.auth.displayName
+		// console.log("displayName call", displayName)
+
+		// if(!auth) {
+		// 	sessionStorage.removeItem(auth)
+		// 	this.$router.push('/login')
+		// }
+		// this.auth = JSON.parse(sessionStorage.getItem('user'))
+		
 	},
 	data: () => ({
 		drawer: null,
@@ -70,7 +80,9 @@ import firebase from "@/firebase/firebase"
 		// ['mdi-message', 'messages','/about'],
 		],
 		user:[],
-		auth: null
+		auth: null,
+		email: '',
+		displayName: ''
 	}),
 	computed: {
 		userId () {

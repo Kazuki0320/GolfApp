@@ -12,30 +12,68 @@
 	②プロフィール画面では表示のみで、編集画面で入力できるようにする。
 	-->
 	<v-main>
-		<v-simple-table
+		<!-- <v-simple-table
 		v-if="auth"
 		>
 			<template v-slot:default>
 				<thead>
 					<tr>
-					<th class="text-left">
+					<th class="text-center">
 						ユーザーネーム（工事中）
 					</th>
-					<th class="text-left">
+					<th class="text-center">
 						メールアドレス（工事中）
 					</th>
 					</tr>
 				</thead>
 			<tbody>
 				<tr
-					v-for="item in desserts"
+					v-for="item in userInfo"
 					:key="item.name"
 				>
 				<td>{{ auth.displayName }}</td>
 				<td>{{ auth.email }}</td>
-				<td>{{ auth.uid }}</td>
 				</tr>
 			</tbody>
+			</template>
+		</v-simple-table> -->
+		<v-simple-table
+		v-if="auth"
+		>
+			<template v-slot:default>
+				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+					<tr>
+					<th class="text-center">
+						ユーザーネーム（工事中）
+					</th>
+					</tr>
+					<!--<tr>
+					<th class="text-center">
+						メールアドレス（工事中）
+					</th>
+					</tr> -->
+				</thead>
+				<tbody>
+					<tr>
+					<td>{{ auth.displayName }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+					<th class="text-center">
+						メールアドレス（工事中）
+					</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td>{{ auth.email }}</td>
+					</tr>
+				</tbody>
 			</template>
 		</v-simple-table>
 
@@ -84,12 +122,6 @@ export default {
 			const user = userDoc.data()
 			console.log("user info", user);
 
-			// userRef.collection('users').add({//←コメントアウトするとこ
-			// 	name: this.auth.user.displayName,
-			// 	email: this.auth.user.email,
-			// 	uid: this.auth.user.uid,
-			// 	refreshToken: this.auth.user.refreshToken
-			// })
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
 		// 		console.log(doc.data())
@@ -99,21 +131,26 @@ export default {
 	async mounted() {
 		this.auth = JSON.parse(sessionStorage.getItem('user'))
 		console.log("auth call", this.auth);
-
-		// const userRef = await firebase.firestore().collection('users').add({//←コメントアウトするとこ
-		// 		auth: this.auth
-		// })
+		this.email = this.auth.email
+		this.displayName = this.auth.displayName
+		// userRef.collection('users').add({//←コメントアウトするとこ
+			// 	name: this.auth.user.displayName,
+			// 	email: this.auth.user.email,
+			// 	uid: this.auth.user.uid,
+			// 	refreshToken: this.auth.user.refreshToken
+			// })
+		
 		// const userDoc = await userRef.get()
 		// console.log("userDoc call", userDoc.data())
 	},
 	data: () => ({
 		users:[],
 		auth: null,
-		desserts: [
-		{
-			name: 'Frozen Yogurt',
-			calories: 159,
-		}]
+		// desserts: [
+		// {
+		// 	name: 'Frozen Yogurt',
+		// 	calories: 159,
+		// }]
 	}),
 	computed: {
 		userId () {

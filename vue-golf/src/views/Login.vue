@@ -133,8 +133,8 @@ methods: {
 				})
 
 		}
-},
-	}
+	},
+}
 </script>
 
 <style scoped>

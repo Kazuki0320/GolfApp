@@ -19,9 +19,7 @@ import SurveyEdit from '../views/SurveyEdit.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
 import SurveyAnswer from '../views/SurveyAnswer.vue'
 import UsersSearch from '../views/UsersSearch.vue'
-
-
-// import firebase from "@/firebase/firebase"
+import firebase from "@/firebase/firebase"
 
 Vue.use(VueRouter)
 
@@ -138,24 +136,83 @@ const router = new VueRouter({
   routes
 })
 
+
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth) {
-    const user = sessionStorage.getItem('user')
-    console.log(JSON.parse(user))//userを文字列からオブジェクトに変換するには、parseを使用する。
-
-    if (!user) {
-          next({
-            path: '/login',
-            query: { redirect: to.fullPath }
-          })
-      } else {
-            next()
-      }
-  }
-  else {
+	// console.log("requiresAuth", requiresAuth);
+	if(requiresAuth) {
+		firebase.auth().onAuthStateChanged(async (user) => {
+			// console.log("user", user);
+			if (!user) {
+				next({
+					path: '/login',
+					query: { redirect: to.fullPath }
+				})
+			} else {
+        next()
+          let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+          console.log("userDoc call", userDoc);
+          if (!userDoc.exists) {
+          // Firestore にユーザー用のドキュメントが作られていなければ作る
+          await userDoc.ref.set({
+              userName: user.displayName,
+              email: user.email,
+          });
+        }
+			}
+		})
+	}else {
 		next()
 	}
-})
+	})
+
+// firebase.auth().onAuthStateChanged(async (user) => {
+//   // 未ログイン時
+//   if (!user) {
+//     // 匿名ログインする
+//     firebase.auth().signInAnonymously();
+//   }
+//   // ログイン時
+//   else {
+//     // ログイン済みのユーザー情報があるかをチェック
+//     var userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+//     if (!userDoc.exists) {
+//       // Firestore にユーザー用のドキュメントが作られていなければ作る
+//       await userDoc.ref.set({
+//         screen_name: user.uid,
+//         display_name: '名無しさん',
+//         created_at: firebase.firestore.FieldValue.serverTimestamp(),
+//       });
+// let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
+// console.log("userDoc call", userDoc);
+// if (!userDoc.exists) {
+// // Firestore にユーザー用のドキュメントが作られていなければ作る
+//   await userDoc.ref.set({
+//       userName: user.displayName,
+//       email: user.email,
+//   });
+//     }
+//   }
+// });
+
+// router.beforeEach((to, from, next) => {
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   if (requiresAuth) {
+//     const user = sessionStorage.getItem('user')
+//     // console.log(JSON.parse(user))//userを文字列からオブジェクトに変換するには、parseを使用する。
+
+//     if (!user) {
+//           next({
+//             path: '/login',
+//             query: { redirect: to.fullPath }
+//           })
+//       } else {
+//             next()
+//       }
+//   }
+//   else {
+// 		next()
+// 	}
+// })
 
 export default router

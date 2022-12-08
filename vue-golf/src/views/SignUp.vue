@@ -88,13 +88,13 @@ computed:	{
 },
 methods: {
 		validate () {
-	this.$refs.form.validate()
+			this.$refs.form.validate()
 		},
 		reset () {
-	this.$refs.form.reset()
+			this.$refs.form.reset()
 		},
 		resetValidation () {
-	this.$refs.form.resetValidation()
+			this.$refs.form.resetValidation()
 		},
 		submit() {
 			console.log("submit call")
@@ -108,16 +108,6 @@ methods: {
 				console.log("updateUser", result.user)
 
 				localStorage.message = "新規作成に成功しました"
-
-			// firebase.firestore().collection('users')
-			// .createUserWithEmailAndPassword(this.email, this.password)
-			// .then(async(result1) => {
-			// 	console.log("success firestore", result1)
-			// 	await result1.user.updateProfile(
-			// 		{displayName: this.name}
-			// 	);
-			// 	console.log("updateUser call", result1.user);
-			// })
 
 			//→firebaseのusersの中にログイン情報を持ったIDドキュメントを作成する。
 			firebase.auth()
@@ -135,14 +125,21 @@ methods: {
 				sessionStorage.setItem('user', JSON.stringify(auth))
 				this.$router.push('/')
 				})
+
+				// const userRef = await firebase.firestore().collection('users').add({
+				// 	displayName: this.displayName,
+				// 	email: this.email
+				// })
+				// console.log("email call", userRef);//ログイン情報と紐づくようになった。
 			})
 			.catch((error) => {
 				console.log("fail", error)
 				this.errorMessage = "ユーザーの新規作成に失敗しました。";
 			})
 		}
-},
-	}
+	},
+}
+
 </script>
 
 <style scoped>
