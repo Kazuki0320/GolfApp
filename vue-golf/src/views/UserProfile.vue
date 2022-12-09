@@ -30,6 +30,10 @@
 				<tbody>
 					<tr>
 					<td>{{ user }}</td>
+					<!--
+					・指定しているユーザーネームを出力したい
+					・ログインしてるユーザー情報は除外する
+					-->
 					</tr>
 				</tbody>
 			</template>
@@ -103,11 +107,11 @@ export default {
 			console.log("user", user);
 			this.user.push(user)
 
-			const userName = user.userName
-			console.log("userName call", userName)
-			this.userName.push(userName);
-			const email = user.email
-			console.log("email call", email)
+			// const userName = user.userName
+			// console.log("userName call", userName)
+			// this.userName.push(userName);
+			// const email = user.email
+			// console.log("email call", email)
 
 		// 	snapshot.forEach(doc => {
 		// 		console.log(doc.data())
@@ -131,8 +135,8 @@ export default {
 		// console.log("userDoc call", userDoc.data())
 	// },
 	data: () => ({
-		user: " ",
-		userName: [],
+		user: "",
+		userName: "",
 		email: '',
 		// userInfo: [{
 		// 	displayName: '',
