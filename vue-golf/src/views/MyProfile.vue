@@ -44,7 +44,7 @@
 				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
 					<tr>
 					<th class="text-center">
-						ユーザーネーム（工事中）
+						ユーザーネーム
 					</th>
 					</tr>
 					<!--<tr>
@@ -65,7 +65,7 @@
 				<thead>
 					<tr>
 					<th class="text-center">
-						メールアドレス（工事中）
+						メールアドレス
 					</th>
 					</tr>
 				</thead>

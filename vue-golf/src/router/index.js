@@ -183,36 +183,5 @@ router.beforeEach((to, from, next) => {
 //         display_name: '名無しさん',
 //         created_at: firebase.firestore.FieldValue.serverTimestamp(),
 //       });
-// let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-// console.log("userDoc call", userDoc);
-// if (!userDoc.exists) {
-// // Firestore にユーザー用のドキュメントが作られていなければ作る
-//   await userDoc.ref.set({
-//       userName: user.displayName,
-//       email: user.email,
-//   });
-//     }
-//   }
-// });
-
-// router.beforeEach((to, from, next) => {
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-//   if (requiresAuth) {
-//     const user = sessionStorage.getItem('user')
-//     // console.log(JSON.parse(user))//userを文字列からオブジェクトに変換するには、parseを使用する。
-
-//     if (!user) {
-//           next({
-//             path: '/login',
-//             query: { redirect: to.fullPath }
-//           })
-//       } else {
-//             next()
-//       }
-//   }
-//   else {
-// 		next()
-// 	}
-// })
 
 export default router

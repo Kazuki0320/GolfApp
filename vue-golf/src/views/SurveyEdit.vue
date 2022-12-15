@@ -166,8 +166,7 @@ export default {
 	},
 	data: () => ({
 		users:[],
-		date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
-		menu: false,
+		// menu: false,
 		pref: [
 			'北海道',
 			'青森',

@@ -18,18 +18,13 @@
 				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
 					<tr>
 					<th class="text-center">
-						ユーザーネーム（工事中）
+						ユーザーネーム
 					</th>
 					</tr>
-					<!--<tr>
-					<th class="text-center">
-						メールアドレス（工事中）
-					</th>
-					</tr> -->
 				</thead>
 				<tbody>
 					<tr>
-					<td>{{ user }}</td>
+					<td>{{ user.userName }}</td>
 					<!--
 					・指定しているユーザーネームを出力したい
 					・ログインしてるユーザー情報は除外する
@@ -38,12 +33,12 @@
 				</tbody>
 			</template>
 		</v-simple-table>
-		<!-- <v-simple-table>
+		<v-simple-table>
 			<template v-slot:default>
 				<thead>
 					<tr>
 					<th class="text-center">
-						メールアドレス（工事中）
+						メールアドレス
 					</th>
 					</tr>
 				</thead>
@@ -53,7 +48,7 @@
 					</tr>
 				</tbody>
 			</template>
-		</v-simple-table> -->
+		</v-simple-table>
 		<!-- <v-simple-table
 		v-if="auth"
 		>
@@ -98,14 +93,13 @@ export default {
 		Sidebar
 	},
 	async created() {
-			this.user = []
 			// console.log("userId call", this.userId)//userID
 			const userRef = firebase.firestore().collection("users").doc(this.userId)
 			const userDoc = await userRef.get()
 			// console.log("userDoc call", userDoc);
 			const user = userDoc.data()
 			console.log("user", user);
-			this.user.push(user)
+			this.user = user
 
 			// const userName = user.userName
 			// console.log("userName call", userName)
