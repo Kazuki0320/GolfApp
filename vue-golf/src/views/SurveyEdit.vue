@@ -22,131 +22,126 @@
 	-->
 		<v-row>
 			<v-col cols="12">
-					<!-- <v-col>都道府県</v-col>
-						<select id="shot_pref" name="input_pref" class="form-control input-lg">
-							<option value="">都道府県選択</option>
-							<option v-for="(item) in getPref"
-							:key="item.no">
-							{{ item.name }}
-							</option>
-						</select> -->
-						<!-- <v-col cols="4">
-							<v-img :src="book.image"></v-img>
-						</v-col> -->
-							<v-col
-								class="d-flex"
-								cols="12"
-								sm="6"
-							>
-							<v-select
-								:items="pref"
-								label="開催候補地1"
-							>
-								<!-- <option v-for="(item) in getPref"
-								:key="item.no">
-								{{ item.name }}
-								</option> -->
-							</v-select>
-							</v-col>
-								<!-- <v-text-field
-									label="都道府県選択1"
-									required
-								></v-text-field> -->
-								<!-- class="mx-2" v-model="book.memo">
-								{{ book.memo }} -->
-							<v-col
-								class="d-flex"
-								cols="12"
-								sm="6"
-							>
-							<v-select
-								:items="pref"
-								label="開催候補地2"
-							>
-							</v-select>
-							</v-col>
-								<v-col
-									cols="12"
-									sm="6"
-									md="4"
-								>
-									<v-menu
-										v-model="menu"
-										:close-on-content-click="false"
-										:nudge-right="40"
-										transition="scale-transition"
-										offset-y
-										min-width="auto"
-									>
-									<template v-slot:activator="{ on, attrs }">
-									<v-text-field
-										v-model="date"
-										readonly
-										v-bind="attrs"
-										v-on="on"
-										label="候補日"
-										required
-									></v-text-field>
-									</template>
-									<v-date-picker
-										v-model="date"
-										@input="menu = false"
-										locale="jp-ja"
-										:day-format="date => new Date(date).getDate()">
-									</v-date-picker>
-									</v-menu>
-								</v-col>
-								<v-col
-									cols="12"
-									sm="6"
-									md="4"
-								>
-									<v-menu
-										v-model="menu"
-										:close-on-content-click="false"
-										:nudge-right="40"
-										transition="scale-transition"
-										offset-y
-										min-width="auto"
-									>
-									<template v-slot:activator="{ on, attrs }">
-									<v-text-field
-										v-model="date"
-										readonly
-										v-bind="attrs"
-										v-on="on"
-										label="回答締切"
-										required
-									></v-text-field>
-									</template>
-									<v-date-picker
-										v-model="date"
-										@input="menu = false"
-										locale="jp-ja"
-										:day-format="date => new Date(date).getDate()">
-									</v-date-picker>
-									</v-menu>
-								</v-col>
-								<v-col
-									cols="12"
-									md="4"
-								>
-								<v-text-field
-									label="備考"
-									required
-								></v-text-field>
-								</v-col>
-								<v-btn color="secondary" to="/">一覧に戻る</v-btn>
-								<router-link to="/surveyConfirmed">
-									<v-btn class="ma-2" color="primary" dark>確認</v-btn>
-								</router-link>
-								<!-- <v-btn color="info">保存する</v-btn> -->
+				<!-- <v-col>都道府県</v-col>
+				<select id="shot_pref" name="input_pref" class="form-control input-lg">
+					<option value="">都道府県選択</option>
+					<option v-for="(item) in getPref"
+					:key="item.no">
+					{{ item.name }}
+					</option>
+				</select> -->
+				<!-- <v-col cols="4">
+					<v-img :src="book.image"></v-img>
+				</v-col> -->
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6"
+				>
+				<v-select
+					:items="pref"
+					label="開催候補地1"
+				>
+					<!-- <option v-for="(item) in getPref"
+					:key="item.no">
+					{{ item.name }}
+					</option> -->
+				</v-select>
+				</v-col>
+					<!-- <v-text-field
+						label="都道府県選択1"
+						required
+					></v-text-field> -->
+					<!-- class="mx-2" v-model="book.memo">
+					{{ book.memo }} -->
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6"
+				>
+				<v-select
+					:items="pref"
+					label="開催候補地2"
+				>
+				</v-select>
+				</v-col>
+				<v-col
+					cols="12"
+					sm="6"
+					md="4"
+				>
+					<v-menu
+						v-model="menu"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
+					>
+					<template v-slot:activator="{ on, attrs }">
+					<v-text-field
+						v-model="date"
+						readonly
+						v-bind="attrs"
+						v-on="on"
+						label="候補日"
+						required
+					></v-text-field>
+					</template>
+					<v-date-picker
+						v-model="date"
+						@input="menu = false"
+						locale="jp-ja"
+						:day-format="date => new Date(date).getDate()">
+					</v-date-picker>
+					</v-menu>
+				</v-col>
+				<v-col
+					cols="12"
+					sm="6"
+					md="4"
+				>
+					<v-menu
+						v-model="menu"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
+					>
+					<template v-slot:activator="{ on, attrs }">
+					<v-text-field
+						v-model="date"
+						readonly
+						v-bind="attrs"
+						v-on="on"
+						label="回答締切"
+						required
+					></v-text-field>
+					</template>
+					<v-date-picker
+						v-model="date"
+						@input="menu = false"
+						locale="jp-ja"
+						:day-format="date => new Date(date).getDate()">
+					</v-date-picker>
+					</v-menu>
+				</v-col>
+				<v-col
+					cols="12"
+					md="4"
+				>
+				<v-text-field
+					label="備考"
+					required
+				></v-text-field>
+				</v-col>
+				<v-btn color="secondary" to="/">一覧に戻る</v-btn>
+				<router-link to="/surveyConfirmed">
+					<v-btn class="ma-2" color="primary" dark>確認</v-btn>
+				</router-link>
 			</v-col>
 		</v-row>
-		<!-- <router-link to="/surveyConfirmed">
-			<v-btn class="ma-2" color="primary" dark>確認</v-btn>
-		</router-link> -->
-
 	</v-main>
 	</v-app>
 </template>
@@ -176,6 +171,51 @@ export default {
 		pref: [
 			'北海道',
 			'青森',
+			'岩手',
+			'宮城',
+			'秋田',
+			'山形',
+			'福島',
+			'茨城',
+			'栃木',
+			'群馬',
+			'埼玉',
+			'千葉',
+			'東京都',
+			'神奈川',
+			'新潟',
+			'富山',
+			'石川',
+			'福井',
+			'山梨',
+			'長野',
+			'岐阜',
+			'静岡',
+			'愛知',
+			'三重',
+			'滋賀',
+			'京都府',
+			'大阪府',
+			'兵庫',
+			'奈良',
+			'和歌山',
+			'鳥取',
+			'島根',
+			'岡山',
+			'広島',
+			'山口',
+			'徳島',
+			'香川',
+			'愛媛',
+			'高知',
+			'福岡',
+			'佐賀',
+			'長崎',
+			'熊本',
+			'大分',
+			'宮崎',
+			'鹿児島',
+			'沖縄',
 			// {"no":"1","name":"\u5317\u6d77\u9053"},
 			// {"no":"2","name":"\u9752\u68ee\u770c"},
 			// {"no":"3","name":"\u5ca9\u624b\u770c"},
@@ -243,3 +283,34 @@ export default {
 	},
 }
 </script>
+<!-- methods: {
+	clear() {
+		// console.log("clear call");
+		this.body = "";
+	},
+	submit() {
+		// console.log("submit call", this.body);
+		// this.messages.push({
+		// 	message: this.body,
+		// 	name: this.auth.displayName,
+		// 	photoURL: this.auth.photoURL,
+		// 	createdAt: firebase.firestore.Timestamp.now()
+		// });
+		
+		const roomRef = firebase.firestore().collection("rooms").doc(this.roomId);
+		roomRef.collection('messages').add({
+			message: this.body,
+			name: this.auth.displayName,
+			photoURL: this.auth.photoURL,
+			createdAt: firebase.firestore.Timestamp.now()
+		})
+		.then(result => {
+			console.log('success', result);
+			this.body = "";
+		})
+		.catch(error => {
+			console.log('fail', error);
+			alert('メッセージの送信に失敗しました。')
+		})
+	}
+} -->
