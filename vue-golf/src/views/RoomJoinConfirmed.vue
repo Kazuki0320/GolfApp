@@ -21,8 +21,10 @@
 		</v-btn> -->
 		<v-btn class="ma-2" color="primary" dark>不参加</v-btn>
 
+		<router-link to="/">
 			<v-btn class="ma-2" color="primary" dark>参加</v-btn>
-
+		</router-link>
+		
 	</v-main>
 	</v-app>
 </template>

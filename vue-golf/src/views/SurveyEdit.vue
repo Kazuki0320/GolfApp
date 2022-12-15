@@ -175,7 +175,7 @@ export default {
 		menu: false,
 		pref: [
 			'北海道',
-			'青森'
+			'青森',
 			// {"no":"1","name":"\u5317\u6d77\u9053"},
 			// {"no":"2","name":"\u9752\u68ee\u770c"},
 			// {"no":"3","name":"\u5ca9\u624b\u770c"},
