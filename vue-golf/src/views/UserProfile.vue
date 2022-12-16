@@ -101,12 +101,6 @@ export default {
 			console.log("user", user);
 			this.user = user
 
-			// const userName = user.userName
-			// console.log("userName call", userName)
-			// this.userName.push(userName);
-			// const email = user.email
-			// console.log("email call", email)
-
 		// 	snapshot.forEach(doc => {
 		// 		console.log(doc.data())
 		// 		this.users.push(doc.data())
@@ -131,7 +125,7 @@ export default {
 	data: () => ({
 		user: "",
 		userName: "",
-		email: '',
+		email: "",
 		// userInfo: [{
 		// 	displayName: '',
 		// 	email: '',

@@ -142,7 +142,6 @@ router.beforeEach((to, from, next) => {
 	// console.log("requiresAuth", requiresAuth);
 	if(requiresAuth) {
 		firebase.auth().onAuthStateChanged(async (user) => {
-			// console.log("user", user);
 			if (!user) {
 				next({
 					path: '/login',
@@ -151,7 +150,6 @@ router.beforeEach((to, from, next) => {
 			} else {
         next()
           let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-          // console.log("userDoc call", userDoc);
           if (!userDoc.exists) {
           // Firestore にユーザー用のドキュメントが作られていなければ作る
           await userDoc.ref.set({

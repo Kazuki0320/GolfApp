@@ -12,50 +12,20 @@
 	②プロフィール画面では表示のみで、編集画面で入力できるようにする。
 	-->
 	<v-main>
-		<!-- <v-simple-table
-		v-if="auth"
-		>
-			<template v-slot:default>
-				<thead>
-					<tr>
-					<th class="text-center">
-						ユーザーネーム（工事中）
-					</th>
-					<th class="text-center">
-						メールアドレス（工事中）
-					</th>
-					</tr>
-				</thead>
-			<tbody>
-				<tr
-					v-for="item in userInfo"
-					:key="item.name"
-				>
-				<td>{{ auth.displayName }}</td>
-				<td>{{ auth.email }}</td>
-				</tr>
-			</tbody>
-			</template>
-		</v-simple-table> -->
 		<v-simple-table
 		v-if="auth"
 		>
 			<template v-slot:default>
 				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
 					<tr>
-					<th class="text-center">
-						ユーザーネーム
-					</th>
+						<th class="text-center">
+							ユーザーネーム
+						</th>
 					</tr>
-					<!--<tr>
-					<th class="text-center">
-						メールアドレス（工事中）
-					</th>
-					</tr> -->
 				</thead>
 				<tbody>
 					<tr>
-					<td>{{ auth.displayName }}</td>
+						<td>{{ user.userName }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -64,14 +34,14 @@
 			<template v-slot:default>
 				<thead>
 					<tr>
-					<th class="text-center">
-						メールアドレス
-					</th>
+						<th class="text-center">
+							メールアドレス
+						</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-					<td>{{ auth.email }}</td>
+						<td>{{ user.email }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -115,12 +85,12 @@ export default {
 		Sidebar
 	},
 	async created() {
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
+			console.log("userId call", this.userId)//userID取得確認OK
 			const userRef = firebase.firestore().collection("users").doc(this.userId)
 			const userDoc = await userRef.get()
 			const user = userDoc.data()
 			console.log("user info", user);
+			// this.user = user
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -131,8 +101,8 @@ export default {
 	async mounted() {
 		this.auth = JSON.parse(sessionStorage.getItem('user'))
 		console.log("auth call", this.auth);
-		this.email = this.auth.email
-		this.displayName = this.auth.displayName
+		// this.email = this.auth.email
+		// this.displayName = this.auth.displayName
 		// userRef.collection('users').add({//←コメントアウトするとこ
 			// 	name: this.auth.user.displayName,
 			// 	email: this.auth.user.email,
@@ -144,7 +114,9 @@ export default {
 		// console.log("userDoc call", userDoc.data())
 	},
 	data: () => ({
-		users:[],
+		user:'',
+		userName: '',
+		email: '',
 		auth: null,
 		// desserts: [
 		// {

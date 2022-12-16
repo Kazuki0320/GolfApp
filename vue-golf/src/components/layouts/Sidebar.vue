@@ -50,9 +50,32 @@ import firebase from "@/firebase/firebase"
 
 	export default {
 	async mounted() {
-		this.getUser()
+		// this.getUser()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+		console.log("uid", this.auth.uid)
+		const userRef = firebase.firestore().collection("users")
+			const snapshot = await userRef.get()
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id
+				}
+				const user = data
+				console.log("data call", user)
+			})
+			// if(this.auth.uid == this.user.id) {
+			// 	firebase.firestore().collection("users").get()
+			// }
+		/*[やりたいこと]
+		・sessionStorageから取得してきたログイン情報のuidとfirestore上のユーザードキュメントを比較して、
+		ログインしているuidと同じIDを見つけたら、firestore上からその人の情報を取得してくる。
+		*/
+		// console.log("userId call", this.userId)//全部のドキュメントのIDを取得確認
+		
+
+		// console.log("userData", this.user)
+		// if(this.auth.uid == )
+
 		// this.email = this.auth.email
 		// const userRef = await firebase.firestore().collection('users').add({
 		// 		email: this.email
@@ -79,36 +102,41 @@ import firebase from "@/firebase/firebase"
 		['mdi-account-multiple', 'users','/user'],
 		// ['mdi-message', 'messages','/about'],
 		],
-		user:[],
+		user:'',
 		auth: null,
 		email: '',
 		displayName: ''
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		}
-	},
+	// computed: {
+	// 	userId () {
+	// 	return 	this.$route.query.user_id;
+	// 	}
+	// },
 	methods: {
 		getAuth() {
 			return firebase.auth().onAuthStateChanged((user) => {
 				return user
 			})
 		},
-		async getUser() {
-			this.user = []
-			const userRef = firebase.firestore().collection("users")
-			const snapshot = await userRef.get()
+		// async getUsers() {
+		// 	this.users = []
+		// 	const roomRef = firebase.firestore().collection("users")
+		// 	const snapshot = await roomRef.get()
+		// 	// console.log("snapshot call", snapshot);
 
-			snapshot.forEach(doc => {
-				let data = {
-					id: doc.id
-				}
-				this.user.push(data);
-				// this.roomsがpushした後にどういうデータが入っているか？
-				// [{id: doc.id},{id: doc.id}]
-			})
-		},
+		// 	snapshot.forEach(doc => {
+		// 		let data = {
+		// 			id: doc.id
+		// 		}
+		// 		console.log(data)
+		// 		this.users.push(data)
+
+		// 		//this.friendsがpushした後にどういうデータが入っているか？
+		// 		// [{id: doc.id},{id: doc.id}]
+		// }
+		// async getUser() {
+			
+		// },
 		logout() {
 			firebase.auth()
 				.signOut()
