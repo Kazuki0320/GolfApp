@@ -1,13 +1,20 @@
 <template>
 	<v-app id="inspire">
-	<v-app-bar
-		app
-		shrink-on-scroll
-	>
-		<v-toolbar-title>グループ作成</v-toolbar-title>
-		<v-spacer></v-spacer>
-	</v-app-bar>
 	<v-main>
+		<div class="login-box">
+		<v-content class="login-form">
+			<v-card-title class="login-title">グループ作成(この画面は使っていない)</v-card-title>
+
+			<v-row class="justify-center">
+				<router-link to="/roomCreateUndetermined">
+					<v-btn class="ma-10" color="primary" dark>メンバー未確定</v-btn>
+				</router-link>
+				<router-link to="/roomCreateConfirmed">
+					<v-btn class="ma-10" color="primary" dark>メンバー確定</v-btn>
+				</router-link>
+			</v-row>
+		</v-content>
+		</div>
 		<!-- <v-btn
 			class="mr-4"
 			type="submit"
@@ -19,14 +26,6 @@
 		<v-btn @click="clear">
 			clear
 		</v-btn> -->
-		<router-link to="/roomCreateConfirmed">
-			<v-btn class="ma-2" color="primary" dark>メンバー確定</v-btn>
-		</router-link>
-
-		<router-link to="/roomCreateUndetermined">
-			<v-btn class="ma-2" color="primary" dark>メンバー未確定</v-btn>
-		</router-link>
-
 	</v-main>
 	</v-app>
 </template>
@@ -59,3 +58,33 @@ export default {
 	},
 }
 </script>
+
+<style scoped>
+.login-form {
+	margin:200px;
+	padding:30px;
+
+}
+
+/*.login-box {
+	width:60%;
+	margin:0px auto;
+	padding:30px;
+}*/
+
+.login-title {
+	display: inline-block;
+}
+
+/* .member{
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 1;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+} */
+</style>

@@ -16,7 +16,7 @@
 			</button >
 				<div class="menu" v-bind:class="{'is-active' : open }">
 
-			<router-link to="/ConfirmedOrUndetermined">
+			<router-link to="/roomCreateConfirmed">
 				<div class="menu__item">ルーム作成</div>
 			</router-link>
 			<router-link to="/surveyEdit">
