@@ -49,36 +49,9 @@
 				</tbody>
 			</template>
 		</v-simple-table>
-		<!-- <v-simple-table
-		v-if="auth"
-		>
-		<template v-slot:default>
-				<thead>
-					<tr>
-					<th class="text-center">
-						ユーザーネーム（工事中）
-					</th>
-					<th class="text-center">
-						メールアドレス（工事中）
-					</th>
-					</tr>
-				</thead>
-			<tbody>
-				<tr
-					v-for="item in users"
-					:key="item.name"
-				>
-				<td>{{ user.displayName }}</td>
-				<td>{{ auth.email }}</td>
-				</tr>
-			</tbody>
-		</template>
-		</v-simple-table> -->
-		<v-container>
-			<router-link to="/user">
-				<v-btn class="ma-2" color="primary" dark>戻る</v-btn>
-			</router-link>
-		</v-container>
+		<router-link to="/user">
+			<v-btn class="ma-2" color="primary" dark>戻る</v-btn>
+		</router-link>
 	</v-main>
 </v-app>
 	

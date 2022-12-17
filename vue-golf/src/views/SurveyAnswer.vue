@@ -8,21 +8,92 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> -->
-		<router-link to="/surveyConfirmed">
-			<v-btn class="ma-2" color="primary" dark>確認</v-btn>
-		</router-link>
-
+		<v-simple-table>
+			<template v-slot:default>
+				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+					<tr>
+					<th class="text-center">
+						開催候補地1
+					</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td><!--開催候補地1--></td>
+					<!--
+					・指定しているユーザーネームを出力したい
+					・ログインしてるユーザー情報は除外する
+					-->
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+					<th class="text-center">
+						開催候補地2
+					</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td><!--開催候補地2--></td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							候補日
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><!--候補日--></td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							回答締切
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><!--回答締切--></td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							備考
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><!--備考--></td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-btn class="ma-2" color="secondary" dark to="/">断る</v-btn>
+		<v-btn class="ma-2" color="primary" dark to="/">参加</v-btn>
 	</v-main>
 	</v-app>
 </template>
