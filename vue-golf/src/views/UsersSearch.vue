@@ -29,7 +29,7 @@
 				<v-col cols="3">
 					<v-btn
 						color="primary"
-						@click="search(keyword)"><!--firestoreで、検索した時の処理をmethodで書く必要がある-->
+						@click="search"><!--firestoreで、検索した時の処理をmethodで書く必要がある-->
 						検索する
 					</v-btn>
 				</v-col>
@@ -107,5 +107,28 @@ export default {
 		return 	this.$route.query.user_id;
 		},
 	},
+	methods: {
+		async search() {
+			const userDoc = firebase.firestore().collection("users")
+			// Create a query against the collection.
+			let query = await userDoc.where("user.id", "==", this.keyword).get()
+			console.log("query call", query)
+			.then(result => {
+					console.log("success", result);
+			})
+			.catch((error) => {
+				console.log("検索に失敗しました", error);
+			});
+			// .then((result) => {
+			// 		console.log('success', result);
+			// 		this.body = ""
+			// 	})
+			// 	.catch((error) => {
+			// 		console.log('fail', error);
+			// 		alert('メッセージの送信に失敗しました')
+			// 	})
+		}
+	}
 }
 </script>
+
