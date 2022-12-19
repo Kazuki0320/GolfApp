@@ -20,6 +20,50 @@
 			clear
 		</v-btn> 
 	-->
+	<!-- <v-row>
+			<v-col
+			v-for="user in users"
+			:key="user.id"
+			cols="4"
+			>
+			this.friendsがpushした後にどういうデータが入っているか？
+				[{id: doc.id},{id: doc.id}]
+			
+			<router-link :to="{ path: '/profile', query: { user_id: user.id }}">
+			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
+			</router-link>
+			
+			</v-col>
+		</v-row> -->
+		<v-col
+			v-for="user in users"
+			:key="user.id"
+			class="d-flex"
+			cols="6"
+			sm="6"
+		>
+			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
+			{{user}}
+		</v-col>
+		<v-col cols="12">
+		<v-autocomplete
+			:items="items"
+			outlined
+			dense
+			chips
+			small-chips
+			label="友人検索"
+			multiple
+		></v-autocomplete>
+		</v-col>
+		<!-- <v-col
+			class="d-flex"
+			cols="12"
+			sm="6">
+			<v-select
+			:items="users"
+			label="友人一覧"></v-select>
+		</v-col> -->
 		<v-row>
 			<v-col cols="12">
 				<!-- <v-col>都道府県</v-col>
@@ -120,10 +164,12 @@
 					></v-text-field>
 					</template>
 					<v-date-picker
-						v-model="date"
 						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
+						locale="jp-ja">
+					</v-date-picker>
+					<v-date-picker
+						@input="menu = false"
+						locale="jp-ja">
 					</v-date-picker>
 					</v-menu>
 				</v-col>
@@ -151,22 +197,21 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			console.log("user", user);
-
-		// 	const snapshot = await userRef.get()
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
+		this.getUser()
+	},
+	mounted() {
+		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+		// console.log("uid call", this.auth.uid)
+		console.log("userId", this.user.id)
 	},
 	data: () => ({
+		items: ['foo', 'bar', 'fizz', 'buzz'],
+		value: null,
 		users:[],
-		// menu: false,
+		user:'',
+		auth:null,
+		menu: false,
+		date:new Date().toISOString().substr(0, 10),
 		pref: [
 			'北海道',
 			'青森',
@@ -264,52 +309,39 @@ export default {
 			// {"no":"47","name":"\u6c96\u7e04\u770c"}
 		]
 	}),
+	methods: {
+		async getUser() {
+			const userRef = firebase.firestore().collection("users")
+			const snapshot = await userRef.get()
+			// console.log("snapshot call", snapshot);
+
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id
+				}
+				if(!(data.id == this.auth.uid)) {
+					this.users.push(data)
+					console.log("data", this.users)
+				}else{
+					// console.log("success")
+				}
+
+			})
+			// snapshot.forEach(doc => {
+			// 	let data = {
+			// 		id: doc.id
+			// 	}
+			// 	if(!(data.id == this.auth.uid)) {
+			// 		this.users.push(data)
+			// 	}else{
+			// 		// console.log("success")
+			// 	}
+		}
+	},
 	computed: {
 		userId () {
 		return 	this.$route.query.user_id;
 		},
-		// getPref: {
-		// 	get: function () {
-		// 		let self = this;
-		// 		return self.pref.filter(function (item) {
-		// 			return item;
-		// 		});
-		// 	},
-		// 	set: function (v) {
-		// 		this.pref = v;
-		// 	}
-		// }
-	},
+	}
 }
 </script>
-<!-- methods: {
-	clear() {
-		// console.log("clear call");
-		this.body = "";
-	},
-	submit() {
-		// console.log("submit call", this.body);
-		// this.messages.push({
-		// 	message: this.body,
-		// 	name: this.auth.displayName,
-		// 	photoURL: this.auth.photoURL,
-		// 	createdAt: firebase.firestore.Timestamp.now()
-		// });
-		
-		const roomRef = firebase.firestore().collection("rooms").doc(this.roomId);
-		roomRef.collection('messages').add({
-			message: this.body,
-			name: this.auth.displayName,
-			photoURL: this.auth.photoURL,
-			createdAt: firebase.firestore.Timestamp.now()
-		})
-		.then(result => {
-			console.log('success', result);
-			this.body = "";
-		})
-		.catch(error => {
-			console.log('fail', error);
-			alert('メッセージの送信に失敗しました。')
-		})
-	}
-} -->

@@ -19,7 +19,7 @@
 				</thead>
 					<tbody>
 					<tr>
-						<td>{{ user }}</td>
+						<td>空白</td>
 					</tr>
 					</tbody>
 					<!-- <v-col
@@ -45,7 +45,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ user }}</td>
+						<td>空白</td>
 					</tr>
 				</tbody>
 			</template>
@@ -73,6 +73,9 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
+			// this.user_id = this.userId()
+			// console.log("user_id", this.user_id)
+
 			this.users = []
 			// console.log("userId call", this.userId)//userID取得確認OK
 			const userRef = firebase.firestore().collection("users").doc(this.userId)
@@ -87,7 +90,8 @@ export default {
 		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
-		users:[]
+		users:[],
+		// user_id: ''
 	}),
 	computed: {
 		userId () {

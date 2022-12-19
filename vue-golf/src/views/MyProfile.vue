@@ -13,8 +13,7 @@
 	-->
 	<v-main>
 		<v-simple-table
-		v-if="auth"
-		>
+		v-if="user">
 			<template v-slot:default>
 				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
 					<tr>
@@ -54,7 +53,8 @@
 						label="ユーザーネーム（工事中）"
 						clearable
 					></v-text-field> -->
-					<router-link to="/editProfile">
+					<router-link
+					:to="{ path: '/editProfile', query: { user_id: this.user_id}}">
 						<v-btn color="primary" dark>マイページ編集</v-btn>
 					</router-link>
 				</v-col>
@@ -85,12 +85,16 @@ export default {
 		Sidebar
 	},
 	async created() {
-			console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
+			this.user_id = this.$route.query.user_id;
+			console.log("user_id", this.user_id);
+
+			// console.log("userId call", this.userId)//userID取得確認OK
+			const userRef = firebase.firestore().collection("users").doc(this.user_id)
 			const userDoc = await userRef.get()
 			const user = userDoc.data()
-			console.log("user info", user);
-			// this.user = user
+			// console.log("user info", user);
+			this.user = user
+			// console.log("user", this.user)
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -98,36 +102,11 @@ export default {
 		// 		this.users.push(doc.data())
 		// 	// 	console.log("this.users call", this.users)
 	},
-	async mounted() {
-		this.auth = JSON.parse(sessionStorage.getItem('user'))
-		console.log("auth call", this.auth);
-		// this.email = this.auth.email
-		// this.displayName = this.auth.displayName
-		// userRef.collection('users').add({//←コメントアウトするとこ
-			// 	name: this.auth.user.displayName,
-			// 	email: this.auth.user.email,
-			// 	uid: this.auth.user.uid,
-			// 	refreshToken: this.auth.user.refreshToken
-			// })
-		
-		// const userDoc = await userRef.get()
-		// console.log("userDoc call", userDoc.data())
-	},
 	data: () => ({
+		user_id:'',
 		user:'',
 		userName: '',
 		email: '',
-		auth: null,
-		// desserts: [
-		// {
-		// 	name: 'Frozen Yogurt',
-		// 	calories: 159,
-		// }]
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
 }
 </script>

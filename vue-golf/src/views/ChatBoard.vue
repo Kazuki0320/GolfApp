@@ -144,10 +144,6 @@ import Sidebar from '@/components/layouts/Sidebar'
 				this.body = "";
 			},
 			submit() {
-				// console.log("submit call", this.body)
-				// this.messages.unshift({ message: this.body });
-				// this.body = "";
-
 				const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
 				roomRef.collection('messages').add({
 					message: this.body,

@@ -9,126 +9,122 @@
 	</v-app-bar>
 
 	<v-main>
-		<v-row>
-			<v-col cols="12">
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					label="グループ名"
-					required
-				></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					label="ゴルフ場"
-					required
-				></v-text-field>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					:items="pref"
-					label="開催候補地1"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					:items="pref"
-					label="開催候補地2"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="候補日"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="回答締切"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col>
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					label="備考"
-					required
-				></v-text-field>
-				</v-col>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							グループ名
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							ゴルフ場
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+					<tr>
+						<th class="text-center">
+							開催候補地1
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							開催候補地2
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							候補日
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							回答締切
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							備考
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
 				<router-link to="roomCreateConfirmed">
 					<v-btn class="ma-2" color="primary" dark>修正</v-btn>
 				</router-link>
-			
 					<v-btn class="ma-2" color="primary" dark to="/">確定</v-btn>
-			</v-col>
-		</v-row>
 		<!-- <v-btn
 			class="mr-4"
 			type="submit"

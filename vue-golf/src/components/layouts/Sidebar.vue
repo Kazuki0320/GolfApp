@@ -5,7 +5,11 @@
 	>
 	
 		<v-sheet color="grey lighten-4" class="pa-4">
-			<router-link :to="{ path: '/myProfile', query: { user_id: user.id }}">
+			<router-link 
+			v-for="user in user"
+			:key="user.id"
+			cols="4"
+			:to="{ path: '/myProfile', query: { user_id: user.id }}">
 				<v-avatar color="indigo">
 					<v-icon dark>
 						mdi-account-circle
@@ -24,11 +28,11 @@
 			link
 		>
 			<v-list-item-icon>
-			<v-icon>{{ icon }}</v-icon>
+				<v-icon>{{ icon }}</v-icon>
 			</v-list-item-icon>
 
 			<v-list-item-content>
-			<v-list-item-title>{{ text }}</v-list-item-title>
+				<v-list-item-title>{{ text }}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
 		<v-list-item @click="logout">
@@ -53,29 +57,21 @@ import firebase from "@/firebase/firebase"
 		// this.getUser()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
-		console.log("uid", this.auth.uid)
+		console.log("uid", this.auth)
 		const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()
 			snapshot.forEach(doc => {
 				let data = {
 					id: doc.id
 				}
-				const user = data
-				console.log("data call", user)
+				if(this.auth.uid == data.id) {
+					this.user.push(data)
+				}else{
+					// console.log("success")
+				}
+				console.log("userInfo", this.user)
 			})
-			// if(this.auth.uid == this.user.id) {
-			// 	firebase.firestore().collection("users").get()
-			// }
-		/*[やりたいこと]
-		・sessionStorageから取得してきたログイン情報のuidとfirestore上のユーザードキュメントを比較して、
-		ログインしているuidと同じIDを見つけたら、firestore上からその人の情報を取得してくる。
-		*/
-		// console.log("userId call", this.userId)//全部のドキュメントのIDを取得確認
-		
-
-		// console.log("userData", this.user)
-		// if(this.auth.uid == )
-
+	
 		// this.email = this.auth.email
 		// const userRef = await firebase.firestore().collection('users').add({
 		// 		email: this.email
@@ -102,7 +98,7 @@ import firebase from "@/firebase/firebase"
 		['mdi-account-multiple', 'users','/user'],
 		// ['mdi-message', 'messages','/about'],
 		],
-		user:'',
+		user:[],
 		auth: null,
 		email: '',
 		displayName: ''
@@ -124,15 +120,6 @@ import firebase from "@/firebase/firebase"
 		// 	const snapshot = await roomRef.get()
 		// 	// console.log("snapshot call", snapshot);
 
-		// 	snapshot.forEach(doc => {
-		// 		let data = {
-		// 			id: doc.id
-		// 		}
-		// 		console.log(data)
-		// 		this.users.push(data)
-
-		// 		//this.friendsがpushした後にどういうデータが入っているか？
-		// 		// [{id: doc.id},{id: doc.id}]
 		// }
 		// async getUser() {
 			

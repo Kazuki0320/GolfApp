@@ -34,7 +34,7 @@
 					</v-btn>
 				</v-col>
 			</v-row>
-			<v-row>
+			<!-- <v-row>
 				<v-col cols="12" md="6"
 				v-for="(users, index) in searchResults" :key="users.index">
 				<v-card class="mx-auto">
@@ -59,7 +59,7 @@
 					</v-row>
 				</v-card>
 				</v-col>
-			</v-row>
+			</v-row> -->
 			
 		</v-container>
 		<!-- <v-btn
@@ -111,9 +111,9 @@ export default {
 		async search() {
 			const userDoc = firebase.firestore().collection("users")
 			// Create a query against the collection.
-			let query = await userDoc.where("user.id", "==", this.keyword).get()
+			let query = await userDoc.where("doc", "==", this.keyword).get()
 			console.log("query call", query)
-			.then(result => {
+			.then((result) => {
 					console.log("success", result);
 			})
 			.catch((error) => {

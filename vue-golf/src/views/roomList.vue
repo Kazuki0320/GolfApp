@@ -16,14 +16,17 @@
 			</button >
 				<div class="menu" v-bind:class="{'is-active' : open }">
 
-			<router-link to="/roomCreateConfirmed">
-				<div class="menu__item">ルーム作成</div>
-			</router-link>
-			<router-link to="/surveyEdit">
-				<div class="menu__item">フレンドを誘う</div>
-			</router-link>
+					<router-link to="/roomCreateConfirmed">
+						<div class="menu__item">ルーム作成</div>
+					</router-link>
+					<router-link 
+					v-for="user in users"
+					:key="user.id"
+					:to="{ path: '/surveyEdit', query: { user_id: user.id }}">
+						<div class="menu__item">フレンドを誘う</div>
+					</router-link>
 
-			</div>
+				</div>
 			
 				<!-- <v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
 			<v-icon dark right>mdi-checkbox-marked-circle</v-icon> ←チョンマークを表示してくれるv-iconディレクティブ -->
@@ -79,12 +82,17 @@ export default {
 	},
 	mounted() {
 		this.getRooms()
+		this.getUser()
+
+		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+		// console.log("uid call", this.auth.uid)
 
 		// this.auth = JSON.parse(sessionStorage.getItem('user'))
 		// console.log("auth call roomlist", this.auth);
 	},
 	data: () => ({
 		rooms:[],
+		users:[],
 		open: false,
 		auth: null
 	}),
@@ -120,6 +128,23 @@ export default {
 		// })
 
 		},
+		async getUser() {
+			const userRef = firebase.firestore().collection("users")
+			const snapshot = await userRef.get()
+			// console.log("snapshot call", snapshot);
+
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id
+				}
+				if(!(data.id == this.auth.uid)) {
+					this.users.push(data)
+					console.log("data", this.users)
+				}else{
+					// console.log("success")
+				}
+			})
+		}
 	}
 }
 </script>

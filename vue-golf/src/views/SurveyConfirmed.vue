@@ -8,136 +8,86 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> 
-	-->
-		<v-row>
-			<v-col cols="12">
-				<!-- <v-col>都道府県</v-col>
-				<select id="shot_pref" name="input_pref" class="form-control input-lg">
-					<option value="">都道府県選択</option>
-					<option v-for="(item) in getPref"
-					:key="item.no">
-					{{ item.name }}
-					</option>
-				</select> -->
-				<!-- <v-col cols="4">
-					<v-img :src="book.image"></v-img>
-				</v-col> -->
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					:items="pref"
-					label="開催候補地1"
-				>
-					<!-- <option v-for="(item) in getPref"
-					:key="item.no">
-					{{ item.name }}
-					</option> -->
-				</v-select>
-				</v-col>
-					<!-- <v-text-field
-						label="都道府県選択1"
-						required
-					></v-text-field> -->
-					<!-- class="mx-2" v-model="book.memo">
-					{{ book.memo }} -->
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					:items="pref"
-					label="開催候補地2"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="候補日"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="回答締切"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col>
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					label="備考"
-					required
-				></v-text-field>
-				</v-col>
-			</v-col>
-		</v-row>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+					<tr>
+						<th class="text-center">
+							開催候補地1
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							開催候補地2
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							候補日
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							回答締切
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							備考
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
 		<router-link to="/surveyEdit">
 			<v-btn color="secondary">一覧に戻る</v-btn>
 		</router-link>
@@ -167,7 +117,9 @@ export default {
 		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
-		users:[]
+		users:[],
+		menu: false,
+		date:new Date().toISOString().substr(0, 10),
 	}),
 	computed: {
 		userId () {
