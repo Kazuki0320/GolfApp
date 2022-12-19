@@ -19,7 +19,7 @@
 				</thead>
 					<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ user.userName }}</td>
 					</tr>
 					</tbody>
 					<!-- <v-col
@@ -45,7 +45,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ user.email }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -61,7 +61,7 @@
 		<v-btn @click="clear">
 			clear
 		</v-btn> -->
-		<router-link to="/myProfile">
+		<router-link :to="{ path: '/myProfile', query: { user_id: this.user_id }}">
 			<v-btn color="primary">編集完了</v-btn>
 		</router-link>
 	</v-main>
@@ -73,14 +73,16 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			// this.user_id = this.userId()
-			// console.log("user_id", this.user_id)
+			this.user_id = this.$route.query.user_id;
+			console.log("user_id", this.user_id)
 
 			this.users = []
 			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
+			const userRef = firebase.firestore().collection("users").doc(this.user_id)
 			const userDoc = await userRef.get()
 			const user = userDoc.data()
+			this.user = user
+
 			console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
@@ -91,7 +93,9 @@ export default {
 	},
 	data: () => ({
 		users:[],
-		// user_id: ''
+		user: '',
+		userName: '',
+		email: ''
 	}),
 	computed: {
 		userId () {
