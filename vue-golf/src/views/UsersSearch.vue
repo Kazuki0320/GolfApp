@@ -119,14 +119,6 @@ export default {
 			.catch((error) => {
 				console.log("検索に失敗しました", error);
 			});
-			// .then((result) => {
-			// 		console.log('success', result);
-			// 		this.body = ""
-			// 	})
-			// 	.catch((error) => {
-			// 		console.log('fail', error);
-			// 		alert('メッセージの送信に失敗しました')
-			// 	})
 		}
 	}
 }

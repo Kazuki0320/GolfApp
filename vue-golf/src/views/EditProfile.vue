@@ -8,59 +8,27 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
-					<tr>
-						<th class="text-center">
-							ユーザーネーム
-						</th>
-					</tr>
-				</thead>
-					<tbody>
-					<tr>
-						<td>{{ user.userName }}</td>
-					</tr>
-					</tbody>
-					<!-- <v-col
-					cols="12"
-					sm="6"
-					md="3"
-					>
+		<v-container>
+			<v-row>
+				<v-col cols="12">
 					<v-text-field
 						label="ユーザーネーム"
-					></v-text-field>
-					</v-col> -->
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
-					<tr>
-						<th class="text-center">
-							メールアドレス
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ user.email }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> -->
+						clearable
+						v-model="userName">
+					</v-text-field>
+				</v-col>
+			</v-row>
+			<v-row>
+				<v-col cols="12">
+					<v-text-field
+						label="メールアドレス"
+						clearable
+						v-model="email">
+					</v-text-field>
+				</v-col>
+			</v-row>
+		</v-container>
+			
 		<router-link :to="{ path: '/myProfile', query: { user_id: this.user_id }}">
 			<v-btn color="primary">編集完了</v-btn>
 		</router-link>
@@ -73,17 +41,15 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.user_id = this.$route.query.user_id;
-			console.log("user_id", this.user_id)
-
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.user_id)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			this.user = user
-
-			console.log("user", user);
+		this.user_id = this.$route.query.user_id;
+		// console.log("user_id", this.user_id)
+		this.users = []
+		// console.log("userId call", this.userId)//userID取得確認OK
+		const userRef = firebase.firestore().collection("users").doc(this.user_id)
+		const userDoc = await userRef.get()
+		const user = userDoc.data()
+		this.user = user
+		// console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -97,10 +63,5 @@ export default {
 		userName: '',
 		email: ''
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
 }
 </script>
