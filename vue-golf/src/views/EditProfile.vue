@@ -14,7 +14,7 @@
 					<v-text-field
 						label="ユーザーネーム"
 						clearable
-						v-model="userName">
+						v-model="user.userName">
 					</v-text-field>
 				</v-col>
 			</v-row>
@@ -23,14 +23,16 @@
 					<v-text-field
 						label="メールアドレス"
 						clearable
-						v-model="email">
+						v-model="user.email">
 					</v-text-field>
 				</v-col>
 			</v-row>
 		</v-container>
 			
 		<router-link :to="{ path: '/myProfile', query: { user_id: this.user_id }}">
-			<v-btn color="primary">編集完了</v-btn>
+			<v-btn 
+			color="primary"
+			@click="submit">編集完了</v-btn>
 		</router-link>
 	</v-main>
 	</v-app>
@@ -49,7 +51,7 @@ export default {
 		const userDoc = await userRef.get()
 		const user = userDoc.data()
 		this.user = user
-		// console.log("user", user);
+		console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -60,8 +62,33 @@ export default {
 	data: () => ({
 		users:[],
 		user: '',
-		userName: '',
-		email: ''
 	}),
+	methods: {
+		submit () {
+			const userRef = firebase.firestore().collection("users").doc(this.user_id)
+			userRef.update({
+				email: this.user.email,
+				userName: this.user.userName
+			})
+			// const userRef = firebase.firestore().collection("users").doc(this.user_id)
+			// userRef.update({
+			// 	userName: "kazuki0320"
+			// })
+			// 			const handleSubmit = e => {
+			//   e.preventDefault()
+			
+			//   updateDoc(docRef, {
+			//     title: book.title,
+			//     author: book.author,
+			//     category: book.category,
+			//   })
+						// .then(doc => {
+			// this.memoRef.doc(doc.id).update({
+			// id: doc.id
+			// })
+			// })
+			// }
+		}
+	}
 }
 </script>
