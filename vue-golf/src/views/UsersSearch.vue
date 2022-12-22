@@ -99,6 +99,7 @@ export default {
 	},
 	data: () => ({
 		users:[],
+		user: '',
 		keyword: '',
 		searchResults:[]
 	}),
@@ -109,16 +110,49 @@ export default {
 	},
 	methods: {
 		async search() {
-			const userDoc = firebase.firestore().collection("users")
-			// Create a query against the collection.
-			let query = await userDoc.where("doc", "==", this.keyword).get()
-			console.log("query call", query)
-			.then((result) => {
-					console.log("success", result);
-			})
-			.catch((error) => {
-				console.log("検索に失敗しました", error);
-			});
+
+			// console.log("userId call", this.userId)//userID
+			const userRef = firebase.firestore().collection("users").doc(this.keyword)
+			const userDoc = await userRef.get()
+			// console.log("userDoc call", userDoc);
+			const user = userDoc.data()
+			console.log("user", user);
+			this.user = user
+
+			//[下記処理はemailや個人IDなどで検索する場合に使用する]
+			// const userDoc = firebase.firestore().collection("users")
+			// // console.log("userDoc", userDoc)
+			// await userDoc.where("id", "==", this.keyword).get()
+			// // console.log("query call", query)
+			// .then((result) => {
+			// 	console.log("success",result)
+			// 	result.forEach((doc) => {
+			// 	// doc.data() is never undefined for query doc snapshots
+			// 	console.log(doc.id, " => ", doc.data());
+			// 	});
+			// })
+			// .catch((error) => {
+			// 	console.log("検索に失敗しました", error);
+			// });
+
+	// 		.then((querySnapshot) => {
+    //     querySnapshot.forEach((doc) => {
+    //         // doc.data() is never undefined for query doc snapshots
+    //         console.log(doc.id, " => ", doc.data());
+    //     });
+    // })
+		// 	snapshot.docs.forEach(doc => {
+        //     const data = doc.data()
+        //     //準備しておいた配列に取り出したデータをpushします
+        //     posts.push({
+        //         authorName: data.authorName,
+        //         content: data.content,
+        //         createdAt: data.createdAt,
+        //         title: data.title,
+        //         id: doc.id
+        //     })
+//         // })
+
 		}
 	}
 }

@@ -19,10 +19,7 @@
 					<router-link to="/roomCreateConfirmed">
 						<div class="menu__item">ルーム作成</div>
 					</router-link>
-					<router-link 
-					v-for="user in users"
-					:key="user.id"
-					:to="{ path: '/surveyEdit', query: { user_id: user.id }}">
+					<router-link to="/surveyEdit">
 						<div class="menu__item">フレンドを誘う</div>
 					</router-link>
 

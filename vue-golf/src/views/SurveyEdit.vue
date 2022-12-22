@@ -8,34 +8,7 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> 
-	-->
-	<!-- <v-row>
-			<v-col
-			v-for="user in users"
-			:key="user.id"
-			cols="4"
-			>
-			this.friendsがpushした後にどういうデータが入っているか？
-				[{id: doc.id},{id: doc.id}]
-			
-			<router-link :to="{ path: '/profile', query: { user_id: user.id }}">
-			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
-			</router-link>
-			
-			</v-col>
-		</v-row> -->
-		<v-col
+		<!-- <v-col
 			v-for="user in users"
 			:key="user.id"
 			class="d-flex"
@@ -43,8 +16,8 @@
 			sm="6"
 		>
 			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
-			{{user}}
-		</v-col>
+			{{user.id}}
+		</v-col> -->
 		<v-col cols="12">
 		<v-autocomplete
 			:items="items"
@@ -313,20 +286,28 @@ export default {
 		async getUser() {
 			const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()
-			// console.log("snapshot call", snapshot);
+			console.log("snapshot call", snapshot);
 
-			snapshot.forEach(doc => {
-				let data = {
-					id: doc.id
-				}
-				if(!(data.id == this.auth.uid)) {
-					this.users.push(data)
-					console.log("data", this.users)
-				}else{
-					// console.log("success")
-				}
+			// snapshot.forEach(doc => {
+			// 	let data = {
+			// 		id: doc.id
+			// 	}
+			// 	if(!(data.id == this.auth.uid)) {
+			// 		this.users.push(data)
+			// 		// this.users.push(data)
+			// 	}else{
+			// 		// console.log("success")
+			// 	}
+			// console.log("data", this.users)
 
-			})
+			// 	const userRef = firebase.firestore().collection("users").doc(this.userId)
+			// const userDoc = await userRef.get()
+			// // console.log("userDoc call", userDoc);
+			// const user = userDoc.data()
+			// console.log("user", user);
+			// this.user = user
+
+			// })
 			// snapshot.forEach(doc => {
 			// 	let data = {
 			// 		id: doc.id
