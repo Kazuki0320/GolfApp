@@ -170,18 +170,29 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		this.getUser()
+		// this.getUser()
 	},
-	mounted() {
-		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+	async mounted() {
+		// this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
 		// console.log("uid call", this.auth.uid)
-		console.log("userId", this.user.id)
+
+		this.user_id = this.$route.query.user_id;
+		console.log("user_id", this.user_id);
+		// console.log("userId call", this.userId)//userID取得確認OK
+		const userRef = firebase.firestore().collection("users").doc(this.user_id)
+		const userDoc = await userRef.get()
+		const user = userDoc.data()
+		console.log("user info", user);
+		// this.user = user
+		// // console.log("user", this.user)
+
+		// snapshot.data().get()
 	},
 	data: () => ({
 		items: ['foo', 'bar', 'fizz', 'buzz'],
 		value: null,
 		users:[],
-		user:'',
+		user:[],
 		auth:null,
 		menu: false,
 		date:new Date().toISOString().substr(0, 10),
@@ -282,43 +293,27 @@ export default {
 			// {"no":"47","name":"\u6c96\u7e04\u770c"}
 		]
 	}),
-	methods: {
-		async getUser() {
-			const userRef = firebase.firestore().collection("users")
-			const snapshot = await userRef.get()
-			console.log("snapshot call", snapshot);
+	// methods: {
+	// 	async getUser() {
+	// 		// 	const userRef = firebase.firestore().collection("users").doc(this.userId)
+	// 		// const userDoc = await userRef.get()
+	// 		// // console.log("userDoc call", userDoc);
+	// 		// const user = userDoc.data()
+	// 		// console.log("user", user);
+	// 		// this.user = user
 
-			// snapshot.forEach(doc => {
-			// 	let data = {
-			// 		id: doc.id
-			// 	}
-			// 	if(!(data.id == this.auth.uid)) {
-			// 		this.users.push(data)
-			// 		// this.users.push(data)
-			// 	}else{
-			// 		// console.log("success")
-			// 	}
-			// console.log("data", this.users)
-
-			// 	const userRef = firebase.firestore().collection("users").doc(this.userId)
-			// const userDoc = await userRef.get()
-			// // console.log("userDoc call", userDoc);
-			// const user = userDoc.data()
-			// console.log("user", user);
-			// this.user = user
-
-			// })
-			// snapshot.forEach(doc => {
-			// 	let data = {
-			// 		id: doc.id
-			// 	}
-			// 	if(!(data.id == this.auth.uid)) {
-			// 		this.users.push(data)
-			// 	}else{
-			// 		// console.log("success")
-			// 	}
-		}
-	},
+	// 		// })
+	// 		// snapshot.forEach(doc => {
+	// 		// 	let data = {
+	// 		// 		id: doc.id
+	// 		// 	}
+	// 		// 	if(!(data.id == this.auth.uid)) {
+	// 		// 		this.users.push(data)
+	// 		// 	}else{
+	// 		// 		// console.log("success")
+	// 		// 	}
+	// 	}
+	// },
 	computed: {
 		userId () {
 		return 	this.$route.query.user_id;

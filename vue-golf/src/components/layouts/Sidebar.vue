@@ -6,17 +6,14 @@
 	
 		<v-sheet color="grey lighten-4" class="pa-4">
 			<router-link 
-			v-for="user in user"
-			:key="user.id"
-			cols="4"
-			:to="{ path: '/myProfile', query: { user_id: user.id }}">
+			:to="{ path: '/myProfile', query: { user_id: this.user.id }}">
 				<v-avatar color="indigo">
 					<v-icon dark>
 						mdi-account-circle
 					</v-icon>
 				</v-avatar>
 			</router-link>
-			<div class="username">{{ auth && auth.displayName }}</div>
+			<div class="username">{{ userInfo.userName }}</div>
 		</v-sheet>
 
 
@@ -42,7 +39,7 @@
 				</v-icon>
 			</v-list-item-icon>
 			<v-list-item-content>
-				<v-list-item-title>Logout</v-list-item-title>
+				<v-list-item-title>ログアウト</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
 		</v-list>
@@ -57,7 +54,7 @@ import firebase from "@/firebase/firebase"
 		// this.getUser()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
-		console.log("uid", this.auth)
+		// console.log("uid", this.auth)
 		const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()
 			snapshot.forEach(doc => {
@@ -65,13 +62,24 @@ import firebase from "@/firebase/firebase"
 					id: doc.id
 				}
 				if(this.auth.uid == data.id) {
-					this.user.push(data)
+					this.user = data
 				}else{
 					// console.log("success")
 				}
-				console.log("userInfo", this.user)
+				// console.log("user", this.user.id)
 			})
-	
+
+		const userDoc = firebase.firestore().collection("users").doc(this.user.id)
+		const userData = await userDoc.get()
+		this.userInfo = userData.data()
+		console.log("userInfo", this.userInfo)
+
+		// console.log("user call", this.user)
+		// const userDoc = userRef.data("QB7G6ur0aWglrXbfM8xaWTSePr93")
+		// console.log("userDoc", userDoc)
+		// const user = userDoc.data()
+		// console.log("user info", user)
+
 		// this.email = this.auth.email
 		// const userRef = await firebase.firestore().collection('users').add({
 		// 		email: this.email
@@ -89,16 +97,29 @@ import firebase from "@/firebase/firebase"
 		// 	this.$router.push('/login')
 		// }
 		// this.auth = JSON.parse(sessionStorage.getItem('user'))
-		
+	},
+	async created () {
+		// const userRef = firebase.firestore().collection("users").doc(this.user.id)
+		// console.log("userRef call", userRef)
+		// const userDoc = await userRef.get()
+		// console.log("userDoc", userDoc)
+		// const user = userDoc.data()
+		// console.log("user", user)
+		// const user = userDoc.data()
+		// // console.log("user info", user);
+		// this.userInfo = user
+		// console.log("userInfo", this.userInfo)
 	},
 	data: () => ({
 		drawer: null,
 		links: [
-		['mdi-door-open', 'rooms','/'],
-		['mdi-account-multiple', 'users','/user'],
-		// ['mdi-message', 'messages','/about'],
+		['mdi-door-open', 'ルーム','/'],
+		['mdi-account-multiple', 'ユーザー','/user'],
+		['mdi-message', 'ルーム作成','/roomCreateConfirmed'],
+		['mdi-message', 'フレンドを誘う','/surveyEdit'],
 		],
-		user:[],
+		user:'',
+		userInfo:'',
 		auth: null,
 		email: '',
 		displayName: ''
@@ -115,14 +136,13 @@ import firebase from "@/firebase/firebase"
 			})
 		},
 		// async getUsers() {
-		// 	this.users = []
 		// 	const roomRef = firebase.firestore().collection("users")
 		// 	const snapshot = await roomRef.get()
 		// 	// console.log("snapshot call", snapshot);
 
 		// }
 		// async getUser() {
-			
+
 		// },
 		logout() {
 			firebase.auth()

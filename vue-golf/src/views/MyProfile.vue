@@ -85,16 +85,15 @@ export default {
 		Sidebar
 	},
 	async created() {
-			this.user_id = this.$route.query.user_id;
-			// console.log("user_id", this.user_id);
-
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.user_id)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			// console.log("user info", user);
-			this.user = user
-			// console.log("user", this.user)
+		this.user_id = this.$route.query.user_id;
+		console.log("user_id", this.user_id);
+		// console.log("userId call", this.userId)//userID取得確認OK
+		const userRef = firebase.firestore().collection("users").doc(this.user_id)
+		const userDoc = await userRef.get()
+		const user = userDoc.data()
+		// console.log("user info", user);
+		this.user = user
+		// console.log("user", this.user)
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
