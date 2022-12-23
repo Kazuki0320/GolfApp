@@ -12,9 +12,13 @@
 		<!-- <v-btn icon>
 		<v-icon>mdi-dots-vertical</v-icon>
 		</v-btn> -->
-		<router-link to="/usersSearch">
-			<v-btn class="ma-2" color="primary" dark>ユーザー追加</v-btn>
-		</router-link>
+		<v-row>
+			<v-col>
+				<router-link :to="{ path: '/usersSearch', query: { user_id: this.user.id}}">
+					<v-btn class="ma-2" color="primary" dark>ユーザー追加</v-btn>
+				</router-link>
+			</v-col>
+		</v-row>
 	</v-app-bar>
 
 	<v-main>
@@ -54,10 +58,14 @@ export default {
 		// console.log("uid call", this.auth.uid)
 	},
 	data: () => ({
-		users:[],
+		users:'',
 		user:[]
 	}),
 	methods: {
+		/*下記処理は、ドキュメントIDの中でログインしてるユーザー以外のIDを取得する処理を書いてる。
+		→ログインしてるユーザーのフレンドのみを表示する処理に変更する。
+		→そこから、userIdをユーザー追加の画面へ渡す
+		*/
 		async getUsers() {
 			this.users = []
 			const userRef = firebase.firestore().collection("users")
@@ -69,7 +77,7 @@ export default {
 					id: doc.id
 				}
 				if(!(data.id == this.auth.uid)) {
-					this.users.push(data)
+					this.users = data
 				}else{
 					// console.log("success")
 				}

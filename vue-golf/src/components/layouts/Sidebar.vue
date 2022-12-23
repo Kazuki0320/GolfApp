@@ -72,7 +72,7 @@ import firebase from "@/firebase/firebase"
 		const userDoc = firebase.firestore().collection("users").doc(this.user.id)
 		const userData = await userDoc.get()
 		this.userInfo = userData.data()
-		console.log("userInfo", this.userInfo)
+		// console.log("userInfo", this.userInfo)
 
 		// console.log("user call", this.user)
 		// const userDoc = userRef.data("QB7G6ur0aWglrXbfM8xaWTSePr93")
@@ -115,8 +115,8 @@ import firebase from "@/firebase/firebase"
 		links: [
 		['mdi-door-open', 'ルーム','/'],
 		['mdi-account-multiple', 'ユーザー','/user'],
-		['mdi-message', 'ルーム作成','/roomCreateConfirmed'],
-		['mdi-message', 'フレンドを誘う','/surveyEdit'],
+		['mdi-door', 'ルーム作成','/roomCreateConfirmed'],
+		['mdi-hand-wave-outline', 'フレンドを誘う','/surveyEdit'],
 		],
 		user:'',
 		userInfo:'',

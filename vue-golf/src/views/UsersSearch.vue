@@ -8,7 +8,8 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<v-container>
+		<v-container
+		v-show="valid">
 			<v-row>
 				<v-col cols="6">
 					<v-text-field
@@ -34,34 +35,75 @@
 					</v-btn>
 				</v-col>
 			</v-row>
+		</v-container>
+
 			<!-- <v-row>
 				<v-col cols="12" md="6"
 				v-for="(users, index) in searchResults" :key="users.index">
-				<v-card class="mx-auto">
-					<v-row>
-						<v-col>
-							<v-avatar 
-							class="mb-4"
-							color="grey darken-1"
-							size="64"
-							></v-avatar>
-							<v-btn
-								color="secondary">
-								キャンセル
-							</v-btn>
-							<v-btn
-								color="primary"
-								@click="addUsersList(index)">
-								追加
-							</v-btn>
-							
-						</v-col>
-					</v-row>
+				<v-card class="mx-auto">-->
+		<v-container
+		v-show="isValid">
+			<v-sheet
+			color="grey lighten-4"
+			class="pa-16"
+			>
+				<v-row>
+					<v-col>
+						<v-avatar
+						class="mb-4"
+						color="grey darken-1"
+						size="64"
+						>
+						</v-avatar>
+						<div class="username">{{ this.user.userName }}</div>
+					</v-col>
+				</v-row>
+			</v-sheet>
+
+			<v-btn
+				color="primary"
+				@click="submit">
+				追加
+			</v-btn>
+		</v-container>
+		<!--
+		<div id="app-1">
+    <div v-show="checkflg">チェックが入るとこの要素が表示されます</div>
+    
+    <input type="checkbox" v-model="checkflg" /> チェックを入れる
+</div>
+
+<script>
+new Vue({
+    el: '#app-1',
+    data: {
+        checkflg : false,
+    }
+});
+</script>
+						<v-main>
+		<v-container>
+		<v-row>
+			<v-col
+			v-for="user in users"
+			:key="user.id"
+			cols="4"
+			>
+			this.friendsがpushした後にどういうデータが入っているか？
+				[{id: doc.id},{id: doc.id}]
+			
+			<router-link :to="{ path: '/profile', query: { user_id: user.id }}">
+			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
+			</router-link>
+			
+			</v-col>
+		</v-row>
+		</v-container>
+	</v-main>
 				</v-card>
 				</v-col>
 			</v-row> -->
 			
-		</v-container>
 		<!-- <v-btn
 			class="mr-4"
 			type="submit"
@@ -84,12 +126,14 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.users = []
-			console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			console.log("user", user);
+		console.log("userId",this.userId);
+
+		// this.users = []
+		// console.log("userId call", this.userId)//userID取得確認OK
+		// const userRef = firebase.firestore().collection("users").doc(this.userId)
+		// const userDoc = await userRef.get()
+		// const user = userDoc.data()
+		// console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -98,16 +142,11 @@ export default {
 		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
-		users:[],
+		valid: true,
 		user: '',
 		keyword: '',
 		searchResults:[]
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
 	methods: {
 		async search() {
 
@@ -119,6 +158,7 @@ export default {
 			console.log("user", user);
 			this.user = user
 
+			this.valid = !this.valid
 			//[下記処理はemailや個人IDなどで検索する場合に使用する]
 			// const userDoc = firebase.firestore().collection("users")
 			// // console.log("userDoc", userDoc)
@@ -134,27 +174,26 @@ export default {
 			// .catch((error) => {
 			// 	console.log("検索に失敗しました", error);
 			// });
-
-	// 		.then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //         // doc.data() is never undefined for query doc snapshots
-    //         console.log(doc.id, " => ", doc.data());
-    //     });
-    // })
-		// 	snapshot.docs.forEach(doc => {
-        //     const data = doc.data()
-        //     //準備しておいた配列に取り出したデータをpushします
-        //     posts.push({
-        //         authorName: data.authorName,
-        //         content: data.content,
-        //         createdAt: data.createdAt,
-        //         title: data.title,
-        //         id: doc.id
-        //     })
-//         // })
-
-		}
-	}
+		},
+		submit () {
+			console.log("success")
+			const userDoc = firebase.firestore().collection("users").doc(this.user_id)
+			console.log("userDoc", userDoc)
+		},
+	},
+	computed:	{
+		isValid () {
+			return !this.valid
+		},
+		userId () {
+		return 	this.$route.query.user_id;
+		},
+	},
 }
 </script>
 
+<style scoped>
+.username {
+	margin-bottom: 10px;
+}
+</style>

@@ -73,13 +73,13 @@ data: () => ({
 		valid: true,
 		name: '',
 		nameRules: [
-	v => !!v || 'Name is required',
-	v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+			v => !!v || 'Name is required',
+			v => (v && v.length <= 10) || 'Name must be less than 10 characters',
 		],
 		email: '',
 		emailRules: [
-	v => !!v || 'メッセージを入力してください',
-	v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
+			v => !!v || 'メッセージを入力してください',
+			v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
 		],
 		password: '',
 		errorMessage: "",
