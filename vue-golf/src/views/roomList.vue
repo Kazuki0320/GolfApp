@@ -66,7 +66,7 @@ export default {
 		this.getUser()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
-		// console.log("uid call", this.auth.uid)
+		// console.log("uid call", this.auth)
 
 		// this.auth = JSON.parse(sessionStorage.getItem('user'))
 		// console.log("auth call roomlist", this.auth);

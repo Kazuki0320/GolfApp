@@ -105,8 +105,8 @@ export default {
 		// }]
 	}),
 	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
+		friendId () {
+		return 	this.$route.query.friend_id;
 		},
 	},
 	// methods: {
