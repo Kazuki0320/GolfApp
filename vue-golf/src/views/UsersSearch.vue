@@ -165,9 +165,9 @@ export default {
 			const userRef = firebase.firestore().collection("users").doc(this.keyword)
 			const userDoc = await userRef.get()
 			// console.log("userDoc call", userDoc);
-			const user = userDoc.data()
-			console.log("user", user);
-			this.user = user
+			this.user = userDoc.data()
+			// console.log("user", this.user);
+			// this.user = user
 
 			this.valid = !this.valid
 			//[下記処理はemailや個人IDなどで検索する場合に使用する]

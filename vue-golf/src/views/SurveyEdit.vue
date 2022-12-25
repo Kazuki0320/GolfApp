@@ -288,7 +288,6 @@ export default {
 	},
 	data: () => ({
 		friends: [],
-		friendsId: [],
 		friendsIdArray: [],
 		users:[],
 		user_id: '',

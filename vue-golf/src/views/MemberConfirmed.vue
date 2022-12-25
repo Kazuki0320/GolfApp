@@ -121,7 +121,7 @@
 				</tbody>
 			</template>
 		</v-simple-table>
-				<router-link to="roomCreateConfirmed">
+				<router-link :to=" { path: '/roomCreateConfirmed',query: { user_id: this.user_id} }">
 					<v-btn class="ma-2" color="primary" dark>修正</v-btn>
 				</router-link>
 					<v-btn class="ma-2" color="primary" dark to="/">確定</v-btn>
@@ -153,16 +153,17 @@
 </template>
 
 <script>
-import firebase from "@/firebase/firebase"
+// import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			console.log("user", user);
+		this.user_id = this.$route.query.user_id;
+		console.log("userId call", this.user_id)//userID取得確認OK
+		// this.users = []
+		// const userRef = firebase.firestore().collection("users").doc(this.userId)
+		// const userDoc = await userRef.get()
+		// const user = userDoc.data()
+		// console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -171,12 +172,9 @@ export default {
 		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
+		user_id:'',
+		user:'',
 		users:[]
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
 }
 </script>

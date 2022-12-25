@@ -4,7 +4,7 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>グループ作成(メンバー確定)</v-toolbar-title>
+		<v-toolbar-title>グループ作成</v-toolbar-title>
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
@@ -39,6 +39,20 @@
 					label="ゴルフ場"
 					required
 				></v-text-field>
+				</v-col>
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6">
+					<v-autocomplete
+						:items="friendsIdArray"
+						outlined
+						dense
+						chips
+						small-chips
+						label="友人検索"
+						multiple
+					></v-autocomplete>
 				</v-col>
 				<v-col
 					class="d-flex"
@@ -144,7 +158,7 @@
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" to="/">一覧に戻る</v-btn>
-				<router-link to="/memberConfirmed">
+				<router-link :to="{ path: '/memberConfirmed', query: { user_id: this.user_id} }">
 					<v-btn class="ma-2" color="primary" dark>確認</v-btn>
 				</router-link>
 			</v-col>
@@ -176,11 +190,17 @@ export default {
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
 		console.log("user", this.user);
+
+		this.friendsIdArray =JSON.parse(userDoc.get("friends"))
+		console.log("friendsIdArray", this.friendsIdArray)
+
 	},
 	data: () => ({
 		menu: false,
+		friendsIdArray: [],
 		date:new Date().toISOString().substr(0, 10),
 		user:'',
+		user_id: '',
 		users:[],
 		pref: [
 			'北海道',
