@@ -103,7 +103,7 @@
 					</v-date-picker>
 					</v-menu>
 				</v-col>
-				<v-col
+				<!-- <v-col
 					cols="12"
 					sm="6"
 					md="4"
@@ -133,7 +133,7 @@
 						:day-format="date => new Date(date).getDate()">
 					</v-date-picker>
 					</v-menu>
-				</v-col>
+				</v-col> -->
 				<v-col
 					cols="12"
 					md="4"
@@ -170,20 +170,17 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			console.log("user", user);
-
-		// 	const snapshot = await userRef.get()
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
+		this.user_id = this.$route.query.user_id;
+		// console.log("user_id", this.user_id);
+		const userRef = firebase.firestore().collection("users").doc(this.user_id)
+		const userDoc = await userRef.get()
+		this.user = userDoc.data()
+		console.log("user", this.user);
 	},
 	data: () => ({
+		menu: false,
+		date:new Date().toISOString().substr(0, 10),
+		user:'',
 		users:[],
 		pref: [
 			'北海道',
@@ -235,10 +232,10 @@ export default {
 			'沖縄',
 		]
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
+	// computed: {
+	// 	userId () {
+	// 	return 	this.$route.query.user_id;
+	// 	},
+	// },
 }
 </script>

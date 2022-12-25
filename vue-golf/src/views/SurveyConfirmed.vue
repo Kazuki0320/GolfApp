@@ -88,7 +88,7 @@
 				</tbody>
 			</template>
 		</v-simple-table>
-		<router-link to="/surveyEdit">
+		<router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id} }">
 			<v-btn color="secondary">一覧に戻る</v-btn>
 		</router-link>
 		<router-link to="/surveyAnswer">
@@ -99,16 +99,20 @@
 </template>
 
 <script>
-import firebase from "@/firebase/firebase"
+// import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			console.log("user", user);
+		//ログインユーザーの友人情報を取得する必要があるので、user.idを前の画面から受け取ってくる必要がある。
+
+		this.user_id = this.$route.query.user_id;
+		console.log("user_id", this.userId);
+		// console.log("userId call", this.userId)//userID取得確認OK
+		// const userRef = firebase.firestore().collection("users").doc(this.user_id)
+		// console.log("userRef", userRef)
+		// const userDoc = await userRef.get()
+		// const user = userDoc.data()
+		// console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -117,14 +121,13 @@ export default {
 		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
+		user: '',
 		users:[],
-		menu: false,
-		date:new Date().toISOString().substr(0, 10),
 	}),
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	},
+	// computed: {
+	// 	userId () {
+	// 	return 	this.$route.query.user_id;
+	// 	},
+	// },
 }
 </script>

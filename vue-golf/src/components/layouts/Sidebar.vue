@@ -32,6 +32,20 @@
 				<v-list-item-title>{{ text }}</v-list-item-title>
 			</v-list-item-content>
 		</v-list-item>
+
+		<router-link :to="{ path: '/surveyEdit', query: { user_id: this.user.id }}">
+			<v-list-item>
+				<v-list-item-icon>
+					<v-icon color="blue">
+						mdi-hand-wave-outline
+					</v-icon>
+				</v-list-item-icon>
+				<v-list-item-content>
+					<v-list-item-title>フレンドを誘う</v-list-item-title>
+				</v-list-item-content>
+			</v-list-item>
+		</router-link>
+
 		<v-list-item @click="logout">
 			<v-list-item-icon>
 				<v-icon color="blue">
@@ -115,8 +129,8 @@ import firebase from "@/firebase/firebase"
 		links: [
 		['mdi-door-open', 'ルーム','/'],
 		['mdi-account-multiple', 'ユーザー','/user'],
-		['mdi-door', 'ルーム作成','/roomCreateConfirmed'],
-		['mdi-hand-wave-outline', 'フレンドを誘う','/surveyEdit'],
+		// ['mdi-door', 'ルーム作成','/roomCreateConfirmed'],
+		// ['mdi-hand-wave-outline', 'フレンドを誘う','/surveyEdit'],
 		],
 		user:'',
 		userInfo:'',

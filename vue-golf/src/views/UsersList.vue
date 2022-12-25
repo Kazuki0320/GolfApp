@@ -28,7 +28,7 @@
 				[{id: doc.id},{id: doc.id}]-->
 			
 			<router-link :to="{ path: '/profile', query: { friend_id: friend.id }}">
-			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
+				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
 			
 			</v-col>
@@ -57,11 +57,6 @@ export default {
 		friends:[]
 	}),
 	methods: {
-		/*下記処理は、ドキュメントIDの中でログインしてるユーザー以外のIDを取得する処理を書いてる。
-		→ログインしてるユーザーのフレンドのみを表示する処理に変更する。○
-		→そこから、userIdをユーザー追加の画面へ渡す。
-		→ルーム作成のボタンをルームリストに作成する
-		*/
 		async getUserId() {
 			const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()

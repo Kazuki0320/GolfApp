@@ -9,6 +9,11 @@
 
 		<v-spacer></v-spacer>
 
+		<!--ルーム作成画面にuser.idを渡す必要がある-->
+		<!-- <router-link :to="{ path: '/roomCreateConfirmed', query: { user_id: user.id }}"> -->
+		<router-link :to="{ path: '/roomCreateConfirmed', query: { user_id: this.user.id }}">
+			<v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
+		</router-link>
 				<!-- <v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
 			<v-icon dark right>mdi-checkbox-marked-circle</v-icon> ←チョンマークを表示してくれるv-iconディレクティブ -->
 	</v-app-bar>
@@ -51,7 +56,6 @@
 	</v-main>
 	</v-app>
 </template>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue-burger-menu@2.0.3/dist/vue-burger-menu.umd.js"></script> -->
 
 <script>
 import Sidebar from '@/components/layouts/Sidebar'
@@ -61,18 +65,32 @@ export default {
 	components: {
 		Sidebar
 	},
-	mounted() {
+	async mounted() {
 		this.getRooms()
-		this.getUser()
+		// this.getUser()
 
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
 		// console.log("uid call", this.auth)
 
+		const userRef = firebase.firestore().collection("users")
+			const snapshot = await userRef.get()
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id
+				}
+				if(this.auth.uid == data.id) {
+					this.user = data
+				}else{
+					// console.log("success")
+				}
+				console.log("user", this.user.id)
+			})
 		// this.auth = JSON.parse(sessionStorage.getItem('user'))
 		// console.log("auth call roomlist", this.auth);
 	},
 	data: () => ({
 		rooms:[],
+		user:'',
 		users:[],
 		open: false,
 		auth: null
@@ -109,23 +127,23 @@ export default {
 		// })
 
 		},
-		async getUser() {
-			const userRef = firebase.firestore().collection("users")
-			const snapshot = await userRef.get()
-			// console.log("snapshot call", snapshot);
+		// async getUser() {
+		// 	const userRef = firebase.firestore().collection("users")
+		// 	const snapshot = await userRef.get()
+		// 	// console.log("snapshot call", snapshot);
 
-			snapshot.forEach(doc => {
-				let data = {
-					id: doc.id
-				}
-				if(!(data.id == this.auth.uid)) {
-					this.users.push(data)
-					console.log("data", this.users)
-				}else{
-					// console.log("success")
-				}
-			})
-		}
+		// 	snapshot.forEach(doc => {
+		// 		let data = {
+		// 			id: doc.id
+		// 		}
+		// 		if(!(data.id == this.auth.uid)) {
+		// 			this.users.push(data)
+		// 			console.log("data", this.users)
+		// 		}else{
+		// 			// console.log("success")
+		// 		}
+		// 	})
+		// }
 	}
 }
 </script>

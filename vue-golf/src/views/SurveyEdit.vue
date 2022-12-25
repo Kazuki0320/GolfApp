@@ -18,9 +18,12 @@
 			<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			{{user.id}}
 		</v-col> -->
-		<v-col cols="12">
+		<v-col
+		class="d-flex"
+		cols="12"
+		sm="6">
 		<v-autocomplete
-			:items="items"
+			:items="friendsIdArray"
 			outlined
 			dense
 			chips
@@ -98,6 +101,7 @@
 					<template v-slot:activator="{ on, attrs }">
 					<v-text-field
 						v-model="date"
+						prepend-icon="mdi-calendar"
 						readonly
 						v-bind="attrs"
 						v-on="on"
@@ -113,12 +117,50 @@
 					</v-date-picker>
 					</v-menu>
 				</v-col>
+
+				<!--<template>
+				<v-menu v-model="menu" offset-y :close-on-content-click="false">
+					<template v-slot:activator="{ on }">
+					<v-btn icon color="primary" dark elevation="0" v-on="on">
+						<v-icon>mdi-calendar</v-icon>
+					</v-btn>
+					</template>
+					<v-date-picker v-model="picker" @click="menu = false"/>
+				</v-menu>
+				</template>
+				<script>
+				export default {
+				props: {
+					value: {
+					type: String,
+					default: new Date().toISOString().substr(0, 10)
+					}
+				},
+				data() {
+					return {
+					menu: false
+					};
+				},
+				computed: {
+					picker: {
+					get() {
+						return this.value;
+					},
+					set(val) {
+						this.menu = false;
+						this.$emit("input", val);
+					}
+					}
+				}
+				};
+				</script> -->
+
 				<v-col
 					cols="12"
 					sm="6"
 					md="4"
 				>
-					<v-menu
+					<!-- <v-menu
 						v-model="menu"
 						:close-on-content-click="false"
 						:nudge-right="40"
@@ -129,6 +171,7 @@
 					<template v-slot:activator="{ on, attrs }">
 					<v-text-field
 						v-model="date"
+						prepend-icon="mdi-calendar"
 						readonly
 						v-bind="attrs"
 						v-on="on"
@@ -144,7 +187,7 @@
 						@input="menu = false"
 						locale="jp-ja">
 					</v-date-picker>
-					</v-menu>
+					</v-menu> -->
 				</v-col>
 				<v-col
 					cols="12"
@@ -156,7 +199,7 @@
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" to="/">一覧に戻る</v-btn>
-				<router-link to="/surveyConfirmed">
+				<router-link :to="{ path:'/surveyConfirmed', query: { user_id: this.user_id}}">
 					<v-btn class="ma-2" color="primary" dark>確認</v-btn>
 				</router-link>
 			</v-col>
@@ -170,29 +213,86 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		// this.getUser()
-	},
-	async mounted() {
 		// this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
 		// console.log("uid call", this.auth.uid)
 
 		this.user_id = this.$route.query.user_id;
-		console.log("user_id", this.user_id);
-		// console.log("userId call", this.userId)//userID取得確認OK
+		// console.log("user_id", this.user_id);
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
-		const user = userDoc.data()
-		console.log("user info", user);
-		// this.user = user
-		// // console.log("user", this.user)
+		this.user = userDoc.data()
+		// console.log("user info", user);
 
-		// snapshot.data().get()
+		this.friendsIdArray =JSON.parse(userDoc.get("friends"))
+		console.log("friendsIdArray 1", this.friendsIdArray)
+
+		// friendsArray.forEach((doc) => {
+		// 	const friendRef = firebase.firestore().collection("users").doc(doc)
+		// 	const friendDoc = await friendRef.get()
+		// 	console.log("friendDoc call", friendDoc)
+		// });
+
+		// friendsIdArray.forEach(doc => {
+		// 	let friendData = {
+		// 		id: doc
+		// 	}
+		// 	console.log("friendData", friendData);
+		// 	this.friendsIdArray.push(friendData);
+		// })
+		// console.log("friendsIdArray 2", this.friendsIdArray)
+
+		// this.friendsId = JSON.parse(this.friendsIdArray)
+		// console.log("friendsId call", this.friendsId)
+		// this.friendsIdArray = friendsIdArray
+		// console.log("friendsIdArray", this.friendsIdArray)
+
+		// const userDoc = firebase.firestore().collection("users").doc(this.userId)
+		// 	const userInfo =await userDoc.get()
+		// 	this.friendsIdArray = JSON.parse(userInfo.get("friends"))
+		// 	this.friendsIdArray.push(this.keyword)
+		// 	userDoc.update({
+		// 			friends: JSON.stringify(this.friendsIdArray)
+		// 		})
+		// 	console.log("friendsIdArray", this.friendsIdArray)
+
+		// const friendRef = firebase.firestore().collection("users").doc(this.friendsIdArray)
+		// console.log("friendRef", friendRef)
+		// const friendDoc = friendRef.get()
+		// this.friends = friendDoc.data()
+		// console.log("friends data", this.friends)
+	},
+	async mounted() {
+		// friendsArray.forEach((doc) => {
+		// 	const friendRef = firebase.firestore().collection("users").doc(doc)
+		// 	const friendDoc = await friendRef.get()
+		// 	console.log("friendDoc call", friendDoc)
+		// });
+
+		
+		// friendsArray.forEach(doc => {
+		// 	let friendData = {
+		// 		id: doc
+		// 	}
+		// 	this.friends.push(friendData)
+		// 	console.log("friendsData", this.friends)
+		// })
+		// const userDoc = firebase.firestore().collection("users").doc(this.userId)
+		// 	const userInfo =await userDoc.get()
+		// 	this.friendsArray = JSON.parse(userInfo.get("friends"))
+		// 	this.friendsArray.push(this.keyword)
+		// 	userDoc.update({
+		// 			friends: JSON.stringify(this.friendsArray)
+		// 		})
+		// 	console.log("friendsArray", this.friendsArray)
+
 	},
 	data: () => ({
-		items: ['foo', 'bar', 'fizz', 'buzz'],
-		value: null,
+		friends: [],
+		friendsId: [],
+		friendsIdArray: [],
 		users:[],
-		user:[],
+		user_id: '',
+		user:'',
 		auth:null,
 		menu: false,
 		date:new Date().toISOString().substr(0, 10),
@@ -314,10 +414,10 @@ export default {
 	// 		// 	}
 	// 	}
 	// },
-	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
-		},
-	}
+	// computed: {
+	// 	userId () {
+	// 	return 	this.$route.query.user_id;
+	// 	},
+	// }
 }
 </script>
