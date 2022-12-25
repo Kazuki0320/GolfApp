@@ -60,12 +60,23 @@
 				</v-row>
 			</v-sheet>
 
-			<v-btn
-				color="primary"
-				@click="submit">
-				追加
-			</v-btn>
+				<v-btn
+					color="primary"
+					@click="submit">
+					追加
+				</v-btn>
 		</v-container>
+<!-- 
+		<v-alert
+			dense
+			outlined
+			type="error"
+			v-if="errorMessage"
+			class="error-message"
+			>
+			{{ errorMessage }}
+		</v-alert> -->
+
 		<!--
 		<div id="app-1">
     <div v-show="checkflg">チェックが入るとこの要素が表示されます</div>
@@ -126,8 +137,6 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		console.log("userId",this.userId);
-
 		// this.users = []
 		// console.log("userId call", this.userId)//userID取得確認OK
 		// const userRef = firebase.firestore().collection("users").doc(this.userId)
@@ -145,7 +154,9 @@ export default {
 		valid: true,
 		user: '',
 		keyword: '',
-		searchResults:[]
+		searchResults: [],
+		friendsArray: [],
+		errormessage: ''
 	}),
 	methods: {
 		async search() {
@@ -175,10 +186,47 @@ export default {
 			// 	console.log("検索に失敗しました", error);
 			// });
 		},
-		submit () {
-			console.log("success")
-			const userDoc = firebase.firestore().collection("users").doc(this.user_id)
-			console.log("userDoc", userDoc)
+		async submit () {
+			const userDoc = firebase.firestore().collection("users").doc(this.userId)
+			const userInfo =await userDoc.get()
+			this.friendsArray = JSON.parse(userInfo.get("friends"))
+			this.friendsArray.push(this.keyword)
+			userDoc.update({
+					friends: JSON.stringify(this.friendsArray)
+				})
+			console.log("friendsArray", this.friendsArray)
+
+
+			// z5OszDyVMVcuNBDeR5XvOftNKz53
+			// ["z5OszDyVMVcuNBDeR5XvOftNKz53", "6vDQs644K9XGlZTt3j67HXhfjbO2"]
+			// .catch((error) => {
+			// 		console.log("fail", error)
+			// 		this.errorMessage = "友達追加に失敗しました"
+			// })
+
+
+			// logout() {
+			// firebase.auth()
+			// 	.signOut()
+			// 	.then(() => {
+			// 		localStorage.message = "ログアウトに成功しました"
+			// 		this.$router.push('/login')
+			// 	})
+			// 	.catch((error) => {
+			// 		console.log(error)
+			// 	})
+			// }
+			// .catch((error) => {
+			// 		console.log("fail", error)
+
+			// 		this.errorMessage = "ユーザーのログインに失敗しました"
+			// 	})
+
+			// const userRef = firebase.firestore().collection("users").doc(this.user_id)
+			// userRef.update({
+			// 	email: this.user.email,
+			// 	userName: this.user.userName
+			// })
 		},
 	},
 	computed:	{
@@ -195,5 +243,8 @@ export default {
 <style scoped>
 .username {
 	margin-bottom: 10px;
+}
+.error-message {
+	margin-top: 20px;
 }
 </style>

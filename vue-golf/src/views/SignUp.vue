@@ -105,7 +105,7 @@ methods: {
 				await result.user.updateProfile(
 					{displayName: this.name}
 				);
-				console.log("updateUser", result.user)
+				// console.log("updateUser", result.user)
 
 				localStorage.message = "新規作成に成功しました"
 

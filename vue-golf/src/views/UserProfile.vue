@@ -66,13 +66,12 @@ export default {
 		Sidebar
 	},
 	async created() {
-			// console.log("userId call", this.userId)//userID
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			// console.log("userDoc call", userDoc);
-			const user = userDoc.data()
-			console.log("user", user);
-			this.user = user
+		const userRef = firebase.firestore().collection("users").doc(this.friendId)
+		const userDoc = await userRef.get()
+		// console.log("userDoc call", userDoc);
+		const user = userDoc.data()
+		console.log("user", user);
+		this.user = user
 
 		// 	snapshot.forEach(doc => {
 		// 		console.log(doc.data())
