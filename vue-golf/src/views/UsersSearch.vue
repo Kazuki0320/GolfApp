@@ -196,6 +196,7 @@ export default {
 				})
 			console.log("friendsArray", this.friendsArray)
 
+			this.$router.push('/user')
 
 			// z5OszDyVMVcuNBDeR5XvOftNKz53
 			// ["z5OszDyVMVcuNBDeR5XvOftNKz53", "6vDQs644K9XGlZTt3j67HXhfjbO2"]
