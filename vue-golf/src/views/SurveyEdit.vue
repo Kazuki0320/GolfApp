@@ -23,7 +23,7 @@
 		cols="12"
 		sm="6">
 		<v-autocomplete
-			:items="friendsIdArray"
+			:items="friendNameList"
 			outlined
 			dense
 			chips
@@ -59,10 +59,10 @@
 					sm="6"
 				>
 				<v-select
-					:items="pref"
+					:items="prefs"
 					label="開催候補地1"
 				>
-					<!-- <option v-for="(item) in getPref"
+					<!-- <option v-for="(item) in getPrefs"
 					:key="item.no">
 					{{ item.name }}
 					</option> -->
@@ -80,7 +80,7 @@
 					sm="6"
 				>
 				<v-select
-					:items="pref"
+					:items="prefs"
 					label="開催候補地2"
 				>
 				</v-select>
@@ -223,14 +223,18 @@ export default {
 		this.user = userDoc.data()
 		// console.log("user info", user);
 
-		this.friendsIdArray =JSON.parse(userDoc.get("friends"))
-		console.log("friendsIdArray 1", this.friendsIdArray)
+		const friendsIdArray =JSON.parse(userDoc.get("friends"))
+		// console.log("friendsIdArray 1", this.friendsIdArray)
 
-		// friendsArray.forEach((doc) => {
-		// 	const friendRef = firebase.firestore().collection("users").doc(doc)
-		// 	const friendDoc = await friendRef.get()
-		// 	console.log("friendDoc call", friendDoc)
-		// });
+		friendsIdArray.forEach(async (doc) => {
+			const friendRef = firebase.firestore().collection("users").doc(doc)
+			const friendDoc = await friendRef.get()
+			// console.log("friendDoc call", friendDoc)
+			// const friendData = friendDoc.data()
+			const friendGetName = friendDoc.get('userName')
+			this.friendNameList.push(friendGetName)
+			// console.log("friendData", this.friendNameList)
+		});
 
 		// friendsIdArray.forEach(doc => {
 		// 	let friendData = {
@@ -287,15 +291,16 @@ export default {
 
 	},
 	data: () => ({
+		friendNameList: [],
 		friends: [],
-		friendsIdArray: [],
+		// friendsIdArray: [],
 		users:[],
 		user_id: '',
 		user:'',
 		auth:null,
 		menu: false,
 		date:new Date().toISOString().substr(0, 10),
-		pref: [
+		prefs: [
 			'北海道',
 			'青森',
 			'岩手',

@@ -9,7 +9,7 @@
 	</v-app-bar>
 	<v-main>
 		<v-container
-		v-show="valid">
+		v-show="!isValid">
 			<v-row>
 				<v-col cols="6">
 					<v-text-field
@@ -194,16 +194,19 @@ export default {
 			userDoc.update({
 					friends: JSON.stringify(this.friendsArray)
 				})
+			//非同期関数だったら、catchが使えるようになる。
+			//async/awaitを調べる。
+			// .catch((error) => {
+			// 		console.log("fail", error)
+			// 		this.errorMessage = "友達追加に失敗しました"
+			// })
 			console.log("friendsArray", this.friendsArray)
 
 			this.$router.push('/user')
 
 			// z5OszDyVMVcuNBDeR5XvOftNKz53
 			// ["z5OszDyVMVcuNBDeR5XvOftNKz53", "6vDQs644K9XGlZTt3j67HXhfjbO2"]
-			// .catch((error) => {
-			// 		console.log("fail", error)
-			// 		this.errorMessage = "友達追加に失敗しました"
-			// })
+			
 
 
 			// logout() {
@@ -232,7 +235,7 @@ export default {
 	},
 	computed:	{
 		isValid () {
-			return !this.valid
+			return !this.valid //this.userに値があるかどうかで、判定するのもアリ。
 		},
 		userId () {
 		return 	this.$route.query.user_id;
