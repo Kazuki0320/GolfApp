@@ -97,11 +97,9 @@ methods: {
 			this.$refs.form.resetValidation()
 		},
 		submit() {
-			console.log("submit call")
 			firebase.auth()
 			.createUserWithEmailAndPassword(this.email, this.password)
 			.then(async(result) => {
-				console.log("success", result)
 				await result.user.updateProfile(
 					{displayName: this.name}
 				);
@@ -113,8 +111,7 @@ methods: {
 			firebase.auth()
 			.signInWithEmailAndPassword(this.email, this.password)
 			.then((result) => {
-				console.log("success result", result)
-				// console.log("user", result.user)
+				// console.log("success result", result)
 				const auth = {
 					displayName: result.user.displayName,
 					email: result.user.email,
@@ -125,12 +122,6 @@ methods: {
 				sessionStorage.setItem('user', JSON.stringify(auth))
 				this.$router.push('/')
 				})
-
-				// const userRef = await firebase.firestore().collection('users').add({
-				// 	displayName: this.displayName,
-				// 	email: this.email
-				// })
-				// console.log("email call", userRef);//ログイン情報と紐づくようになった。
 			})
 			.catch((error) => {
 				console.log("fail", error)
