@@ -13,13 +13,29 @@
 				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
 					<tr>
 					<th class="text-center">
+						メンバー
+					</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+					<tr>
+					<th class="text-center">
 						開催候補地1
 					</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-					<td><!--開催候補地1--></td>
+					<td>空白</td>
 					<!--
 					・指定しているユーザーネームを出力したい
 					・ログインしてるユーザー情報は除外する
@@ -39,7 +55,7 @@
 				</thead>
 				<tbody>
 					<tr>
-					<td><!--開催候補地2--></td>
+					<td>空白</td>
 					</tr>
 				</tbody>
 			</template>
@@ -55,7 +71,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><!--候補日--></td>
+						<td>空白</td>
 					</tr>
 				</tbody>
 			</template>
@@ -71,7 +87,103 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><!--回答締切--></td>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							車の有無
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							スルーor昼付き
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							希望金額
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							キャディの有無
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							スタート希望時間
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							最寄り駅
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>空白</td>
 					</tr>
 				</tbody>
 			</template>
@@ -87,7 +199,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><!--備考--></td>
+						<td>空白</td>
 					</tr>
 				</tbody>
 			</template>

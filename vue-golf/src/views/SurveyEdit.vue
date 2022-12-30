@@ -168,7 +168,7 @@
 						offset-y
 						min-width="auto"
 					>
-					<template v-slot:activator="{ on, attrs }">
+					<template v-slot:activator="{ on, attrs }">-->
 					<v-text-field
 						v-model="date"
 						prepend-icon="mdi-calendar"
@@ -178,7 +178,7 @@
 						label="回答締切"
 						required
 					></v-text-field>
-					</template>
+					<!--</template>
 					<v-date-picker
 						@input="menu = false"
 						locale="jp-ja">
@@ -189,6 +189,47 @@
 					</v-date-picker>
 					</v-menu> -->
 				</v-col>
+
+				<v-col
+					cols="12"
+					md="4"
+				>
+				<v-text-field
+					label="車の有無"
+					required
+				></v-text-field>
+				</v-col>
+
+				<v-col
+					cols="12"
+					md="4"
+				>
+				<v-text-field
+					label="スルーor昼付き"
+					required
+				></v-text-field>
+				</v-col>
+
+				<v-col
+					cols="12"
+					md="4"
+				>
+				<v-text-field
+					label="キャディの有無"
+					required
+				></v-text-field>
+				</v-col>
+
+				<v-col
+					cols="12"
+					md="4"
+				>
+				<v-text-field
+					label="スタート時間"
+					required
+				></v-text-field>
+				</v-col>
+
 				<v-col
 					cols="12"
 					md="4"
