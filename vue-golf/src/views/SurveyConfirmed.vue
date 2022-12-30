@@ -125,22 +125,6 @@
 				<thead>
 					<tr>
 						<th class="text-center">
-							スタート時間
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>空白</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
 							備考
 						</th>
 					</tr>

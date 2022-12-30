@@ -160,17 +160,17 @@
 					sm="6"
 					md="4"
 				>
-					<!-- <v-menu
-						v-model="menu"
+					<v-menu
+						v-model="menu1"
 						:close-on-content-click="false"
 						:nudge-right="40"
 						transition="scale-transition"
 						offset-y
 						min-width="auto"
 					>
-					<template v-slot:activator="{ on, attrs }">-->
+					<template v-slot:activator="{ on, attrs }">
 					<v-text-field
-						v-model="date"
+						v-model="date1"
 						prepend-icon="mdi-calendar"
 						readonly
 						v-bind="attrs"
@@ -178,56 +178,44 @@
 						label="回答締切"
 						required
 					></v-text-field>
-					<!--</template>
+					</template>
 					<v-date-picker
-						@input="menu = false"
-						locale="jp-ja">
+						v-model="date1"
+						@input="menu1 = false"
+						locale="jp-ja"
+						:day-format="date1 => new Date(date1).getDate()">
 					</v-date-picker>
-					<v-date-picker
-						@input="menu = false"
-						locale="jp-ja">
-					</v-date-picker>
-					</v-menu> -->
+					</v-menu>
 				</v-col>
 
 				<v-col
 					cols="12"
 					md="4"
 				>
-				<v-text-field
+				<v-select
+					:items="cars"
 					label="車の有無"
-					required
-				></v-text-field>
+				></v-select>
 				</v-col>
 
 				<v-col
 					cols="12"
 					md="4"
 				>
-				<v-text-field
+				<v-select
+					:items="lunches"
 					label="スルーor昼付き"
-					required
-				></v-text-field>
+				></v-select>
 				</v-col>
 
 				<v-col
 					cols="12"
 					md="4"
 				>
-				<v-text-field
+				<v-select
+					:items="caddys"
 					label="キャディの有無"
-					required
-				></v-text-field>
-				</v-col>
-
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					label="スタート時間"
-					required
-				></v-text-field>
+				></v-select>
 				</v-col>
 
 				<v-col
@@ -332,6 +320,19 @@ export default {
 
 	},
 	data: () => ({
+		cars: [
+			'有',
+			'無'
+		],
+		lunches:[
+			'スルー',
+			'昼付き'
+		],
+		caddys:[
+			'有',
+			'無'
+		],
+
 		friendNameList: [],
 		friends: [],
 		// friendsIdArray: [],
@@ -340,7 +341,9 @@ export default {
 		user:'',
 		auth:null,
 		menu: false,
+		menu1: false,
 		date:new Date().toISOString().substr(0, 10),
+		date1:new Date().toISOString().substr(0, 10),
 		prefs: [
 			'北海道',
 			'青森',
