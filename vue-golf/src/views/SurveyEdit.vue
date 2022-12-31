@@ -31,6 +31,7 @@
 					sm="6"
 				>
 				<v-select
+					v-model="prefModel1"
 					:items="prefs1"
 					label="開催候補地1"
 				>
@@ -42,6 +43,7 @@
 					sm="6"
 				>
 				<v-select
+					v-model="prefModel2"
 					:items="prefs2"
 					label="開催候補地2"
 				>
@@ -127,11 +129,10 @@
 					cols="12"
 					md="4"
 				>
-				<v-select
-					v-model="lunchModel"
-					:items="lunches"
-					label="スルーor昼付き"
-				></v-select>
+				<v-checkbox
+					v-model="caddy"
+					label="キャディの有無"
+				></v-checkbox>
 				</v-col>
 
 				<v-col
@@ -139,8 +140,9 @@
 					md="4"
 				>
 				<v-select
-					:items="caddys"
-					label="キャディの有無"
+					v-model="lunchModel"
+					:items="throughOrLunch"
+					label="スルーor昼付き"
 				></v-select>
 				</v-col>
 
@@ -159,8 +161,9 @@
 						@click="onClick"
 						class="ma-2"
 						color="primary" 
-						dark
-						>確認</v-btn>
+						dark>
+						確認
+					</v-btn>
 				</router-link>
 			</v-col>
 		</v-row>
@@ -189,47 +192,34 @@ export default {
 			this.friendNameList.push(friendGetName)
 		});
 
-
+		const questionnairesRef = firebase.firestore().collection("questionnaires")
+			questionnairesRef.add({
+				active: this.active,
+				answered: this.answered,
+				room_id: this.room_id,
+				schedules_id: this.schedulesId,
+				users_id: this.user_id,
+			})
+			.then((result) => {
+				console.log("success",result);
+				this.questionnairesId = result.id
+			})
+			.catch((error) => {
+				console.log("fail", error);
+			})
+		
+		// const questionnairesDoc = await questionnairesRef.get()
+		// console.log("questionnairesDoc", questionnairesDoc)
 		/*
-		submit() {
-				const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
-				roomRef.collection('messages').add({
-					message: this.body,
-					name: this.auth.displayName,
-					// photoURL: this.auth.photoURL,
-					createdAt: firebase.firestore.Timestamp.now()
-				})
-				.then((result) => {
-					console.log('success', result);
-					this.body = ""
-				})
-				.catch((error) => {
-					console.log('fail', error);
-					alert('メッセージの送信に失敗しました')
-				})
-			}
 		schedulesには、本来何もドキュメントが設定されていない状態なので、アンケート作成と共に、ドキュメントを作成し、その中でアンケートの中身も書き換える必要がある。
 		有無の場合、checkボックスを使った方が良い。
 		selectboxと表示のvalueを分けたい時があると思うから、その時はvuetifyを使って、うまくデータ保存する。
+		ESLintとprettier後程、インストール。
+		「やっぱ、やめた」の時一覧から戻るときに、firebase上のデータを削除するのが１つの方法。
+		オプションAPI、コンポジションAPI。他の新しい書き方もあるらしい...スクリプトセットアップ。
+		ローカルストレージ使うのも、１つの方法としてあり。
+		firebaseのsetとaddの違い
 		*/
-		// const schedulesRef = firebase.firestore().collection("schedules")
-		// schedulesRef.add({
-		// 	友人一覧: this.friendNameList,
-		// 	開催場所1: this.prefs1,
-		// 	開催場所2: this.prefs2,
-		// 	候補日: this.date,
-		// 	回答締切: this.date1,
-		// 	車の有無: this.carsModel,
-		// 	スルーor昼付き: this.lunchModel,
-		// 	キャディの有無: this.caddys,
-		// })
-		// .then((result) => {
-		// 	console.log("success",result);
-		// })
-		// .catch((error) => {
-		// 	console.log("fail", error);
-		// })
-
 		// const schedulesDoc = await schedulesRef.get()
 		// console.log("schedulesDoc", schedulesDoc)
 		// const schedules = schedulesDoc.data()
@@ -238,21 +228,26 @@ export default {
 	// mounted() {
 	// },
 	data: () => ({
+		questionnairesId: '',
+		schedulesId: '',
+		room_id: '',
+		active: true,
+		answered: false,
 		lunchModel: 0,
 		carsModel: false,
-		lunches: [{
-			text: 'スルー',
-			value: 1,
-		},
-		{
-			text: '昼付き',
-			value: 2,
-		}
-	],
-		caddys:[],
+		throughOrLunch: [
+			{
+				text: 'スルー',
+				value: 1,
+			},
+			{
+				text: '昼付き',
+				value: 2,
+			}
+		],
+		caddy:false,
 		friendNameList: [],
 		friends: [],
-		// friendsIdArray: [],
 		users:[],
 		user_id: '',
 		user:'',
@@ -261,6 +256,8 @@ export default {
 		menu1: false,
 		date:new Date().toISOString().substr(0, 10),
 		date1:new Date().toISOString().substr(0, 10),
+		prefModel1: '',
+		prefModel2: '',
 		prefs1: [
 			'北海道',
 			'青森',
@@ -364,22 +361,38 @@ export default {
 		onClick() {
 			const schedulesRef = firebase.firestore().collection("schedules")
 			schedulesRef.add({
-			友人一覧: this.friendNameList,
-			開催場所1: this.prefs1,
-			開催場所2: this.prefs2,
-			候補日: this.date,
-			回答締切: this.date1,
-			車の有無: this.carsModel,
-			スルーor昼付き: this.lunchModel,
-			キャディの有無: this.caddys,
-		})
-		.then((result) => {
-			console.log("success",result);
-		})
-		.catch((error) => {
-			console.log("fail", error);
-		})
+				questionnairesId: this.questionnairesId,
+				friends: this.friendNameList,
+				selectPlace1: this.prefModel1,
+				selectPlace2: this.prefModel2,
+				proposedDate: this.date,
+				DeadlineForResponse: this.date1,
+				AvailabilityOfCar: this.carsModel,
+				throughOrLunch: this.lunchModel,
+				AvailabilityOfCaddy: this.caddy,
+			})
+			.then((result) => {
+				console.log("success",result);
+				this.schedulesId = result.id;
+			})
+			.catch((error) => {
+				console.log("fail", error);
+			})
+
+		// 	const questionnairesData = firebase.firestore().collection("questionnaires").doc(this.questionnairesId)
+		// 	// console.log("questionnairesData", questionnairesData)
+		// 	questionnairesData.update({
+		// 		schedulesId: this.schedulesId,
+		// 	})
+		// 	.then((result) => {
+		// 		console.log("success",result);
+		// 		this.questionnairesId = result
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log("fail", error);
+		// 	})
 		}
+
 	// 	async getUser() {
 	// 		// 	const userRef = firebase.firestore().collection("users").doc(this.userId)
 	// 		// const userDoc = await userRef.get()
@@ -401,14 +414,13 @@ export default {
 	// 	}
 	},
 	watch:{
-		lunchModel(newValue) {
+		schedulesId(newValue) {
 			console.log(newValue)
 		}
 	},
 	computed: {
 		// userId () {
 		// return 	this.$route.query.user_id;
-		// },
-	}
+	},
 }
 </script>
