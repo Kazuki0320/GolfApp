@@ -196,27 +196,21 @@ export default {
 			this.friendNameList.push(friendGetName)
 		});
 
-		// const questionnairesRef = firebase.firestore().collection("questionnaires")
-		// 	questionnairesRef.add({
-		// 		active: this.active,
-		// 		answered: this.answered,
-		// 		room_id: this.room_id,
-		// 		schedules_id: this.schedulesId,
-		// 		users_id: this.user_id,
-		// 	})
-		// 	.then((result) => {
-		// 		console.log("success",result);
-		// 		this.questionnairesId = result.id
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log("fail", error);
-		// 	})
+		const questionnairesRef = firebase.firestore().collection("questionnaires")
+			const result = await questionnairesRef.add({
+				active: this.active,
+				answered: this.answered,
+				room_id: this.room_id,
+				schedules_id: this.schedulesId,
+				users_id: this.user_id,
+			})
+			this.questionnairesId = result.id
+			console.log("questionnairesId", this.questionnairesId)
 
 		// const questionnairesDoc = await questionnairesRef.get()
 		// console.log("questionnairesDoc", questionnairesDoc)
 		/*
 		schedulesには、本来何もドキュメントが設定されていない状態なので、アンケート作成と共に、ドキュメントを作成し、その中でアンケートの中身も書き換える必要がある。
-		有無の場合、checkボックスを使った方が良い。
 		selectboxと表示のvalueを分けたい時があると思うから、その時はvuetifyを使って、うまくデータ保存する。
 		ESLintとprettier後程、インストール。
 		「やっぱ、やめた」の時一覧から戻るときに、firebase上のデータを削除するのが１つの方法。
