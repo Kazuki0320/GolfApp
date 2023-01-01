@@ -11,7 +11,7 @@ import EditProfile from '../views/EditProfile.vue'
 import RoomCreateConfirmed from '../views/RoomCreateConfirmed.vue'
 import MemberConfirmed from '../views/MemberConfirmed.vue'
 import RoomJoinConfirmed from '../views/RoomJoinConfirmed.vue'
-import SurveyEdit from '../views/SurveyEdit.vue'
+import NewSurvey from '../views/NewSurvey.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
 import SurveyAnswer from '../views/SurveyAnswer.vue'
 import UsersSearch from '../views/UsersSearch.vue'
@@ -27,12 +27,12 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/surveyEdit',
-    name: 'SurveyEdit',
-    component: SurveyEdit
+    path: '/newSurvey',
+    name: 'NewSurvey',
+    component: NewSurvey
   },
   {
-    path: '/surveyConfirmed',
+    path: '/survey/:id',
     name: 'SurveyConfirmed',
     component: SurveyConfirmed
   },

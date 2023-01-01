@@ -136,7 +136,8 @@
 				</tbody>
 			</template>
 		</v-simple-table>
-		<router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id} }">
+		<!-- <router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id, schedules_id: this.schedulesIdData } }"> -->
+		<router-link :to="{ path: '/newSurvey', query: { user_id: this.user_id } }">
 			<v-btn color="secondary">一覧に戻る</v-btn>
 		</router-link>
 		<router-link to="/surveyAnswer">
@@ -147,14 +148,20 @@
 </template>
 
 <script>
-// import firebase from "@/firebase/firebase"
+import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
 		//ログインユーザーの友人情報を取得する必要があるので、user.idを前の画面から受け取ってくる必要がある。
 
-		this.user_id = this.$route.query.user_id;
-		console.log("user_id", this.userId);
+		console.log("schedulesId", this.schedulesId())
+		// this.schedulesId = this.$route.query.schedules_id;
+		// console.log("schedules", this.schedulesId);
+		const schedulesDoc = firebase.firestore().collection("schedules").doc(this.$route.params.id)
+		const schedulesData = await schedulesDoc.get()
+		const schedules = schedulesData.data()
+		console.log("schedules", schedules)
+
 		// console.log("userId call", this.userId)//userID取得確認OK
 		// const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		// console.log("userRef", userRef)
@@ -171,10 +178,19 @@ export default {
 	data: () => ({
 		user: '',
 		users:[],
+		user_id: '',
+		schedules_id: '',
+		schedulesIdData: ''
 	}),
+	methods: {
+		schedulesId () {
+		// console.log("routerId", this.route.id)
+		return 	this.$route.params.id;
+		},
+	},
 	// computed: {
-	// 	userId () {
-	// 	return 	this.$route.query.user_id;
+	// 	schedulesId () {
+	// 	return 	this.$router.id;
 	// 	},
 	// },
 }

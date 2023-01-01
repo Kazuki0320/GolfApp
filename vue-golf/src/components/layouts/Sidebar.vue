@@ -33,7 +33,7 @@
 			</v-list-item-content>
 		</v-list-item>
 
-		<router-link :to="{ path: '/surveyEdit', query: { user_id: this.user.id }}">
+		<router-link :to="{ path: '/newSurvey', query: { user_id: this.user.id }}">
 			<v-list-item>
 				<v-list-item-icon>
 					<v-icon color="blue">

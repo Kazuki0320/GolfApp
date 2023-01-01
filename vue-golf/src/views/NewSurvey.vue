@@ -155,8 +155,12 @@
 					required
 				></v-text-field>
 				</v-col>
-				<v-btn color="secondary" to="/">一覧に戻る</v-btn>
-				<router-link :to="{ path:'/surveyConfirmed', query: { user_id: this.user_id}}">
+				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
+				<!-- <router-link 
+				:to="{ path:`/survey/${ this.schedulesIdData }`}"> -->
+				<!-- <router-link :to="{ path: '/surveyConfirmed', query: { user_id: this.user_id }}"> 
+					:to="{ name: 'content-url', params: {id: Number(id) + 1 } }"
+				-->
 					<v-btn 
 						@click="onClick"
 						class="ma-2"
@@ -164,7 +168,7 @@
 						dark>
 						確認
 					</v-btn>
-				</router-link>
+				<!-- </router-link> -->
 			</v-col>
 		</v-row>
 	</v-main>
@@ -192,22 +196,22 @@ export default {
 			this.friendNameList.push(friendGetName)
 		});
 
-		const questionnairesRef = firebase.firestore().collection("questionnaires")
-			questionnairesRef.add({
-				active: this.active,
-				answered: this.answered,
-				room_id: this.room_id,
-				schedules_id: this.schedulesId,
-				users_id: this.user_id,
-			})
-			.then((result) => {
-				console.log("success",result);
-				this.questionnairesId = result.id
-			})
-			.catch((error) => {
-				console.log("fail", error);
-			})
-		
+		// const questionnairesRef = firebase.firestore().collection("questionnaires")
+		// 	questionnairesRef.add({
+		// 		active: this.active,
+		// 		answered: this.answered,
+		// 		room_id: this.room_id,
+		// 		schedules_id: this.schedulesId,
+		// 		users_id: this.user_id,
+		// 	})
+		// 	.then((result) => {
+		// 		console.log("success",result);
+		// 		this.questionnairesId = result.id
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log("fail", error);
+		// 	})
+
 		// const questionnairesDoc = await questionnairesRef.get()
 		// console.log("questionnairesDoc", questionnairesDoc)
 		/*
@@ -219,6 +223,7 @@ export default {
 		オプションAPI、コンポジションAPI。他の新しい書き方もあるらしい...スクリプトセットアップ。
 		ローカルストレージ使うのも、１つの方法としてあり。
 		firebaseのsetとaddの違い
+		テンプレート構文orテンプレートリテラル
 		*/
 		// const schedulesDoc = await schedulesRef.get()
 		// console.log("schedulesDoc", schedulesDoc)
@@ -358,9 +363,9 @@ export default {
 		]
 	}),
 	methods: {
-		onClick() {
+		async onClick() {
 			const schedulesRef = firebase.firestore().collection("schedules")
-			schedulesRef.add({
+			const result = await schedulesRef.add({
 				questionnairesId: this.questionnairesId,
 				friends: this.friendNameList,
 				selectPlace1: this.prefModel1,
@@ -371,13 +376,49 @@ export default {
 				throughOrLunch: this.lunchModel,
 				AvailabilityOfCaddy: this.caddy,
 			})
-			.then((result) => {
-				console.log("success",result);
-				this.schedulesId = result.id;
-			})
-			.catch((error) => {
-				console.log("fail", error);
-			})
+			this.$router.push(`/survey/${ result.id }`)
+			// this.$router.push(`/survey/${ this.schedulesIdData.id }`)
+			// this.$router.push({ name: '/surveyConfirmed', params: { schedules_id: this.schedulesId }})
+			// .then(async(result) => {
+			// 	this.schedulesIdData = result.id
+			// 	// schedulesId = result.id;
+			// 	// const schedulesData = firebase.firestore().collection("schedules")
+			// 	// const snapshot = await schedulesData.get(result.id)
+			// 	// console.log("snapshot", snapshot)
+			// 	console.log("schedulesIdData", this.schedulesIdData)
+			// 	// snapshot.forEach(doc => {
+			// 	// 	if(result.id === doc.id) {
+			// 	// 		this.schedulesIdData = doc.id
+			// 	// 		console.log("schedulesIdData", this.schedulesIdData)
+			// 	// 	}
+			// 	// })
+			// })
+			// .catch((error) => {
+			// 	console.log("fail", error);
+			// })
+
+			// schedulesIdData.forEach(doc => {
+			// 	let data = {
+			// 		id: doc.id
+			// 	}
+			// })
+			// console.log("schedulesID", this.schedulesId)
+			// const schedules =schedulesIdData.data()
+			// console.log("schedules", schedules);
+			
+			// const userRef = firebase.firestore().collection("users")
+			// const snapshot = await userRef.get()
+			// snapshot.forEach(doc => {
+			// 	let data = {
+			// 		id: doc.id
+			// 	}
+			// 	if(this.auth.uid == data.id) {
+			// 		this.user = data
+			// 	}else{
+			// 		// console.log("success")
+			// 	}
+			// 	// console.log("user", this.user.id)
+			// })
 
 		// 	const questionnairesData = firebase.firestore().collection("questionnaires").doc(this.questionnairesId)
 		// 	// console.log("questionnairesData", questionnairesData)
@@ -414,8 +455,8 @@ export default {
 	// 	}
 	},
 	watch:{
-		schedulesId(newValue) {
-			console.log(newValue)
+		schedulesIdData(newValue) {
+			console.log("newValue", newValue)
 		}
 	},
 	computed: {
