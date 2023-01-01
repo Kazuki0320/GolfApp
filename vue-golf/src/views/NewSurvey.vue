@@ -207,8 +207,6 @@ export default {
 			this.questionnairesId = result.id
 			console.log("questionnairesId", this.questionnairesId)
 
-		// const questionnairesDoc = await questionnairesRef.get()
-		// console.log("questionnairesDoc", questionnairesDoc)
 		/*
 		schedulesには、本来何もドキュメントが設定されていない状態なので、アンケート作成と共に、ドキュメントを作成し、その中でアンケートの中身も書き換える必要がある。
 		selectboxと表示のvalueを分けたい時があると思うから、その時はvuetifyを使って、うまくデータ保存する。
@@ -219,13 +217,8 @@ export default {
 		firebaseのsetとaddの違い
 		テンプレート構文orテンプレートリテラル
 		*/
-		// const schedulesDoc = await schedulesRef.get()
-		// console.log("schedulesDoc", schedulesDoc)
-		// const schedules = schedulesDoc.data()
-		// console.log("schedules", schedules);
+	
 	},
-	// mounted() {
-	// },
 	data: () => ({
 		questionnairesId: '',
 		schedulesId: '',
@@ -371,91 +364,12 @@ export default {
 				AvailabilityOfCaddy: this.caddy,
 			})
 			this.$router.push(`/survey/${ result.id }`)
-			// this.$router.push(`/survey/${ this.schedulesIdData.id }`)
-			// this.$router.push({ name: '/surveyConfirmed', params: { schedules_id: this.schedulesId }})
-			// .then(async(result) => {
-			// 	this.schedulesIdData = result.id
-			// 	// schedulesId = result.id;
-			// 	// const schedulesData = firebase.firestore().collection("schedules")
-			// 	// const snapshot = await schedulesData.get(result.id)
-			// 	// console.log("snapshot", snapshot)
-			// 	console.log("schedulesIdData", this.schedulesIdData)
-			// 	// snapshot.forEach(doc => {
-			// 	// 	if(result.id === doc.id) {
-			// 	// 		this.schedulesIdData = doc.id
-			// 	// 		console.log("schedulesIdData", this.schedulesIdData)
-			// 	// 	}
-			// 	// })
-			// })
-			// .catch((error) => {
-			// 	console.log("fail", error);
-			// })
-
-			// schedulesIdData.forEach(doc => {
-			// 	let data = {
-			// 		id: doc.id
-			// 	}
-			// })
-			// console.log("schedulesID", this.schedulesId)
-			// const schedules =schedulesIdData.data()
-			// console.log("schedules", schedules);
-			
-			// const userRef = firebase.firestore().collection("users")
-			// const snapshot = await userRef.get()
-			// snapshot.forEach(doc => {
-			// 	let data = {
-			// 		id: doc.id
-			// 	}
-			// 	if(this.auth.uid == data.id) {
-			// 		this.user = data
-			// 	}else{
-			// 		// console.log("success")
-			// 	}
-			// 	// console.log("user", this.user.id)
-			// })
-
-		// 	const questionnairesData = firebase.firestore().collection("questionnaires").doc(this.questionnairesId)
-		// 	// console.log("questionnairesData", questionnairesData)
-		// 	questionnairesData.update({
-		// 		schedulesId: this.schedulesId,
-		// 	})
-		// 	.then((result) => {
-		// 		console.log("success",result);
-		// 		this.questionnairesId = result
-		// 	})
-		// 	.catch((error) => {
-		// 		console.log("fail", error);
-		// 	})
 		}
-
-	// 	async getUser() {
-	// 		// 	const userRef = firebase.firestore().collection("users").doc(this.userId)
-	// 		// const userDoc = await userRef.get()
-	// 		// // console.log("userDoc call", userDoc);
-	// 		// const user = userDoc.data()
-	// 		// console.log("user", user);
-	// 		// this.user = user
-
-	// 		// })
-	// 		// snapshot.forEach(doc => {
-	// 		// 	let data = {
-	// 		// 		id: doc.id
-	// 		// 	}
-	// 		// 	if(!(data.id == this.auth.uid)) {
-	// 		// 		this.users.push(data)
-	// 		// 	}else{
-	// 		// 		// console.log("success")
-	// 		// 	}
+	},
+	// watch:{
+	// 	schedulesIdData(newValue) {
+	// 		console.log("newValue", newValue)
 	// 	}
-	},
-	watch:{
-		schedulesIdData(newValue) {
-			console.log("newValue", newValue)
-		}
-	},
-	computed: {
-		// userId () {
-		// return 	this.$route.query.user_id;
-	},
+	// },
 }
 </script>

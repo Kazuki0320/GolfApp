@@ -152,7 +152,6 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		//ログインユーザーの友人情報を取得する必要があるので、user.idを前の画面から受け取ってくる必要がある。
 
 		// console.log("schedulesId", this.schedulesId())
 		// console.log("schedules", this.schedulesId);
@@ -165,18 +164,6 @@ export default {
 			questionnairesRef.update({
 				schedules_id: this.$route.params.id,
 			})
-		// console.log("userId call", this.userId)//userID取得確認OK
-		// const userRef = firebase.firestore().collection("users").doc(this.user_id)
-		// console.log("userRef", userRef)
-		// const userDoc = await userRef.get()
-		// const user = userDoc.data()
-		// console.log("user", user);
-
-		// 	const snapshot = await userRef.get()
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
 		user: '',
@@ -187,14 +174,8 @@ export default {
 	}),
 	methods: {
 		schedulesId () {
-		// console.log("routerId", this.route.id)
 		return 	this.$route.params.id;
 		},
 	},
-	// computed: {
-	// 	schedulesId () {
-	// 	return 	this.$router.id;
-	// 	},
-	// },
 }
 </script>
