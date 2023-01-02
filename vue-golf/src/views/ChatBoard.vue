@@ -128,6 +128,7 @@ import Sidebar from '@/components/layouts/Sidebar'
 				roomRef.collection('messages').add({
 					message: this.body,
 					name: this.auth.displayName,
+					//後から、photoURLは追加すると思うから、一旦残し
 					// photoURL: this.auth.photoURL,
 					createdAt: firebase.firestore.Timestamp.now()
 				})

@@ -125,51 +125,19 @@
 					<v-btn class="ma-2" color="primary" dark>修正</v-btn>
 				</router-link>
 					<v-btn class="ma-2" color="primary" dark to="/">確定</v-btn>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> -->
-
-	<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> -->
 	</v-main>
 	</v-app>
 </template>
 
 <script>
+//後ほど使うと思うので、残し
 // import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
 		this.user_id = this.$route.query.user_id;
-		console.log("userId call", this.user_id)//userID取得確認OK
-		// this.users = []
-		// const userRef = firebase.firestore().collection("users").doc(this.userId)
-		// const userDoc = await userRef.get()
-		// const user = userDoc.data()
-		// console.log("user", user);
-
-		// 	const snapshot = await userRef.get()
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
+		//userID取得確認OK
+		console.log("userId call", this.user_id)
 	},
 	data: () => ({
 		user_id:'',

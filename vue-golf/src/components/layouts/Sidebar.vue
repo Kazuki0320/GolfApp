@@ -81,9 +81,9 @@ import firebase from "@/firebase/firebase"
 				if(this.auth.uid == data.id) {
 					this.user = data
 				}else{
+					//消したらエラーになるかも？
 					// console.log("success")
 				}
-				// console.log("user", this.user.id)
 			})
 
 		//検索したIDから、user情報を取得する処理
