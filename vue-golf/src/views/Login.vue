@@ -37,7 +37,6 @@
 			ログイン
 		</v-btn>
 
-
 		<v-alert
 			dense
 			text
@@ -47,7 +46,6 @@
 			>
 			{{ message }}
 		</v-alert>
-
 
 		<v-alert
 			dense
@@ -67,15 +65,9 @@
 
 <script>
 import firebase from "@/firebase/firebase"
-
 	export default {
 data: () => ({
 		valid: true,
-		name: '',
-		nameRules: [
-			v => !!v || 'Name is required',
-			v => (v && v.length <= 10) || 'Name must be less than 10 characters',
-		],
 		email: '',
 		emailRules: [
 			v => !!v || 'メッセージを入力してください',
@@ -111,27 +103,20 @@ methods: {
 			firebase.auth()
 				.signInWithEmailAndPassword(this.email, this.password)
 				.then((result) => {
-					// console.log("success", result)
-					// console.log("user", result.user)
-
 					const auth = {
 						displayName: result.user.displayName,
 						email: result.user.email,
 						uid: result.user.uid,
-						refreshToken: result.user.refreshToken
+						password: this.password
 					}
-
 					//sessionStorageに保存する値は、文字列にする必要があるので、JSON.stringifyで指定
 					sessionStorage.setItem('user', JSON.stringify(auth))
-
 					this.$router.push('/')
 				})
 				.catch((error) => {
 					console.log("fail", error)
-
 					this.errorMessage = "ユーザーのログインに失敗しました"
 				})
-
 		}
 	},
 }
@@ -142,25 +127,20 @@ methods: {
 	margin:150px;
 	padding:30px;
 }
-
 .login-box {
 	width:60%;
 	margin:0px auto;
 	padding:30px;
 }
-
 .login-title {
 	display: inline-block;
 }
-
 .login-btn {
 	margin-left: 20px; 
 }
-
 .success-message {
 	margin-top: 20px;
 }
-
 .error-message {
 	margin-top: 20px;
 }

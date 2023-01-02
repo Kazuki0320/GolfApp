@@ -63,7 +63,6 @@
 
 <script>
 import firebase from "@/firebase/firebase"
-
 	export default {
 data: () => ({
 		valid: true,
@@ -98,25 +97,23 @@ methods: {
 		},
 		submit() {
 			firebase.auth()
+			//firebaseAuthに、ユーザーの認証をするために新しくログイン情報を作成
 			.createUserWithEmailAndPassword(this.email, this.password)
 			.then(async(result) => {
 				await result.user.updateProfile(
 					{displayName: this.name}
 				);
-				// console.log("updateUser", result.user)
-
 				localStorage.message = "新規作成に成功しました"
-
-			//→firebaseのusersの中にログイン情報を持ったIDドキュメントを作成する。
+			//新規作成したユーザーのログイン情報作成後、auth変数の中にユーザー情報を持たせて、それをsessionStorageで保存し、そのままホーム画面へ遷移
 			firebase.auth()
 			.signInWithEmailAndPassword(this.email, this.password)
 			.then((result) => {
-				// console.log("success result", result)
+				// console.log("success result", result.user)
 				const auth = {
 					displayName: result.user.displayName,
 					email: result.user.email,
 					uid: result.user.uid,
-					refreshToken: result.user.refreshToken
+					password: this.password
 				}
 				//sessionStorageに保存する値は、文字列にする必要があるので、JSON.stringifyで指定
 				sessionStorage.setItem('user', JSON.stringify(auth))
@@ -130,7 +127,6 @@ methods: {
 		}
 	},
 }
-
 </script>
 
 <style scoped>
@@ -138,21 +134,17 @@ methods: {
 	margin:150px;
 	padding:30px;
 }
-
 .login-box {
 	width:60%;
 	margin:0px auto;
 	padding:30px;
 }
-
 .login-title {
 	display: inline-block;
 }
-
 .login-btn {
 	margin-left: 20px; 
 }
-
 .error-message {
 	margin-top: 20px;
 }

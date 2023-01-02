@@ -78,15 +78,9 @@ import Sidebar from '@/components/layouts/Sidebar'
 			Sidebar
 		},
 		async created() {
-			const user_id = this.$route.query.user_id;
-			console.log("user_id", user_id);
-
-			// console.log("roomId call", this.roomId)
 			//firebaseから、ドキュメントを取得
 			const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
-			// console.log("roomRef", roomRef)
 			const roomDoc = await roomRef.get()
-			// console.log("roomDoc", roomDoc)
 			const room = roomDoc.data()
 			console.log("room", room);
 
@@ -96,27 +90,13 @@ import Sidebar from '@/components/layouts/Sidebar'
 				console.log(doc.data())
 				this.messages.push(doc.data())
 			})
-			// const snapshot = await roomsRef.get()
-			// console.log(snapshot);
-
-			// snapshot.forEach(doc => {
-			// 	console.log(doc.data());
-			// 	this.messages.unshift(doc.data())
-			// })
-
 		},
 		mounted () {
 			this.auth = JSON.parse(sessionStorage.getItem('user'))
 			console.log("auth call", this.auth);
 		},
 		data: () => ({
-			messages: [
-				// { message: "message 1" },
-				// { message: "message 2" },
-				// { message: "message 3" },
-				// { message: "message 4" },
-				// { message: "message 5" },				
-			],
+			messages: [],
 			body: "",
 			cards: ['Today'],
 			drawer: null,

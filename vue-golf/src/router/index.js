@@ -109,11 +109,10 @@ const router = new VueRouter({
   routes
 })
 
-
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-	// console.log("requiresAuth", requiresAuth);
 	if(requiresAuth) {
+    //ユーザーがログイン済みかどうか確認する処理:onAuthStateChanged
 		firebase.auth().onAuthStateChanged(async (user) => {
 			if (!user) {
 				next({
@@ -124,7 +123,7 @@ router.beforeEach((to, from, next) => {
         next()
           let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
           if (!userDoc.exists) {
-          // Firestore にユーザー用のドキュメントが作られていなければ作る
+          // firestore にユーザーIDがなければ新しいIDを作る
           await userDoc.ref.set({
               userName: user.displayName,
               email: user.email,
