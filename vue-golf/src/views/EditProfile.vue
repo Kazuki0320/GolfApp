@@ -44,20 +44,11 @@ import firebase from "@/firebase/firebase"
 export default {
 	async created() {
 		this.user_id = this.$route.query.user_id;
-		// console.log("user_id", this.user_id)
-		// this.users = []
-		// console.log("userId call", this.userId)//userID取得確認OK
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		const user = userDoc.data()
 		this.user = user
 		console.log("user", user);
-
-		// 	const snapshot = await userRef.get()
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
 		users:[],
@@ -70,24 +61,6 @@ export default {
 				email: this.user.email,
 				userName: this.user.userName
 			})
-			// const userRef = firebase.firestore().collection("users").doc(this.user_id)
-			// userRef.update({
-			// 	userName: "kazuki0320"
-			// })
-			// 			const handleSubmit = e => {
-			//   e.preventDefault()
-			
-			//   updateDoc(docRef, {
-			//     title: book.title,
-			//     author: book.author,
-			//     category: book.category,
-			//   })
-						// .then(doc => {
-			// this.memoRef.doc(doc.id).update({
-			// id: doc.id
-			// })
-			// })
-			// }
 		}
 	}
 }
