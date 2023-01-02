@@ -151,16 +151,13 @@
 					md="4"
 				>
 				<v-text-field
+					v-model="remarks"
 					label="備考"
 					required
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
-				<!-- <router-link 
-				:to="{ path:`/survey/${ this.schedulesIdData }`}"> -->
-				<!-- <router-link :to="{ path: '/surveyConfirmed', query: { user_id: this.user_id }}"> 
-					:to="{ name: 'content-url', params: {id: Number(id) + 1 } }"
-				-->
+				<!-- <router-link :to="{ path:`/survey/${ this.schedulesIdData }`}"> -->
 					<v-btn 
 						@click="onClick"
 						class="ma-2"
@@ -181,12 +178,15 @@ import firebase from "@/firebase/firebase"
 export default {
 	async created() {
 		// this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+		this.schedules_id = this.$route.params;
+		// console.log("schedules_id", this.schedules_id)
 
 		this.user_id = this.$route.query.user_id;
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
 
+		//一覧から戻るようの新しいコンポーネントを作って、newSurveyBackみたいな名前のコンポーネントpathも作っちゃう。
 		const friendsIdArray =JSON.parse(userDoc.get("friends"))
 
 		friendsIdArray.forEach(async (doc) => {
@@ -205,7 +205,7 @@ export default {
 				users_id: this.user_id,
 			})
 			this.questionnairesId = result.id
-			console.log("questionnairesId", this.questionnairesId)
+			// console.log("questionnairesId", this.questionnairesId)
 
 		/*
 		schedulesには、本来何もドキュメントが設定されていない状態なので、アンケート作成と共に、ドキュメントを作成し、その中でアンケートの中身も書き換える必要がある。
@@ -220,6 +220,8 @@ export default {
 	
 	},
 	data: () => ({
+		remarks: '',
+		schedules_id: '',
 		questionnairesId: '',
 		schedulesId: '',
 		room_id: '',
@@ -362,9 +364,10 @@ export default {
 				AvailabilityOfCar: this.carsModel,
 				throughOrLunch: this.lunchModel,
 				AvailabilityOfCaddy: this.caddy,
+				remarks: this.remarks,
 			})
 			this.$router.push(`/survey/${ result.id }`)
-		}
+		},
 	},
 	// watch:{
 	// 	schedulesIdData(newValue) {

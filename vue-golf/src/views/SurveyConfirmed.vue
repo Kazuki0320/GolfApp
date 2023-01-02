@@ -19,7 +19,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.selectPlace1 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -35,7 +35,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.selectPlace2 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -51,7 +51,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.proposedDate }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -67,7 +67,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.DeadlineForResponse }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -83,7 +83,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.AvailabilityOfCar }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -99,7 +99,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.throughOrLunch }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -115,7 +115,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.AvailabilityOfCaddy }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -131,15 +131,25 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ schedules.remarks }}</td>
 					</tr>
 				</tbody>
 			</template>
 		</v-simple-table>
 		<!-- <router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id, schedules_id: this.schedulesIdData } }"> -->
-		<router-link :to="{ path: '/newSurvey', query: { user_id: this.user_id } }">
-			<v-btn color="secondary">一覧に戻る</v-btn>
-		</router-link>
+		<!-- <router-link :to="{ path: '/newSurvey', query: { schedules_id: this.schedules_id }} "> -->
+		<!-- <router-link :to="{ path:`/newSurvey/${ this.schedules_id }`}"> -->
+			<v-btn 
+				@click="backPage"
+				color="secondary">
+				一覧に戻る
+			</v-btn>
+			<!-- <v-btn 
+				to="/newSurvey"
+				color="secondary">
+				一覧に戻る
+			</v-btn> -->
+		<!-- </router-link> -->
 		<router-link to="/surveyAnswer">
 			<v-btn class="ma-2" color="primary" dark>メッセージ送信</v-btn>
 		</router-link>
@@ -153,12 +163,13 @@ import firebase from "@/firebase/firebase"
 export default {
 	async created() {
 
-		// console.log("schedulesId", this.schedulesId())
+		this.schedules_id = this.$route.params.id;
+		console.log("schedulesId", this.schedulesId())
 		// console.log("schedules", this.schedulesId);
 		const schedulesDoc = firebase.firestore().collection("schedules").doc(this.$route.params.id)
 		const schedulesData = await schedulesDoc.get()
 		this.schedules = schedulesData.data()
-		// console.log("schedules", this.schedules)
+		console.log("schedules", this.schedules)
 
 		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
 			questionnairesRef.update({
@@ -170,12 +181,16 @@ export default {
 		users:[],
 		user_id: '',
 		schedules: '',
-		schedulesIdData: ''
+		schedules_id: ''
 	}),
 	methods: {
 		schedulesId () {
 		return 	this.$route.params.id;
 		},
+		backPage() {
+			// console.log("schedulesId", this.schedulesId())
+			this.$router.push(`/newSurvey/${ this.schedules_id }`)
+		}
 	},
 }
 </script>

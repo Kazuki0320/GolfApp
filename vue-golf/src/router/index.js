@@ -32,6 +32,11 @@ const routes = [
     component: NewSurvey
   },
   {
+    path: '/newSurvey/:id',
+    name: 'NewSurvey',
+    component: NewSurvey
+  },
+  {
     path: '/survey/:id',
     name: 'SurveyConfirmed',
     component: SurveyConfirmed
