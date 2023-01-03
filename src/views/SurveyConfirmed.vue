@@ -13,6 +13,24 @@
 				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
 					<tr>
 						<th class="text-center">
+							メンバー
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr
+					v-for="friend in friends"
+					:key="friend">
+						<td>{{ friend }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+					<tr>
+						<th class="text-center">
 							開催候補地1
 						</th>
 					</tr>
@@ -83,7 +101,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.AvailabilityOfCar }}</td>
+						<td>{{ AvailabilityOfCar }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -99,7 +117,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.throughOrLunch }}</td>
+						<td>{{ throughOrLunch }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -115,7 +133,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.AvailabilityOfCaddy }}</td>
+						<td>{{ AvailabilityOfCaddy }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -171,6 +189,16 @@ export default {
 		this.schedules = schedulesData.data()
 		console.log("schedules", this.schedules)
 
+		//友人一覧を表示するための処理
+		this.friends = this.schedules.friends
+		//車の有無を表示するための処理
+		this.AvailabilityOfCar = (this.schedules.AvailabilityOfCar ? '有' : '無')
+		//スルーorランチ付きかを判断する処理
+		this.throughOrLunch = (this.schedules.throughOrLunch ? 'スルー' : '昼付き')
+		console.log("throughOrLunch", this.schedules.throughOrLunch)
+
+		//キャディの有無
+		this.AvailabilityOfCaddy = (this.schedules.AvailabilityOfCaddy ? '有' : '無')
 		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
 			questionnairesRef.update({
 				schedules_id: this.$route.params.id,
@@ -181,7 +209,11 @@ export default {
 		users:[],
 		user_id: '',
 		schedules: '',
-		schedules_id: ''
+		schedules_id: '',
+		friends: [],
+		AvailabilityOfCar: null,
+		AvailabilityOfCaddy: null,
+		throughOrLunch: null
 	}),
 	methods: {
 		schedulesId () {
