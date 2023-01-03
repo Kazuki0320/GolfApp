@@ -1,7 +1,7 @@
 <template>
 	<v-app id="inspire">
 
-	<sidebar/>
+	<DefaultSidebar/>
 		<v-avatar
 			class="mb-4"
 			color="grey darken-1"
@@ -71,11 +71,11 @@
 
 <script>
 import firebase from "@/firebase/firebase"
-import Sidebar from '@/components/layouts/Sidebar'
+import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 
 	export default {
 		components: {
-			Sidebar
+			DefaultSidebar
 		},
 		async created() {
 			//firebaseから、ドキュメントを取得

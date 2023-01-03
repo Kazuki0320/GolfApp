@@ -1,8 +1,8 @@
 <template>
 	<v-app>
-		<div class="login-box">
-		<v-card class="login-form">
-			<v-card-title class="login-title">新規登録</v-card-title>
+		<div class="Login-box">
+		<v-card class="Login-form">
+			<v-card-title class="Login-title">新規登録</v-card-title>
 			<v-card-subtitle>ユーザー情報を入力してください</v-card-subtitle>
 			<v-btn text color="light-blue" to="Login">ログイン画面はこちら</v-btn>
 
@@ -39,7 +39,7 @@
 
 		<v-btn
 			color="#4DD0E1"
-			class="login-btn"
+			class="Login-btn"
 			@click="submit"
 			:disabled="isValid">
 			新規登録
@@ -130,19 +130,19 @@ methods: {
 </script>
 
 <style scoped>
-.login-form {
+.Login-form {
 	margin:150px;
 	padding:30px;
 }
-.login-box {
+.Login-box {
 	width:60%;
 	margin:0px auto;
 	padding:30px;
 }
-.login-title {
+.Login-title {
 	display: inline-block;
 }
-.login-btn {
+.Login-btn {
 	margin-left: 20px; 
 }
 .error-message {

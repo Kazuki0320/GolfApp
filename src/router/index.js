@@ -52,7 +52,7 @@ const routes = [
     component: UsersSearch
   },
   {
-    path: '/login',
+    path: '/Login',
     name: 'Login',
     component: Login
   },
@@ -116,7 +116,7 @@ router.beforeEach((to, from, next) => {
 		firebase.auth().onAuthStateChanged(async (user) => {
 			if (!user) {
 				next({
-					path: '/login',
+					path: '/Login',
 					query: { redirect: to.fullPath }
 				})
 			} else {
