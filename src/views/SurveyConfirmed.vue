@@ -154,6 +154,7 @@
 				</tbody>
 			</template>
 		</v-simple-table>
+		<!--一蘭から戻ったときに、データの渡し方がわからないため一旦残し-->
 		<!-- <router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id, schedules_id: this.schedulesIdData } }"> -->
 		<!-- <router-link :to="{ path: '/newSurvey', query: { schedules_id: this.schedules_id }} "> -->
 		<!-- <router-link :to="{ path:`/newSurvey/${ this.schedules_id }`}"> -->
@@ -182,12 +183,9 @@ export default {
 	async created() {
 
 		this.schedules_id = this.$route.params.id;
-		console.log("schedulesId", this.schedulesId())
-		// console.log("schedules", this.schedulesId);
 		const schedulesDoc = firebase.firestore().collection("schedules").doc(this.$route.params.id)
 		const schedulesData = await schedulesDoc.get()
 		this.schedules = schedulesData.data()
-		console.log("schedules", this.schedules)
 
 		//友人一覧を表示するための処理
 		this.friends = this.schedules.friends
@@ -195,10 +193,9 @@ export default {
 		this.AvailabilityOfCar = (this.schedules.AvailabilityOfCar ? '有' : '無')
 		//スルーorランチ付きかを判断する処理
 		this.throughOrLunch = (this.schedules.throughOrLunch ? 'スルー' : '昼付き')
-		console.log("throughOrLunch", this.schedules.throughOrLunch)
-
 		//キャディの有無
 		this.AvailabilityOfCaddy = (this.schedules.AvailabilityOfCaddy ? '有' : '無')
+
 		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
 			questionnairesRef.update({
 				schedules_id: this.$route.params.id,
@@ -220,7 +217,6 @@ export default {
 		return 	this.$route.params.id;
 		},
 		backPage() {
-			// console.log("schedulesId", this.schedulesId())
 			this.$router.push(`/newSurvey/${ this.schedules_id }`)
 		}
 	},
