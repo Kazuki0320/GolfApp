@@ -214,7 +214,7 @@ export default {
 			// 	.signOut()
 			// 	.then(() => {
 			// 		localStorage.message = "ログアウトに成功しました"
-			// 		this.$router.push('/UserLogin')
+			// 		this.$router.push('/Login')
 			// 	})
 			// 	.catch((error) => {
 			// 		console.log(error)
