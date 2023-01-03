@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import roomList from '../views/roomList.vue'
-import Login from '../views/Login.vue'
+import UserLogin from '../views/UserLogin.vue'
 import SignUp from '../views/SignUp.vue'
 import ChatBoard from '../views/ChatBoard.vue'
 import UsersList from '../views/UsersList.vue'
@@ -52,9 +52,9 @@ const routes = [
     component: UsersSearch
   },
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
+    path: '/UserLogin',
+    name: 'UserLogin',
+    component: UserLogin
   },
   {
     path: '/signUp',
@@ -116,7 +116,7 @@ router.beforeEach((to, from, next) => {
 		firebase.auth().onAuthStateChanged(async (user) => {
 			if (!user) {
 				next({
-					path: '/login',
+					path: '/UserLogin',
 					query: { redirect: to.fullPath }
 				})
 			} else {
