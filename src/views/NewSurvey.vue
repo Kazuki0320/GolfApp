@@ -157,7 +157,6 @@
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
-				<!-- <router-link :to="{ path:`/survey/${ this.schedulesIdData }`}"> -->
 					<v-btn 
 						@click="onClick"
 						class="ma-2"
@@ -165,7 +164,6 @@
 						dark>
 						確認
 					</v-btn>
-				<!-- </router-link> -->
 			</v-col>
 		</v-row>
 	</v-main>
@@ -177,9 +175,7 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		// this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
 		this.schedules_id = this.$route.params;
-		// console.log("schedules_id", this.schedules_id)
 
 		this.user_id = this.$route.query.user_id;
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
@@ -188,6 +184,12 @@ export default {
 
 		//一覧から戻るようの新しいコンポーネントを作って、newSurveyBackみたいな名前のコンポーネントpathも作っちゃう。
 		const friendsIdArray =JSON.parse(userDoc.get("friends"))
+		/*【明日やること】
+		・友人検索で、v-modelを使用し、選んだユーザーのIDを取得する処理を書く必要がある。
+		→v-modelが発火したタイミングで、clickイベントを発火させ、その中で選んだユーザーのIDを取得する処理を書く。
+		→選んだユーザーのIDを取得して、データに同期させることで、そのユーザーのデータIDをfirebaseに保存。
+		*/
+		// this.friendsId = friendsIdArray
 
 		friendsIdArray.forEach(async (doc) => {
 			const friendRef = firebase.firestore().collection("users").doc(doc)
@@ -205,17 +207,9 @@ export default {
 				users_id: this.user_id,
 			})
 			this.questionnairesId = result.id
-			// console.log("questionnairesId", this.questionnairesId)
 
 		/*
-		schedulesには、本来何もドキュメントが設定されていない状態なので、アンケート作成と共に、ドキュメントを作成し、その中でアンケートの中身も書き換える必要がある。
-		selectboxと表示のvalueを分けたい時があると思うから、その時はvuetifyを使って、うまくデータ保存する。
-		ESLintとprettier後程、インストール。
 		「やっぱ、やめた」の時一覧から戻るときに、firebase上のデータを削除するのが１つの方法。
-		オプションAPI、コンポジションAPI。他の新しい書き方もあるらしい...スクリプトセットアップ。
-		ローカルストレージ使うのも、１つの方法としてあり。
-		firebaseのsetとaddの違い
-		テンプレート構文orテンプレートリテラル
 		*/
 	
 	},
@@ -242,6 +236,7 @@ export default {
 		caddy:false,
 		friendNameList: [],
 		friends: [],
+		friendsId: [],
 		users:[],
 		user_id: '',
 		user:'',
@@ -356,7 +351,8 @@ export default {
 			const schedulesRef = firebase.firestore().collection("schedules")
 			const result = await schedulesRef.add({
 				questionnairesId: this.questionnairesId,
-				friends: this.friendNameList,
+				// friends: this.friendNameList,
+				// friendsId: this.friendsId,
 				selectPlace1: this.prefModel1,
 				selectPlace2: this.prefModel2,
 				proposedDate: this.date,

@@ -187,6 +187,7 @@ export default {
 		const schedulesData = await schedulesDoc.get()
 		this.schedules = schedulesData.data()
 
+		console.log("friendsId", this.schedules.friendsId)
 		//友人一覧を表示するための処理
 		this.friends = this.schedules.friends
 		//車の有無を表示するための処理
