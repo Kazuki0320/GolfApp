@@ -98,7 +98,7 @@ export default {
 				.signOut()
 				.then(() => {
 					localStorage.message = "ログアウトに成功しました"
-					this.$router.push('/Login')
+					this.$router.push('/login')
 				})
 				.catch((error) => {
 					console.log(error)
