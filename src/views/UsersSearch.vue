@@ -160,7 +160,6 @@ export default {
 			this.valid = !this.valid
 			//[下記処理はemailや個人IDなどで検索する場合に使用する]
 			// const userDoc = firebase.firestore().collection("users")
-			// // console.log("userDoc", userDoc)
 			// await userDoc.where("id", "==", this.keyword).get()
 			// // console.log("query call", query)
 			// .then((result) => {

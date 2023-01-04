@@ -78,7 +78,7 @@ import firebase from "@/firebase/firebase"
 				let data = {
 					id: doc.id
 				}
-				if(this.auth.uid == data.id) {
+				if(this.auth.uid === data.id) {
 					this.user = data
 				}else{
 					//消したらエラーになるかも？

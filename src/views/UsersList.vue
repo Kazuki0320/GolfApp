@@ -81,42 +81,8 @@ export default {
 					id: doc
 				}
 				this.friends.push(friendData)
-				console.log("friendData", this.friends)
+				// console.log("friendData", this.friends)
 			})
-			// console.log("userId friend", this.friends)
-
-			// let arr = ['first', 'second', 'third'];
-			// let obj = {};
-			// arr.forEach((element, index) => {
-			// obj['key' + index] = element;
-			// });
-			// 
-			// console.log(obj);
-			// const friendDoc =firebase.firestore().collection("users").doc(this.friends)
-			// console.log("friendDoc", friendDoc)
-			// const userInfo = userId.data()
-			// const friend =userInfo.data("friends")
-			// console.log("friend", friend)
-
-					// const postRef = db.collection('posts').doc('AOPFbwazI7HoE2ofXm5Q')
-			// const postDoc = await postRef.get() // firebase.firestore.DocumentSnapshotのインスタンスを取得
-			// if (postDoc.exists) {
-			//   console.log(postDoc.id)
-			//   console.log(postDoc.data())
-			//   console.log(postDoc.get('title'))
-			// } else {
-			//   console.log('No such document!')
-			// }
-			// var docRef = db.collection("cities").doc("SF");
-			// docRef.get().then(function(doc) {
-				// if (doc.exists) {
-					// console.log("Document data:", doc.data());
-				// } else {
-					// console.log("No such document!");
-				// }
-			// }).catch(function(error) {
-				// console.log("Error getting document:", error);
-			// });
 		},
 	}
 }

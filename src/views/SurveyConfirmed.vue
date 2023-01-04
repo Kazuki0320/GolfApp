@@ -10,7 +10,7 @@
 	<v-main>
 		<v-simple-table>
 			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+				<thead>
 					<tr>
 						<th class="text-center">
 							メンバー
@@ -19,16 +19,16 @@
 				</thead>
 				<tbody>
 					<tr
-					v-for="friend in friends"
-					:key="friend">
-						<td>{{ friend }}</td>
+					v-for="friend in friendsArray"
+					:key="friend.name">
+						<td>{{ friend.name }}</td>
 					</tr>
 				</tbody>
 			</template>
 		</v-simple-table>
 		<v-simple-table>
 			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+				<thead>
 					<tr>
 						<th class="text-center">
 							開催候補地1
@@ -154,21 +154,11 @@
 				</tbody>
 			</template>
 		</v-simple-table>
-		<!--一蘭から戻ったときに、データの渡し方がわからないため一旦残し-->
-		<!-- <router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id, schedules_id: this.schedulesIdData } }"> -->
-		<!-- <router-link :to="{ path: '/newSurvey', query: { schedules_id: this.schedules_id }} "> -->
-		<!-- <router-link :to="{ path:`/newSurvey/${ this.schedules_id }`}"> -->
 			<v-btn 
-				@click="backPage"
-				color="secondary">
-				一覧に戻る
-			</v-btn>
-			<!-- <v-btn 
 				to="/newSurvey"
 				color="secondary">
 				一覧に戻る
-			</v-btn> -->
-		<!-- </router-link> -->
+			</v-btn>
 		<router-link to="/surveyAnswer">
 			<v-btn class="ma-2" color="primary" dark>メッセージ送信</v-btn>
 		</router-link>
@@ -182,14 +172,12 @@ import firebase from "@/firebase/firebase"
 export default {
 	async created() {
 
-		this.schedules_id = this.$route.params.id;
 		const schedulesDoc = firebase.firestore().collection("schedules").doc(this.$route.params.id)
 		const schedulesData = await schedulesDoc.get()
 		this.schedules = schedulesData.data()
 
-		console.log("friendsId", this.schedules.friendsId)
 		//友人一覧を表示するための処理
-		this.friends = this.schedules.friends
+		this.friendsArray = this.schedules.friends
 		//車の有無を表示するための処理
 		this.AvailabilityOfCar = (this.schedules.AvailabilityOfCar ? '有' : '無')
 		//スルーorランチ付きかを判断する処理
@@ -197,10 +185,10 @@ export default {
 		//キャディの有無
 		this.AvailabilityOfCaddy = (this.schedules.AvailabilityOfCaddy ? '有' : '無')
 
-		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
-			questionnairesRef.update({
-				schedules_id: this.$route.params.id,
-			})
+		// const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
+		// 	questionnairesRef.update({
+		// 		schedules_id: this.$route.params.id,
+		// 	})
 	},
 	data: () => ({
 		user: '',
@@ -208,18 +196,10 @@ export default {
 		user_id: '',
 		schedules: '',
 		schedules_id: '',
-		friends: [],
+		friendsArray: [],
 		AvailabilityOfCar: null,
 		AvailabilityOfCaddy: null,
 		throughOrLunch: null
 	}),
-	methods: {
-		schedulesId () {
-		return 	this.$route.params.id;
-		},
-		backPage() {
-			this.$router.push(`/newSurvey/${ this.schedules_id }`)
-		}
-	},
 }
 </script>
