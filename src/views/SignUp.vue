@@ -4,7 +4,7 @@
 		<v-card class="login-form">
 			<v-card-title class="login-title">新規登録</v-card-title>
 			<v-card-subtitle>ユーザー情報を入力してください</v-card-subtitle>
-			<v-btn text color="light-blue" to="Login">ログイン画面はこちら</v-btn>
+			<v-btn text color="light-blue" to="login">ログイン画面はこちら</v-btn>
 
 		<v-form
 			ref="form"

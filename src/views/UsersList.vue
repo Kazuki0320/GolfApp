@@ -1,6 +1,6 @@
 <template>
 	<v-app id="inspire">
-	<sidebar/>
+	<DefaultSidebar/>
 	<v-app-bar
 		app
 		shrink-on-scroll
@@ -39,18 +39,16 @@
 </template>
 
 <script>
-import Sidebar from '@/components/layouts/Sidebar'
+import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 import firebase from "@/firebase/firebase"
 
 export default {
 	components: {
-		Sidebar
+		DefaultSidebar
 	},
 	mounted() {
 		this.getUserId()
-
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
-		// console.log("uid call", this.auth.uid)
 	},
 	data: () => ({
 		user:'',
@@ -60,7 +58,6 @@ export default {
 		async getUserId() {
 			const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()
-			// console.log("snapshot call", snapshot);
 
 			snapshot.forEach(doc => {
 				let data = {
@@ -75,6 +72,8 @@ export default {
 
 			const userDoc = firebase.firestore().collection("users").doc(this.user.id)
 			const userInfo = await userDoc.get()
+			if (userInfo != undefined) return
+
 			const friendsArray =JSON.parse(userInfo.get("friends"))
 			friendsArray.forEach(doc => {
 				let friendData = {

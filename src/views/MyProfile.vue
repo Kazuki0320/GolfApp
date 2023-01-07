@@ -1,6 +1,6 @@
 <template>
 	<v-app id="inspire">
-	<sidebar/>
+	<DefaultSidebar/>
 	<v-app-bar
 		app
 		shrink-on-scroll
@@ -78,13 +78,13 @@
 </template>
 
 <script>
-import Sidebar from '@/components/layouts/Sidebar'
+import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 import firebase from "@/firebase/firebase"
 import { mapGetters } from 'vuex';
 
 export default {
 	components: {
-		Sidebar
+		DefaultSidebar
 	},
 	async created() {
 		this.user_id = this.$route.query.user_id;
