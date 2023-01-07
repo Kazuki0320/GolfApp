@@ -92,7 +92,7 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 			})
 		},
 		mounted () {
-			this.auth = JSON.parse(sessionStorage.getItem('user'))
+			this.auth = firebase.auth().currentUser
 			console.log("auth call", this.auth);
 		},
 		data: () => ({
@@ -116,7 +116,7 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 				return false;
 			},
 			roomId () {
-			return 	this.$route.query.room_id; 
+			return 	this.$route.query.room_id;
 			},
 		},
 		methods: {

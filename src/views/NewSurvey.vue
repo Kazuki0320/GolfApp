@@ -158,10 +158,10 @@
 				</v-col>
 				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
 				<!-- <router-link :to="{ path:`/survey/${ this.schedulesIdData }`}"> -->
-					<v-btn 
+					<v-btn
 						@click="onClick"
 						class="ma-2"
-						color="primary" 
+						color="primary"
 						dark>
 						確認
 					</v-btn>
@@ -217,7 +217,7 @@ export default {
 		firebaseのsetとaddの違い
 		テンプレート構文orテンプレートリテラル
 		*/
-	
+
 	},
 	data: () => ({
 		remarks: '',

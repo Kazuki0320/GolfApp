@@ -24,7 +24,7 @@
 			>
 			<!--this.roomsがpushした後にどういうデータが入っているか？
 				[{id: doc.id},{id: doc.id}]-->
-				
+
 			<!--ここで/chatのパスのqueryとして、idを設定している
 			↓pathとqueryで、room_idを取得してきてる。（ここがChatBoard.vueの$routerと紐づいてる)
 			-->
@@ -32,7 +32,7 @@
 				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
 			<div>グループ1</div>
-			
+
 			</v-col>
 		</v-row>
 		</v-container>
@@ -51,15 +51,14 @@ export default {
 	async mounted() {
 		this.getRooms()
 
-	// JSON.parseでJSONからオブジェクトに変換
-	this.auth = JSON.parse(sessionStorage.getItem('user'))
+	const currentUserId = firebase.auth().currentUser.uid
 	const userRef = firebase.firestore().collection("users")
 		const snapshot = await userRef.get()
 		snapshot.forEach(doc => {
 			let data = {
 				id: doc.id
 			}
-			if(this.auth.uid === data.id) {
+			if(currentUserId === data.id) {
 				this.user = data
 			}else{
 				// console.log("success")

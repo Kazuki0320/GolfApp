@@ -61,7 +61,7 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async mounted() {
-		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+    const currentUserId = firebase.auth().currentUser.uid
 		//collection("users")から、ログインユーザーと同じIDを検索する処理
 		const userRef = firebase.firestore().collection("users")
 		const snapshot = await userRef.get()
@@ -69,7 +69,7 @@ export default {
 			let data = {
 				id: doc.id
 			}
-			if (this.auth.uid == data.id) {
+			if (currentUserId === data.id) {
 				this.user = data
 			} else {
 				//消したらエラーになるかも？
