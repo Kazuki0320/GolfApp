@@ -3,7 +3,6 @@
 		v-model="drawer"
 		app
 	>
-	
 		<v-sheet color="grey lighten-4" class="pa-4">
 			<!--マイプロフィールにuserのIDをqueryとして渡している-->
 			<router-link 
@@ -63,6 +62,7 @@
 			</v-list-item>
 		</v-list>
 	</v-navigation-drawer>
+	
 </template>
 
 <script>

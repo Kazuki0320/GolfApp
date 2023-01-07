@@ -185,10 +185,10 @@ export default {
 		//キャディの有無
 		this.AvailabilityOfCaddy = (this.schedules.AvailabilityOfCaddy ? '有' : '無')
 
-		// const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
-		// 	questionnairesRef.update({
-		// 		schedules_id: this.$route.params.id,
-		// 	})
+		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
+			questionnairesRef.update({
+				schedules_id: this.$route.params.id,
+			})
 	},
 	data: () => ({
 		user: '',

@@ -13,7 +13,6 @@
 		cols="12"
 		sm="6">
 		<v-autocomplete
-			v-model="friendModel"
 			item-text="name"
 			:items="friendNameList"
 			outlined
@@ -187,20 +186,6 @@ export default {
 
 		//一覧から戻るようの新しいコンポーネントを作って、newSurveyBackみたいな名前のコンポーネントpathも作っちゃう。
 		const friendsIdArray =JSON.parse(userDoc.get("friends"))
-		/*
-		[やりたいこと]
-		・友人検索で、選んだユーザーのIDを取得すること。取得してきたIDをfirebaseに保存することで、アンケート確認画面でユーザーIDを受け取り、
-		選ばれたメンバーに対して、メッセージを送信することができる。
-		【明日やること】
-		・友人検索で、v-modelを使用し、選んだユーザーのIDを取得する処理を書く必要がある。
-		→v-modelが発火したタイミングで、clickイベントを発火させ、その中で選んだユーザーのIDを取得する処理を書く。
-		→選んだユーザーのIDを取得して、データに同期させることで、そのユーザーのデータIDをfirebaseに保存。
-		[方法]
-		1.検索時にユーザーを選んだタイミングで、IDを取得する方法
-		2.メンバーを確定して、それをアンケート確認画面に遷移するタイミングでの検索。
-		3.friendNameListのユーザーネームとコレクションのusersのuserNameを比較して、同じフィールドの値があれば、ドキュメントIDを取得するような処理を書く。
-		*/
-		// this.friendsId = friendsIdArray
 
 		friendsIdArray.forEach(async (friendId) => {
 			const friendRef = firebase.firestore().collection("users").doc(friendId)
@@ -213,32 +198,8 @@ export default {
 			this.friendNameList.push(friend)
 		});
 
-		// const db = firebase.firestore();
-
-		// db.collection("users").where("age", "<", 20).get().
-		// then(snapshot => {
-		// snapshot.forEach(doc => {
-		// 	console.log(`${doc.id}: ${doc.data().userName}`);
-		// 	})
-		// })
-
-		const questionnairesRef = firebase.firestore().collection("questionnaires")
-			const result = await questionnairesRef.add({
-				active: this.active,
-				answered: this.answered,
-				room_id: this.room_id,
-				schedules_id: this.schedulesId,
-				users_id: this.user_id,
-			})
-			this.questionnairesId = result.id
-
-		/*
-		「やっぱ、やめた」の時一覧から戻るときに、firebase上のデータを削除するのが１つの方法。
-		*/
-	
 	},
 	data: () => ({
-		friendModel: '',
 		remarks: '',
 		schedules_id: '',
 		questionnairesId: '',
@@ -373,6 +334,16 @@ export default {
 	}),
 	methods: {
 		async onClick() {
+			const questionnairesRef = firebase.firestore().collection("questionnaires")
+				const result1 = await questionnairesRef.add({
+					active: this.active,
+					answered: this.answered,
+					room_id: this.room_id,
+					schedules_id: this.schedulesId,
+					users_id: this.user_id,
+				})
+				this.questionnairesId = result1.id
+				
 			const schedulesRef = firebase.firestore().collection("schedules")
 			const result = await schedulesRef.add({
 				questionnairesId: this.questionnairesId,
@@ -388,12 +359,11 @@ export default {
 			})
 			this.$router.push(`/survey/${ result.id }`)
 		},
-
 	},
-	watch:{
-		friendNameList(newValue) {
-			console.log("newValue", newValue)
-		}
-	},
+	// watch:{
+	// 	friendNameList(newValue) {
+	// 		console.log("newValue", newValue)
+	// 	}
+	// },
 }
 </script>
