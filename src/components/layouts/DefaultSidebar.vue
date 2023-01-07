@@ -67,7 +67,6 @@ export default {
 		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
 		//collection("users")から、ログインユーザーと同じIDを検索する処理
 		const userRef = firebase.firestore().collection("users")
-<<<<<<< HEAD:src/components/layouts/Sidebar.vue
 			const snapshot = await userRef.get()
 			snapshot.forEach(doc => {
 				let data = {
@@ -80,20 +79,6 @@ export default {
 					// console.log("success")
 				}
 			})
-=======
-		const snapshot = await userRef.get()
-		snapshot.forEach(doc => {
-			let data = {
-				id: doc.id
-			}
-			if (this.auth.uid == data.id) {
-				this.user = data
-			} else {
-				//消したらエラーになるかも？
-				// console.log("success")
-			}
-		})
->>>>>>> c94619fe7c7b0ab41fee932904a8d6847fe68266:src/components/layouts/DefaultSidebar.vue
 
 		//検索したIDから、user情報を取得する処理
 		const userDoc = firebase.firestore().collection("users").doc(this.user.id)
