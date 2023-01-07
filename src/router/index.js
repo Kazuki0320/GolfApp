@@ -29,27 +29,32 @@ const routes = [
   {
     path: '/newSurvey',
     name: 'NewSurvey',
-    component: NewSurvey
+    component: NewSurvey,
+    meta: { requiresAuth: true }
   },
   {
     path: '/newSurvey/:id',
     name: 'NewSurvey',
-    component: NewSurvey
+    component: NewSurvey,
+    meta: { requiresAuth: true }
   },
   {
     path: '/survey/:id',
     name: 'SurveyConfirmed',
-    component: SurveyConfirmed
+    component: SurveyConfirmed,
+    meta: { requiresAuth: true }
   },
   {
     path: '/surveyAnswer',
     name: 'SurveyAnswer',
-    component: SurveyAnswer
+    component: SurveyAnswer,
+    meta: { requiresAuth: true }
   },
   {
     path: '/usersSearch',
     name: 'UsersSearch',
-    component: UsersSearch
+    component: UsersSearch,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -64,42 +69,50 @@ const routes = [
   {
     path: '/chat',
     name: 'ChatBoard',
-    component: ChatBoard
+    component: ChatBoard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/user',
     name: 'UsersList',
-    component: UsersList
+    component: UsersList,
+    meta: { requiresAuth: true }
   },
   {
     path: '/profile',
     name: 'UserProfile',
-    component: UserProfile
+    component: UserProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/myProfile',
     name: 'MyProfile',
-    component: MyProfile
+    component: MyProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/editProfile',
     name: 'EditProfile',
-    component: EditProfile
+    component: EditProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/roomCreateConfirmed',
     name: 'RoomCreateConfirmed',
-    component: RoomCreateConfirmed
+    component: RoomCreateConfirmed,
+    meta: { requiresAuth: true }
   },
   {
     path: '/memberConfirmed',
     name: 'MemberConfirmed',
-    component: MemberConfirmed
+    component: MemberConfirmed,
+    meta: { requiresAuth: true }
   },
   {
     path:'/roomJoinConfirmed',
     name: 'RoomJoinConfirmed',
-    component: RoomJoinConfirmed
+    component: RoomJoinConfirmed,
+    meta: { requiresAuth: true }
   },
 ]
 
