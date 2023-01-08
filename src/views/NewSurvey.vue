@@ -8,6 +8,12 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
+		<!-- <v-btn @click="increment">+</v-btn>
+		<v-btn @click="decrement">-</v-btn>
+		<p>{{  doubleCount }}</p>
+		<p>{{  tripleCount }}</p>
+		<input type="text" v-model="message">
+		<p>{{ message }}</p> -->
 		<v-col
 		class="d-flex"
 		cols="12"
@@ -174,6 +180,7 @@
 
 <script>
 import firebase from "@/firebase/firebase"
+// import { mapGetters } from 'vuex';
 
 export default {
 	async created() {
@@ -333,33 +340,61 @@ export default {
 		]
 	}),
 	methods: {
-		async onClick() {
-			const questionnairesRef = firebase.firestore().collection("questionnaires")
-				const result1 = await questionnairesRef.add({
-					active: this.active,
-					answered: this.answered,
-					room_id: this.room_id,
-					schedules_id: this.schedulesId,
-					users_id: this.user_id,
-				})
-				this.questionnairesId = result1.id
-				
-			const schedulesRef = firebase.firestore().collection("schedules")
-			const result = await schedulesRef.add({
-				questionnairesId: this.questionnairesId,
-				friends: this.friendNameList,
-				selectPlace1: this.prefModel1,
-				selectPlace2: this.prefModel2,
-				proposedDate: this.date,
-				DeadlineForResponse: this.date1,
-				AvailabilityOfCar: this.carsModel,
-				throughOrLunch: this.lunchModel,
-				AvailabilityOfCaddy: this.caddy,
-				remarks: this.remarks,
-			})
-			this.$router.push(`/survey/${ result.id }`)
-		},
+		onClick() {
+			this.$store.state.friend = this.friendNameList;
+		}
+		// async onClick() {
+			// const questionnairesRef = firebase.firestore().collection("questionnaires")
+			// 	const result1 = await questionnairesRef.add({
+			// 		active: this.active,
+			// 		answered: this.answered,
+			// 		room_id: this.room_id,
+			// 		schedules_id: this.schedulesId,
+			// 		users_id: this.user_id,
+			// 	})
+			// 	this.questionnairesId = result1.id
+
+			// const schedulesRef = firebase.firestore().collection("schedules")
+			// const result = await schedulesRef.add({
+			// 	questionnairesId: this.questionnairesId,
+			// 	friends: this.friendNameList,
+			// 	selectPlace1: this.prefModel1,
+			// 	selectPlace2: this.prefModel2,
+			// 	proposedDate: this.date,
+			// 	DeadlineForResponse: this.date1,
+			// 	AvailabilityOfCar: this.carsModel,
+			// 	throughOrLunch: this.lunchModel,
+			// 	AvailabilityOfCaddy: this.caddy,
+			// 	remarks: this.remarks,
+			// })
+			// this.$router.push(`/survey/${ result.id }`)
+		// },
+		// increment() {
+		// 	this.$store.state.count++;
+		// },
+		// decrement() {
+		// 	this.$store.state.count--;
+		// }
 	},
+
+	//mapGettersはオブジェクトとしても使えるし、配列としても使える。通常は配列で使うことが多い。
+	// computed: {
+	// 	...mapGetters(["doubleCount", "tripleCount"]),
+	// 	// message() {
+	// 	// 	return this.$store.getters.message;
+	// 	// }
+	// 	message: {
+	// 		get() {
+	// 			return this.$store.getters.message;
+	// 		},
+	// 		set(value) {
+	// 			this.$store.dispatch("updateMessage", value)
+	// 		}
+	// 	}
+	// },
+	// computed: mapGetters({
+	// 	myComponentDoubleCount: "doubleCount",
+	// })
 	// watch:{
 	// 	friendNameList(newValue) {
 	// 		console.log("newValue", newValue)

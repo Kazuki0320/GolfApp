@@ -8,13 +8,6 @@
 		<v-toolbar-title>マイページ</v-toolbar-title>
 	</v-app-bar>
 	<v-main>
-		<v-btn @click="increment">+</v-btn>
-		<v-btn @click="decrement">-</v-btn>
-		<p>{{  doubleCount }}</p>
-		<p>{{  tripleCount }}</p>
-		<input type="text" v-model="message">
-		<p>{{ message }}</p>
-
 		<v-simple-table
 		v-if="user">
 			<template v-slot:default>
@@ -82,7 +75,6 @@
 <script>
 import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 import firebase from "@/firebase/firebase"
-import { mapGetters } from 'vuex';
 
 export default {
 	components: {
@@ -110,31 +102,5 @@ export default {
 		userName: '',
 		email: '',
 	}),
-	methods: {
-		increment() {
-			this.$store.state.count++;
-		},
-		decrement() {
-			this.$store.state.count--;
-		}
-	},
-	//mapGettersはオブジェクトとしても使えるし、配列としても使える。通常は配列で使うことが多い。
-	computed: {
-		...mapGetters(["doubleCount", "tripleCount"]),
-		// message() {
-		// 	return this.$store.getters.message;
-		// }
-		message: {
-			get() {
-				return this.$store.getters.message;
-			},
-			set(value) {
-				this.$store.dispatch("updateMessage", value)
-			}
-		}
-	},
-	// computed: mapGetters({
-	// 	myComponentDoubleCount: "doubleCount",
-	// })
 }
 </script>

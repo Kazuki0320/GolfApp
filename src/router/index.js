@@ -123,7 +123,7 @@ router.beforeEach((to, from, next) => {
         next()
           let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
           if (!userDoc.exists) {
-          // firestore にユーザーIDがなければ新しいIDを作る
+          // 新規登録時に、firestore にユーザーIDがなければ新しいIDを作る。
           await userDoc.ref.set({
               userName: user.displayName,
               email: user.email,
