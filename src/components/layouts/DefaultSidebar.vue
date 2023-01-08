@@ -64,7 +64,7 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async mounted() {
-		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
+    const currentUserId = firebase.auth().currentUser.uid
 		//collection("users")から、ログインユーザーと同じIDを検索する処理
 		const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()

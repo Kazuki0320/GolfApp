@@ -162,7 +162,7 @@
 					<v-btn 
 						@click="onClick"
 						class="ma-2"
-						color="primary" 
+						color="primary"
 						dark>
 						確認
 					</v-btn>

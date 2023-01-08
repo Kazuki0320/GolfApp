@@ -23,14 +23,14 @@
 			<v-col
 			v-for="friend in friends"
 			:key="friend.id"
-			cols="4"> 
+			cols="4">
 			<!--this.friendsがpushした後にどういうデータが入っているか？
 				[{id: doc.id},{id: doc.id}]-->
-			
+
 			<router-link :to="{ path: '/profile', query: { friend_id: friend.id }}">
 				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
-			
+
 			</v-col>
 		</v-row>
 		</v-container>
@@ -48,7 +48,6 @@ export default {
 	},
 	mounted() {
 		this.getUserId()
-		this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
 	},
 	data: () => ({
 		user:'',
@@ -58,12 +57,13 @@ export default {
 		async getUserId() {
 			const userRef = firebase.firestore().collection("users")
 			const snapshot = await userRef.get()
+			const currentUserId = firebase.auth().currentUser.uid
 
 			snapshot.forEach(doc => {
 				let data = {
 					id: doc.id
 				}
-				if(data.id == this.auth.uid) {
+				if(currentUserId === data.id) {
 					this.user = data
 				}
 				//this.friendsがpushした後にどういうデータが入っているか？

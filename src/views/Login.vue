@@ -109,8 +109,6 @@ methods: {
 						uid: result.user.uid,
 						password: this.password
 					}
-					//sessionStorageに保存する値は、文字列にする必要があるので、JSON.stringifyで指定
-					sessionStorage.setItem('user', JSON.stringify(auth))
 					this.$router.push('/')
 				})
 				.catch((error) => {
@@ -136,7 +134,7 @@ methods: {
 	display: inline-block;
 }
 .login-btn {
-	margin-left: 20px; 
+	margin-left: 20px;
 }
 .success-message {
 	margin-top: 20px;
