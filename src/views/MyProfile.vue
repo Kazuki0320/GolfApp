@@ -12,6 +12,8 @@
 		<v-btn @click="decrement">-</v-btn>
 		<p>{{  doubleCount }}</p>
 		<p>{{  tripleCount }}</p>
+		<input type="text" v-model="message">
+		<p>{{ message }}</p>
 
 		<v-simple-table
 		v-if="user">
@@ -118,7 +120,18 @@ export default {
 	},
 	//mapGettersはオブジェクトとしても使えるし、配列としても使える。通常は配列で使うことが多い。
 	computed: {
-		...mapGetters(["doubleCount", "tripleCount"])
+		...mapGetters(["doubleCount", "tripleCount"]),
+		// message() {
+		// 	return this.$store.getters.message;
+		// }
+		message: {
+			get() {
+				return this.$store.getters.message;
+			},
+			set(value) {
+				this.$store.dispatch("updateMessage", value)
+			}
+		}
 	},
 	// computed: mapGetters({
 	// 	myComponentDoubleCount: "doubleCount",
