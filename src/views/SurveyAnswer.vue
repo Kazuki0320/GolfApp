@@ -18,8 +18,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-					<td>空白</td>
+					<tr
+					v-for="index in friend"
+					:key="index">
+						<td>{{ index }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -35,7 +37,7 @@
 				</thead>
 				<tbody>
 					<tr>
-					<td>空白</td>
+					<td>{{ prefModel1 }}</td>
 					<!--
 					・指定しているユーザーネームを出力したい
 					・ログインしてるユーザー情報は除外する
@@ -55,7 +57,7 @@
 				</thead>
 				<tbody>
 					<tr>
-					<td>空白</td>
+					<td>{{ prefModel2 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -71,7 +73,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ date }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -87,7 +89,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ deadLineDate }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -103,7 +105,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ carsModel }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -119,7 +121,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ lunchModel }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -151,7 +153,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ caddyModel }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -199,7 +201,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ remarkModel }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -215,12 +217,20 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-			this.users = []
-			// console.log("userId call", this.userId)//userID取得確認OK
-			const userRef = firebase.firestore().collection("users").doc(this.userId)
-			const userDoc = await userRef.get()
-			const user = userDoc.data()
-			console.log("user", user);
+		//この画面では、firebaseのIDを取得して、データを出力する。
+		// //車の有無を表示するための処理
+		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
+		// //スルーorランチ付きかを判断する処理
+		this.throughOrLunch = (this.lunchModel ? 'スルー' : '昼付き')
+		// //キャディの有無
+		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
+
+		this.users = []
+		// console.log("userId call", this.userId)//userID取得確認OK
+		const userRef = firebase.firestore().collection("users").doc(this.userId)
+		const userDoc = await userRef.get()
+		const user = userDoc.data()
+		console.log("user", user);
 
 		// 	const snapshot = await userRef.get()
 		// 	snapshot.forEach(doc => {
@@ -229,12 +239,57 @@ export default {
 		// 	// 	console.log("this.users call", this.users)
 	},
 	data: () => ({
-		users:[]
+		users:[],
+		AvailabilityOfCar: '',
+		throughOrLunch: '',
+		AvailabilityOfCaddy: '',
 	}),
 	computed: {
-		userId () {
-		return 	this.$route.query.user_id;
+		friend: {
+			get() {
+				return this.$store.getters.friend;
+			}
 		},
-	},
+		prefModel1: {
+			get() {
+				return this.$store.getters.pref1;
+			}
+		},
+		prefModel2: {
+			get() {
+				return this.$store.getters.pref2;
+			}
+		},
+		date: {
+			get() {
+				return this.$store.getters.date
+			},
+		},
+		deadLineDate: {
+			get() {
+				return this.$store.getters.deadlineDate
+			},
+		},
+		carsModel: {
+			get() {
+				return this.$store.getters.carsModel
+			},
+		},
+		caddyModel: {
+			get() {
+				return this.$store.getters.caddyModel
+			}
+		},
+		lunchModel: {
+			get() {
+				return this.$store.getters.lunchModel
+			}
+		},
+		remarkModel: {
+			get() {
+				return this.$store.getters.remarkModel
+			}
+		},
+	}
 }
 </script>

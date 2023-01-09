@@ -8,12 +8,6 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<!-- <v-btn @click="increment">+</v-btn>
-		<v-btn @click="decrement">-</v-btn>
-		<p>{{  doubleCount }}</p>
-		<p>{{  tripleCount }}</p>
-		<input type="text" v-model="message">
-		<p>{{ message }}</p> -->
 		<v-col
 		class="d-flex"
 		cols="12"
@@ -21,14 +15,17 @@
 		<v-autocomplete
 			item-text="name"
 			:items="friendNameList"
+			v-model="friend"
 			outlined
 			deletable-chips
 			dense
 			chips
 			small-chips
 			label="友人検索"
+			return-object
 			multiple
-		></v-autocomplete>
+		>
+		</v-autocomplete>
 		</v-col>
 
 		<v-row>
@@ -105,7 +102,7 @@
 					>
 					<template v-slot:activator="{ on, attrs }">
 					<v-text-field
-						v-model="date1"
+						v-model="deadLineDate"
 						prepend-icon="mdi-calendar"
 						readonly
 						v-bind="attrs"
@@ -115,10 +112,10 @@
 					></v-text-field>
 					</template>
 					<v-date-picker
-						v-model="date1"
+						v-model="deadLineDate"
 						@input="menu1 = false"
 						locale="jp-ja"
-						:day-format="date1 => new Date(date1).getDate()">
+						:day-format="deadLineDate => new Date(deadLineDate).getDate()">
 					</v-date-picker>
 					</v-menu>
 				</v-col>
@@ -133,6 +130,11 @@
 				></v-checkbox>
 				</v-col>
 
+				<!--
+				・次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。
+				・Fluxは、vuexとReduxのアーキテクチャになる。←これは後で調べる。
+				・Friendに関しては、DBではIDのみ、stateはID+nameで、それぞれ別にする。
+				-->
 				<v-col
 					cols="12"
 					md="4"
@@ -147,6 +149,7 @@
 					cols="12"
 					md="4"
 				>
+				<!--２択なので、ここはcarsとかと一緒の処理にする-->
 				<v-select
 					v-model="lunchModel"
 					:items="throughOrLunch"
@@ -159,7 +162,7 @@
 					md="4"
 				>
 				<v-text-field
-					v-model="remarks"
+					v-model="remarkModel"
 					label="備考"
 					required
 				></v-text-field>
@@ -180,7 +183,6 @@
 
 <script>
 import firebase from "@/firebase/firebase"
-// import { mapGetters } from 'vuex';
 
 export default {
 	async created() {
@@ -207,15 +209,12 @@ export default {
 
 	},
 	data: () => ({
-		remarks: '',
 		schedules_id: '',
 		questionnairesId: '',
 		schedulesId: '',
 		room_id: '',
 		active: true,
 		answered: false,
-		lunchModel: 0,
-		carsModel: false,
 		throughOrLunch: [
 			{
 				text: 'スルー',
@@ -226,7 +225,6 @@ export default {
 				value: 2,
 			}
 		],
-		caddy:false,
 		friendNameList: [],
 		friends: [],
 		friendsId: [],
@@ -236,10 +234,8 @@ export default {
 		auth:null,
 		menu: false,
 		menu1: false,
-		date:new Date().toISOString().substr(0, 10),
-		date1:new Date().toISOString().substr(0, 10),
-		prefModel1: '',
-		prefModel2: '',
+		// date:new Date().toISOString().substr(0, 10),
+		// deadLineDateModel:new Date().toISOString().substr(0, 10),
 		prefs1: [
 			'北海道',
 			'青森',
@@ -340,45 +336,94 @@ export default {
 		]
 	}),
 	methods: {
-		onClick() {
-			this.$store.state.friend = this.friendNameList;
+		async onClick() {
+			//アンケート確定のタイミングで、下記処理が走るようにする。←SurveyConfirmedで、下の処理を行う。
+			const questionnairesRef = firebase.firestore().collection("questionnaires")
+				const result1 = await questionnairesRef.add({
+					active: this.active,
+					answered: this.answered,
+					room_id: this.room_id,
+					schedules_id: this.schedulesId,
+					users_id: this.user_id,
+				})
+				this.questionnairesId = result1.id
+				this.$router.push(`/survey/${ this.questionnairesId }`)
 		}
-		// async onClick() {
-			// const questionnairesRef = firebase.firestore().collection("questionnaires")
-			// 	const result1 = await questionnairesRef.add({
-			// 		active: this.active,
-			// 		answered: this.answered,
-			// 		room_id: this.room_id,
-			// 		schedules_id: this.schedulesId,
-			// 		users_id: this.user_id,
-			// 	})
-			// 	this.questionnairesId = result1.id
-
-			// const schedulesRef = firebase.firestore().collection("schedules")
-			// const result = await schedulesRef.add({
-			// 	questionnairesId: this.questionnairesId,
-			// 	friends: this.friendNameList,
-			// 	selectPlace1: this.prefModel1,
-			// 	selectPlace2: this.prefModel2,
-			// 	proposedDate: this.date,
-			// 	DeadlineForResponse: this.date1,
-			// 	AvailabilityOfCar: this.carsModel,
-			// 	throughOrLunch: this.lunchModel,
-			// 	AvailabilityOfCaddy: this.caddy,
-			// 	remarks: this.remarks,
-			// })
-			// this.$router.push(`/survey/${ result.id }`)
-		// },
-		// increment() {
-		// 	this.$store.state.count++;
-		// },
-		// decrement() {
-		// 	this.$store.state.count--;
-		// }
 	},
 
-	//mapGettersはオブジェクトとしても使えるし、配列としても使える。通常は配列で使うことが多い。
-	// computed: {
+	computed: {
+		friend: {
+			get() {
+				return this.$store.getters.friend;
+			},
+			set(value) {
+				this.$store.dispatch("updateFriend", value)
+			}
+		},
+		prefModel1: {
+			get() {
+				return this.$store.getters.pref1
+			},
+			set(value) {
+				this.$store.dispatch("updatePref1", value)
+			}
+		},
+		prefModel2: {
+			get() {
+				return this.$store.getters.pref2
+			},
+			set(value) {
+				this.$store.dispatch("updatePref2", value)
+			}
+		},
+		date: {
+			get() {
+				return this.$store.getters.proposedDate
+			},
+			set(value) {
+				this.$store.dispatch("updateDate", value)
+			}
+		},
+		deadLineDate: {
+			get() {
+				return this.$store.getters.deadlineForResponse
+			},
+			set(value) {
+				this.$store.dispatch("updateDeadLineDate", value)
+			}
+		},
+		carsModel: {
+			get() {
+				return this.$store.getters.cars
+			},
+			set(value) {
+				this.$store.dispatch("updateCars", value)
+			}
+		},
+		caddy: {
+			get() {
+				return this.$store.getters.caddy
+			},
+			set(value) {
+				this.$store.dispatch("updateCaddy", value)
+			}
+		},
+		lunchModel: {
+			get() {
+				return this.$store.getters.lunch
+			},
+			set(value) {
+				this.$store.dispatch("updateLunch", value)
+			}
+		},
+		remarkModel: {
+			get() {
+				return this.$store.getters.remark
+			},
+			set(value) {
+				this.$store.dispatch("updateRemark", value)
+			}
+		},
 	// 	...mapGetters(["doubleCount", "tripleCount"]),
 	// 	// message() {
 	// 	// 	return this.$store.getters.message;
@@ -391,10 +436,7 @@ export default {
 	// 			this.$store.dispatch("updateMessage", value)
 	// 		}
 	// 	}
-	// },
-	// computed: mapGetters({
-	// 	myComponentDoubleCount: "doubleCount",
-	// })
+	},
 	// watch:{
 	// 	friendNameList(newValue) {
 	// 		console.log("newValue", newValue)

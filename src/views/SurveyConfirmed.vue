@@ -19,8 +19,12 @@
 				</thead>
 				<tbody>
 					<tr
-					v-for="friend in friendsArray"
-					:key="friend.name">
+					v-for="(friend, index) in friends"
+					:key="`${friend.name}_${index}`"><!--
+					↑このやり方は良くない。
+					他で、indexを使った場合、キーが０の値が複数できてしまう。
+					その場合、テンプレートリテラルを使って、表示を行う。
+					-->
 						<td>{{ friend.name }}</td>
 					</tr>
 				</tbody>
@@ -37,7 +41,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.selectPlace1 }}</td>
+						<td>{{ prefModel1 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -53,7 +57,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.selectPlace2 }}</td>
+						<td>{{ prefModel2 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -69,7 +73,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.proposedDate }}</td>
+						<td>{{ date }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -85,7 +89,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.DeadlineForResponse }}</td>
+						<td>{{ deadLineDate }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -149,7 +153,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.remarks }}</td>
+						<td>{{ remarkModel }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -160,7 +164,12 @@
 				一覧に戻る
 			</v-btn>
 		<router-link to="/surveyAnswer">
-			<v-btn class="ma-2" color="primary" dark>メッセージ送信</v-btn>
+			<v-btn 
+			@click="onClick"
+			class="ma-2"
+			color="primary"
+			dark
+			>メッセージ送信</v-btn>
 		</router-link>
 	</v-main>
 	</v-app>
@@ -171,21 +180,17 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
+		// //車の有無を表示するための処理
+		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
+		// //スルーorランチ付きかを判断する処理
+		this.throughOrLunch = (this.lunchModel ? 'スルー' : '昼付き')
+		// //キャディの有無
+		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
 
-		const schedulesDoc = firebase.firestore().collection("schedules").doc(this.$route.params.id)
-		const schedulesData = await schedulesDoc.get()
-		this.schedules = schedulesData.data()
+		// //友人一覧を表示するための処理
+		// this.friendsArray = this.schedules.friends
 
-		//友人一覧を表示するための処理
-		this.friendsArray = this.schedules.friends
-		//車の有無を表示するための処理
-		this.AvailabilityOfCar = (this.schedules.AvailabilityOfCar ? '有' : '無')
-		//スルーorランチ付きかを判断する処理
-		this.throughOrLunch = (this.schedules.throughOrLunch ? 'スルー' : '昼付き')
-		//キャディの有無
-		this.AvailabilityOfCaddy = (this.schedules.AvailabilityOfCaddy ? '有' : '無')
-
-		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
+		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.$route.params.id)
 			questionnairesRef.update({
 				schedules_id: this.$route.params.id,
 			})
@@ -201,5 +206,71 @@ export default {
 		AvailabilityOfCaddy: null,
 		throughOrLunch: null
 	}),
+	methods: {
+		async onClick() {
+			const schedulesRef = firebase.firestore().collection("schedules")
+			const result = await schedulesRef.add({
+				// questionnairesId: this.questionnairesId,
+				friends: this.friend,
+				selectPlace1: this.prefModel1,
+				selectPlace2: this.prefModel2,
+				proposedDate: this.date,
+				DeadlineForResponse: this.deadLineDate,
+				AvailabilityOfCar: this.carsModel,
+				throughOrLunch: this.lunchModel,
+				AvailabilityOfCaddy: this.caddyModel,
+				remarks: this.remarkModel,
+			})
+			console.log("result", result)
+		}
+	},
+	computed: {
+		friends: {
+			get() {
+				console.log("friends", this.$store.getters.friend)
+				return this.$store.getters.friend;
+			}
+		},
+		prefModel1: {
+			get() {
+				return this.$store.getters.pref1;
+			}
+		},
+		prefModel2: {
+			get() {
+				return this.$store.getters.pref2;
+			}
+		},
+		date: {
+			get() {
+				return this.$store.getters.proposedDate
+			},
+		},
+		deadLineDate: {
+			get() {
+				return this.$store.getters.deadlineForResponse
+			},
+		},
+		carsModel: {
+			get() {
+				return this.$store.getters.carsModel
+			},
+		},
+		caddyModel: {
+			get() {
+				return this.$store.getters.caddyModel
+			}
+		},
+		lunchModel: {
+			get() {
+				return this.$store.getters.lunchModel
+			}
+		},
+		remarkModel: {
+			get() {
+				return this.$store.getters.remarkModel
+			}
+		},
+	}
 }
 </script>

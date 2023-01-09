@@ -5,36 +5,86 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		count: 2,
-		message: '',
-		friend: ''
+		//後で、friendsに直す
+		friend: [],
+		pref1: '',
+		pref2: '',
+		proposedDate: new Date().toISOString().substr(0, 10),
+		deadlineForResponse: new Date().toISOString().substr(0, 10),
+		cars: false,
+		caddy: false,
+		lunch: 0,
+		remark: '',
 	},
+	
 	//gettersで、stateの値をいじって、その値を関数の中に組み込む
 	getters: {
-		doubleCount: state => state.count *  2,
-		tripleCount: state => state.count *  3,
-		message: state => state.message
+		friend: state => state.friend,
+		pref1: state => state.pref1,
+		pref2: state => state.pref2,
+		proposedDate: state => state.proposedDate,
+		deadlineForResponse: state => state.deadlineForResponse,
+		carsModel: state => state.cars,
+		caddyModel: state => state.caddy,
+		lunchModel: state => state.lunch,
+		remarkModel: state => state.remark
 	},
 	mutations: {
-		increment(state, number) {
-			state.count += number
+		updateFriend(state, newFriend) {
+			state.friend = newFriend
 		},
-		decrement(state, number) {
-			state.count -= number
+		updatePref1(state, newPref1) {
+			state.pref1 = newPref1
 		},
-		updateMessage(state, newMessage) {
-			state.message = newMessage
+		updatePref2(state, newPref2) {
+			state.pref2 = newPref2
+		},
+		updateDate(state, newDate) {
+			state.proposedDate = newDate
+		},
+		updateDeadLineDate(state, newDeadLineDate) {
+		state.deadlineForResponse = newDeadLineDate
+		},
+		updateCars(state, newCars) {
+			state.cars = newCars
+		},
+		updateCaddy(state, newCaddy) {
+			state.caddy = newCaddy
+		},
+		updateLunch(state, newLunch) {
+			state.lunch = newLunch
+		},
+		updateRemark(state, newRemark) {
+			state.remark = newRemark
 		}
 	},
 	actions: {
-		increment({commit}, number) {
-			commit("increment", number)
+		updateFriend({commit}, newFriend) {
+			commit("updateFriend", newFriend)
 		},
-		decrement({commit}, number) {
-			commit("decrement", number)
+		updatePref1({commit}, newPref1) {
+			commit("updatePref1", newPref1)
 		},
-		updateMessage({commit}, newMessage) {
-			commit("updateMessage", newMessage)
+		updatePref2({commit}, newPref2) {
+			commit("updatePref2", newPref2)
+		},
+		updateDate({commit}, newDate) {
+			commit("updateDate", newDate)
+		},
+		updateDeadLineDate({commit}, newDeadLineDate) {
+			commit("updateDeadLineDate", newDeadLineDate)
+		},
+		updateCars({commit}, newCars) {
+			commit("updateCars", newCars)
+		},
+		updateCaddy({commit}, newCaddy) {
+			commit("updateCaddy", newCaddy)
+		},
+		updateLunch({commit}, newLunch) {
+			commit("updateLunch", newLunch)
+		},
+		updateRemark({commit}, newRemark) {
+			commit("updateRemark", newRemark)
 		}
 	}
 });
