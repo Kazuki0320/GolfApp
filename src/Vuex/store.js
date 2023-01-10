@@ -5,21 +5,24 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
-		//後で、friendsに直す
-		friend: [],
+		friends: [],
+		price: '',
+		playTime: '',
 		pref1: '',
 		pref2: '',
 		proposedDate: new Date().toISOString().substr(0, 10),
 		deadlineForResponse: new Date().toISOString().substr(0, 10),
 		cars: false,
 		caddy: false,
-		lunch: 0,
+		lunch: false,
 		remark: '',
 	},
 	
 	//gettersで、stateの値をいじって、その値を関数の中に組み込む
 	getters: {
-		friend: state => state.friend,
+		friends: state => state.friends,
+		price: state => state.price,
+		playTime: state => state.playTime,
 		pref1: state => state.pref1,
 		pref2: state => state.pref2,
 		proposedDate: state => state.proposedDate,
@@ -30,8 +33,14 @@ export default new Vuex.Store({
 		remarkModel: state => state.remark
 	},
 	mutations: {
-		updateFriend(state, newFriend) {
-			state.friend = newFriend
+		updateFriends(state, newFriends) {
+			state.friends = newFriends
+		},
+		updatePrice(state, newPrice) {
+			state.price = newPrice
+		},
+		updatePlayTime(state, newPlayTime) {
+			state.playTime = newPlayTime
 		},
 		updatePref1(state, newPref1) {
 			state.pref1 = newPref1
@@ -59,8 +68,14 @@ export default new Vuex.Store({
 		}
 	},
 	actions: {
-		updateFriend({commit}, newFriend) {
-			commit("updateFriend", newFriend)
+		updateFriends({commit}, newFriends) {
+			commit("updateFriends", newFriends)
+		},
+		updatePrice({commit}, newPrice) {
+			commit("updatePrice", newPrice)
+		},
+		updatePlayTime({commit}, newPlayTime) {
+			commit("updatePlayTime", newPlayTime)
 		},
 		updatePref1({commit}, newPref1) {
 			commit("updatePref1", newPref1)

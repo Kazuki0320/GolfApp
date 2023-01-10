@@ -15,7 +15,7 @@
 		<v-autocomplete
 			item-text="name"
 			:items="friendNameList"
-			v-model="friend"
+			v-model="friends"
 			outlined
 			deletable-chips
 			dense
@@ -30,6 +30,30 @@
 
 		<v-row>
 			<v-col cols="12">
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6"
+				>
+				<v-select
+					v-model="priceModel"
+					:items="price"
+					label="価格"
+				>
+				</v-select>
+				</v-col>
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6"
+				>
+				<v-select
+					v-model="playTimeModel"
+					:items="startTime"
+					label="スタート時間"
+				>
+				</v-select>
+				</v-col>
 				<v-col
 					class="d-flex"
 					cols="12"
@@ -130,11 +154,7 @@
 				></v-checkbox>
 				</v-col>
 
-				<!--
-				・次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。
-				・Fluxは、vuexとReduxのアーキテクチャになる。←これは後で調べる。
-				・Friendに関しては、DBではIDのみ、stateはID+nameで、それぞれ別にする。
-				-->
+				<!--・次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。-->
 				<v-col
 					cols="12"
 					md="4"
@@ -149,12 +169,10 @@
 					cols="12"
 					md="4"
 				>
-				<!--２択なので、ここはcarsとかと一緒の処理にする-->
-				<v-select
+				<v-checkbox
 					v-model="lunchModel"
-					:items="throughOrLunch"
-					label="スルーor昼付き"
-				></v-select>
+					label="昼付き"
+				></v-checkbox>
 				</v-col>
 
 				<v-col
@@ -168,13 +186,14 @@
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
+				<router-link to="/survey">
 					<v-btn 
-						@click="onClick"
 						class="ma-2"
 						color="primary"
 						dark>
 						確認
 					</v-btn>
+				</router-link>
 			</v-col>
 		</v-row>
 	</v-main>
@@ -186,16 +205,12 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		this.schedules_id = this.$route.params;
-
 		this.user_id = this.$route.query.user_id;
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
 
-		//一覧から戻るようの新しいコンポーネントを作って、newSurveyBackみたいな名前のコンポーネントpathも作っちゃう。
 		const friendsIdArray =JSON.parse(userDoc.get("friends"))
-
 		friendsIdArray.forEach(async (friendId) => {
 			const friendRef = firebase.firestore().collection("users").doc(friendId)
 			const friendDoc = await friendRef.get()
@@ -209,24 +224,7 @@ export default {
 
 	},
 	data: () => ({
-		schedules_id: '',
-		questionnairesId: '',
-		schedulesId: '',
-		room_id: '',
-		active: true,
-		answered: false,
-		throughOrLunch: [
-			{
-				text: 'スルー',
-				value: 1,
-			},
-			{
-				text: '昼付き',
-				value: 2,
-			}
-		],
 		friendNameList: [],
-		friends: [],
 		friendsId: [],
 		users:[],
 		user_id: '',
@@ -234,8 +232,21 @@ export default {
 		auth:null,
 		menu: false,
 		menu1: false,
-		// date:new Date().toISOString().substr(0, 10),
-		// deadLineDateModel:new Date().toISOString().substr(0, 10),
+		price: [
+			"1万円以下",
+			"1万円〜1万5千円",
+			"1万5千〜2万円",
+			"2万〜2万5千円",
+			"2万5千〜3万",
+			"3万以上"
+		],
+		startTime: [
+			"7:00~8:00",
+			"8:00~9:00",
+			"9:00~10:00",
+			"10:00~11:00",
+			"午後のみ",
+		],
 		prefs1: [
 			'北海道',
 			'青森',
@@ -335,29 +346,29 @@ export default {
 			'沖縄',
 		]
 	}),
-	methods: {
-		async onClick() {
-			//アンケート確定のタイミングで、下記処理が走るようにする。←SurveyConfirmedで、下の処理を行う。
-			const questionnairesRef = firebase.firestore().collection("questionnaires")
-				const result1 = await questionnairesRef.add({
-					active: this.active,
-					answered: this.answered,
-					room_id: this.room_id,
-					schedules_id: this.schedulesId,
-					users_id: this.user_id,
-				})
-				this.questionnairesId = result1.id
-				this.$router.push(`/survey/${ this.questionnairesId }`)
-		}
-	},
-
 	computed: {
-		friend: {
+		friends: {
 			get() {
-				return this.$store.getters.friend;
+				return this.$store.getters.friends;
 			},
 			set(value) {
-				this.$store.dispatch("updateFriend", value)
+				this.$store.dispatch("updateFriends", value)
+			}
+		},
+		priceModel: {
+			get() {
+				return this.$store.getters.price
+			},
+			set(value) {
+				this.$store.dispatch("updatePrice", value)
+			}
+		},
+		playTimeModel: {
+			get() {
+				return this.$store.getters.playTime
+			},
+			set(value) {
+				this.$store.dispatch("updatePlayTime", value)
 			}
 		},
 		prefModel1: {
