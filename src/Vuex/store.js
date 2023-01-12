@@ -8,30 +8,38 @@ export default new Vuex.Store({
 		friends: [],
 		price: '',
 		playTime: '',
-		pref1: '',
-		pref2: '',
+		candidatePrefecture1: '',
+		candidatePrefecture2: '',
 		proposedDate: new Date().toISOString().substr(0, 10),
 		deadlineForResponse: new Date().toISOString().substr(0, 10),
-		cars: false,
-		caddy: false,
-		lunch: false,
+		isCars: false,
+		isCaddy: false,
+		isLunch: false,
 		remark: '',
 	},
-	
-	//gettersで、stateの値をいじって、その値を関数の中に組み込む
 	getters: {
 		friends: state => state.friends,
 		price: state => state.price,
 		playTime: state => state.playTime,
-		pref1: state => state.pref1,
-		pref2: state => state.pref2,
+		candidatePrefecture1: state => state.candidatePrefecture1,
+		candidatePrefecture2: state => state.candidatePrefecture2,
 		proposedDate: state => state.proposedDate,
 		deadlineForResponse: state => state.deadlineForResponse,
-		carsModel: state => state.cars,
-		caddyModel: state => state.caddy,
-		lunchModel: state => state.lunch,
+		isCarsModel: state => state.isCars,
+		isCaddyModel: state => state.isCaddy,
+		isLunchModel: state => state.isLunch,
 		remarkModel: state => state.remark
 	},
+
+	//[ハードコード用]
+	//-----------------------------------
+	// mutations: {
+	// 		updateSurvey(state, surveyList) { 
+	// 			updateFriends(state).friends = surveyList["newFriends"]
+	// 		}
+	// },
+	//-----------------------------------
+
 	mutations: {
 		updateFriends(state, newFriends) {
 			state.friends = newFriends
@@ -42,11 +50,11 @@ export default new Vuex.Store({
 		updatePlayTime(state, newPlayTime) {
 			state.playTime = newPlayTime
 		},
-		updatePref1(state, newPref1) {
-			state.pref1 = newPref1
+		updateCandidatePrefecture1(state, newCandidatePrefecture1) {
+			state.candidatePrefecture1 = newCandidatePrefecture1
 		},
-		updatePref2(state, newPref2) {
-			state.pref2 = newPref2
+		updateCandidatePrefecture2(state, newCandidatePrefecture2) {
+			state.candidatePrefecture2 = newCandidatePrefecture2
 		},
 		updateDate(state, newDate) {
 			state.proposedDate = newDate
@@ -54,19 +62,40 @@ export default new Vuex.Store({
 		updateDeadLineDate(state, newDeadLineDate) {
 		state.deadlineForResponse = newDeadLineDate
 		},
-		updateCars(state, newCars) {
-			state.cars = newCars
+		updateIsCars(state, newIsCars) {
+			state.isCars = newIsCars
 		},
-		updateCaddy(state, newCaddy) {
-			state.caddy = newCaddy
+		updateIsCaddy(state, newIsCaddy) {
+			state.isCaddy = newIsCaddy
 		},
-		updateLunch(state, newLunch) {
-			state.lunch = newLunch
+		updateIsLunch(state, newIsLunch) {
+			state.isLunch = newIsLunch
 		},
 		updateRemark(state, newRemark) {
 			state.remark = newRemark
 		}
 	},
+
+	//[ハードコード用]
+	//-----------------------------------
+	// actions: {
+	// 		updateSurvey({ commit }, surveyList) { 
+	// 			commit("updateFriends", surveyList["newFriends"])
+	// 			commit("updatePrice", surveyList["newPrice"])
+	// 			commit("updatePlayTime", surveyList["newPlayTime"])
+	// 			commit("updateCandidatePrefecture1", surveyList["newCandidatePrefecture1"])
+	// 			commit("updateCandidatePrefecture2", surveyList["newCandidatePrefecture2"])
+	// 			commit("updateDate", surveyList["newDate"])
+	// 			commit("updateDeadLineDate", surveyList["newDeadLineDate"])
+	// 			commit("updateIsCars", surveyList["newIsCars"])
+	// 			commit("updateIsCaddy", surveyList["newIsCaddy"])
+	// 			commit("updateIsLunch", surveyList["newIsCars"])
+	// 			commit("updateIsCars", surveyList["newIsLunch"])
+	// 			commit("updateRemark", surveyList["newRemark"]) 
+	// 		}
+	// },
+	//-----------------------------------
+
 	actions: {
 		updateFriends({commit}, newFriends) {
 			commit("updateFriends", newFriends)
@@ -77,11 +106,11 @@ export default new Vuex.Store({
 		updatePlayTime({commit}, newPlayTime) {
 			commit("updatePlayTime", newPlayTime)
 		},
-		updatePref1({commit}, newPref1) {
-			commit("updatePref1", newPref1)
+		updateCandidatePrefecture1({commit}, newCandidatePrefecture1) {
+			commit("updateCandidatePrefecture1", newCandidatePrefecture1)
 		},
-		updatePref2({commit}, newPref2) {
-			commit("updatePref2", newPref2)
+		updateCandidatePrefecture2({commit}, newCandidatePrefecture2) {
+			commit("updateCandidatePrefecture2", newCandidatePrefecture2)
 		},
 		updateDate({commit}, newDate) {
 			commit("updateDate", newDate)
@@ -89,14 +118,14 @@ export default new Vuex.Store({
 		updateDeadLineDate({commit}, newDeadLineDate) {
 			commit("updateDeadLineDate", newDeadLineDate)
 		},
-		updateCars({commit}, newCars) {
-			commit("updateCars", newCars)
+		updateIsCars({commit}, newIsCars) {
+			commit("updateIsCars", newIsCars)
 		},
-		updateCaddy({commit}, newCaddy) {
-			commit("updateCaddy", newCaddy)
+		updateIsCaddy({commit}, newIsCaddy) {
+			commit("updateIsCaddy", newIsCaddy)
 		},
-		updateLunch({commit}, newLunch) {
-			commit("updateLunch", newLunch)
+		updateIsLunch({commit}, newIsLunch) {
+			commit("updateIsLunch", newIsLunch)
 		},
 		updateRemark({commit}, newRemark) {
 			commit("updateRemark", newRemark)

@@ -29,77 +29,90 @@ const routes = [
   {
     path: '/newSurvey',
     name: 'NewSurvey',
-    component: NewSurvey
+    component: NewSurvey,
+    meta: { requiresAuth: true }
   },
   {
-    path: '/newSurvey/:id',
+    path: '/newSurvey',
     name: 'NewSurvey',
-    component: NewSurvey
+    component: NewSurvey,
+    meta: { requiresAuth: true }
   },
   {
     path: '/survey',
     name: 'SurveyConfirmed',
-    component: SurveyConfirmed
+    component: SurveyConfirmed,
+    meta: { requiresAuth: true }
   },
   {
     path: '/surveyAnswer',
     name: 'SurveyAnswer',
-    component: SurveyAnswer
+    component: SurveyAnswer,
+    meta: { requiresAuth: true }
   },
   {
     path: '/usersSearch',
     name: 'UsersSearch',
-    component: UsersSearch
+    component: UsersSearch,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
   },
   {
     path: '/signUp',
     name: 'SignUp',
-    component: SignUp
+    component: SignUp,
   },
   {
     path: '/chat',
     name: 'ChatBoard',
-    component: ChatBoard
+    component: ChatBoard,
+    meta: { requiresAuth: true }
   },
   {
     path: '/user',
     name: 'UsersList',
-    component: UsersList
+    component: UsersList,
+    meta: { requiresAuth: true }
   },
   {
     path: '/profile',
     name: 'UserProfile',
-    component: UserProfile
+    component: UserProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/myProfile',
     name: 'MyProfile',
-    component: MyProfile
+    component: MyProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/editProfile',
     name: 'EditProfile',
-    component: EditProfile
+    component: EditProfile,
+    meta: { requiresAuth: true }
   },
   {
     path: '/roomCreateConfirmed',
     name: 'RoomCreateConfirmed',
-    component: RoomCreateConfirmed
+    component: RoomCreateConfirmed,
+    meta: { requiresAuth: true }
   },
   {
     path: '/memberConfirmed',
     name: 'MemberConfirmed',
-    component: MemberConfirmed
+    component: MemberConfirmed,
+    meta: { requiresAuth: true }
   },
   {
     path:'/roomJoinConfirmed',
     name: 'RoomJoinConfirmed',
-    component: RoomJoinConfirmed
+    component: RoomJoinConfirmed,
+    meta: { requiresAuth: true }
   },
 ]
 
@@ -111,15 +124,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-	if(requiresAuth) {
+  if(requiresAuth) {
     //ユーザーがログイン済みかどうか確認する処理:onAuthStateChanged
-		firebase.auth().onAuthStateChanged(async (user) => {
-			if (!user) {
-				next({
-					path: '/login',
-					query: { redirect: to.fullPath }
-				})
-			} else {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        next({
+          path: '/login',
+          query: { redirect: to.fullPath }
+        })
+      } else {
         next()
           let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
           if (!userDoc.exists) {
@@ -129,11 +142,12 @@ router.beforeEach((to, from, next) => {
               email: user.email,
           });
         }
-			}
-		})
-	}else {
-		next()
-	}
-	})
+      }
+    })
+  }else {
+    next()
+  }
+  })
 
 export default router
+

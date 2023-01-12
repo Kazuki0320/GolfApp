@@ -61,7 +61,7 @@
 				>
 				<v-select
 					v-model="prefModel1"
-					:items="prefs1"
+					:items="candidatePrefectureData1"
 					label="開催候補地1"
 				>
 				</v-select>
@@ -73,7 +73,7 @@
 				>
 				<v-select
 					v-model="prefModel2"
-					:items="prefs2"
+					:items="candidatePrefectureData2"
 					label="開催候補地2"
 				>
 				</v-select>
@@ -247,7 +247,7 @@ export default {
 			"10:00~11:00",
 			"午後のみ",
 		],
-		prefs1: [
+		candidatePrefectureData1: [
 			'北海道',
 			'青森',
 			'岩手',
@@ -296,7 +296,7 @@ export default {
 			'鹿児島',
 			'沖縄',
 		],
-		prefs2: [
+		candidatePrefectureData2: [
 			'北海道',
 			'青森',
 			'岩手',
@@ -347,6 +347,17 @@ export default {
 		]
 	}),
 	computed: {
+		//[ハードコード用]
+		//-----------------------------------
+		// friends: {
+		// 	get() {
+		// 		return this.$store.getters.friends;
+		// 	},
+		// 	set(value) {
+		// 		this.$store.dispatch(updateSurvey("updateFriends", value))
+		// },
+		//-----------------------------------
+		
 		friends: {
 			get() {
 				return this.$store.getters.friends;
@@ -373,18 +384,18 @@ export default {
 		},
 		prefModel1: {
 			get() {
-				return this.$store.getters.pref1
+				return this.$store.getters.candidatePrefecture1
 			},
 			set(value) {
-				this.$store.dispatch("updatePref1", value)
+				this.$store.dispatch("updateCandidatePrefecture1", value)
 			}
 		},
 		prefModel2: {
 			get() {
-				return this.$store.getters.pref2
+				return this.$store.getters.candidatePrefecture2
 			},
 			set(value) {
-				this.$store.dispatch("updatePref2", value)
+				this.$store.dispatch("updateCandidatePrefecture2", value)
 			}
 		},
 		date: {
@@ -405,26 +416,26 @@ export default {
 		},
 		carsModel: {
 			get() {
-				return this.$store.getters.cars
+				return this.$store.getters.isCars
 			},
 			set(value) {
-				this.$store.dispatch("updateCars", value)
+				this.$store.dispatch("updateIsCars", value)
 			}
 		},
 		caddy: {
 			get() {
-				return this.$store.getters.caddy
+				return this.$store.getters.isCaddy
 			},
 			set(value) {
-				this.$store.dispatch("updateCaddy", value)
+				this.$store.dispatch("updateIsCaddy", value)
 			}
 		},
 		lunchModel: {
 			get() {
-				return this.$store.getters.lunch
+				return this.$store.getters.isLunch
 			},
 			set(value) {
-				this.$store.dispatch("updateLunch", value)
+				this.$store.dispatch("updateIsLunch", value)
 			}
 		},
 		remarkModel: {
@@ -435,23 +446,7 @@ export default {
 				this.$store.dispatch("updateRemark", value)
 			}
 		},
-	// 	...mapGetters(["doubleCount", "tripleCount"]),
-	// 	// message() {
-	// 	// 	return this.$store.getters.message;
-	// 	// }
-	// 	message: {
-	// 		get() {
-	// 			return this.$store.getters.message;
-	// 		},
-	// 		set(value) {
-	// 			this.$store.dispatch("updateMessage", value)
-	// 		}
-	// 	}
-	},
-	// watch:{
-	// 	friendNameList(newValue) {
-	// 		console.log("newValue", newValue)
-	// 	}
-	// },
+	}
 }
 </script>
+

@@ -73,7 +73,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ prefModel1 }}</td>
+						<td>{{ candidatePrefectureModel1 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -89,7 +89,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ prefModel2 }}</td>
+						<td>{{ candidatePrefectureModel2 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -255,8 +255,8 @@ export default {
 				member: JSON.stringify(this.friendsIdArray),
 				price: this.priceModel,
 				playTime: this.playTimeModel,
-				selectPlace1: this.prefModel1,
-				selectPlace2: this.prefModel2,
+				selectPlace1: this.candidatePrefectureModel1,
+				selectPlace2: this.candidatePrefectureModel2,
 				proposedDate: this.date,
 				AvailabilityOfCar: this.carsModel,
 				throughOrLunch: this.lunchModel,
@@ -282,14 +282,14 @@ export default {
 				return this.$store.getters.playTime
 			}
 		},
-		prefModel1: {
+		candidatePrefectureModel1: {
 			get() {
-				return this.$store.getters.pref1;
+				return this.$store.getters.candidatePrefecture1
 			}
 		},
-		prefModel2: {
+		candidatePrefectureModel2: {
 			get() {
-				return this.$store.getters.pref2;
+				return this.$store.getters.candidatePrefecture2
 			}
 		},
 		date: {
@@ -304,17 +304,17 @@ export default {
 		},
 		carsModel: {
 			get() {
-				return this.$store.getters.carsModel
+				return this.$store.getters.isCarsModel
 			},
 		},
 		caddyModel: {
 			get() {
-				return this.$store.getters.caddyModel
+				return this.$store.getters.isCaddyModel
 			}
 		},
 		lunchModel: {
 			get() {
-				return this.$store.getters.lunchModel
+				return this.$store.getters.isLunchModel
 			}
 		},
 		remarkModel: {
