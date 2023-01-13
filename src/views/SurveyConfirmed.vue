@@ -10,7 +10,61 @@
 	<v-main>
 		<v-simple-table>
 			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+				<thead>
+					<tr>
+						<th class="text-center">
+							メンバー
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr
+					v-for="(friend, index) in friends"
+					:key="`${friend.name}_${index}`"><!--
+					:key="index">
+					↑このやり方は良くない。
+					他で、indexを使った場合、キーが０の値が複数できてしまう。
+					その場合、テンプレートリテラルを使って、表示を行う。
+					-->
+						<td>{{ friend.name }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							価格
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{ priceModel }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table><v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
+							スタート時間
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{ playTimeModel }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
 					<tr>
 						<th class="text-center">
 							開催候補地1
@@ -19,7 +73,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.selectPlace1 }}</td>
+						<td>{{ candidatePrefectureModel1 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -35,7 +89,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.selectPlace2 }}</td>
+						<td>{{ candidatePrefectureModel2 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -51,7 +105,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.proposedDate }}</td>
+						<td>{{ date }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -67,7 +121,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.DeadlineForResponse }}</td>
+						<td>{{ deadLineDate }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -83,7 +137,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.AvailabilityOfCar }}</td>
+						<td>{{ AvailabilityOfCar }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -99,7 +153,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.throughOrLunch }}</td>
+						<td>{{ throughOrLunch }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -115,7 +169,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.AvailabilityOfCaddy }}</td>
+						<td>{{ AvailabilityOfCaddy }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -131,28 +185,22 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ schedules.remarks }}</td>
+						<td>{{ remarkModel }}</td>
 					</tr>
 				</tbody>
 			</template>
 		</v-simple-table>
-		<!-- <router-link :to="{ path: '/surveyEdit', query: { user_id: this.user_id, schedules_id: this.schedulesIdData } }"> -->
-		<!-- <router-link :to="{ path: '/newSurvey', query: { schedules_id: this.schedules_id }} "> -->
-		<!-- <router-link :to="{ path:`/newSurvey/${ this.schedules_id }`}"> -->
 			<v-btn 
-				@click="backPage"
-				color="secondary">
-				一覧に戻る
-			</v-btn>
-			<!-- <v-btn 
 				to="/newSurvey"
 				color="secondary">
 				一覧に戻る
-			</v-btn> -->
-		<!-- </router-link> -->
-		<router-link to="/surveyAnswer">
-			<v-btn class="ma-2" color="primary" dark>メッセージ送信</v-btn>
-		</router-link>
+			</v-btn>
+			<v-btn 
+			@click="onClick"
+			class="ma-2"
+			color="primary"
+			dark
+			>メッセージ送信</v-btn>
 	</v-main>
 	</v-app>
 </template>
@@ -162,35 +210,118 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
+		// //車の有無を表示するための処理
+		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
+		// //スルーorランチ付きかを判断する処理
+		this.throughOrLunch = (this.lunchModel ? '昼付き' : 'スルー')
+		// //キャディの有無
+		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
 
-		this.schedules_id = this.$route.params.id;
-		console.log("schedulesId", this.schedulesId())
-		// console.log("schedules", this.schedulesId);
-		const schedulesDoc = firebase.firestore().collection("schedules").doc(this.$route.params.id)
-		const schedulesData = await schedulesDoc.get()
-		this.schedules = schedulesData.data()
-		console.log("schedules", this.schedules)
-
-		const questionnairesRef = firebase.firestore().collection("questionnaires").doc(this.schedules.questionnairesId)
-			questionnairesRef.update({
-				schedules_id: this.$route.params.id,
-			})
+		this.friends.forEach(friends => {
+			const friendId = friends.id
+			this.friendsIdArray.push(friendId)
+		})
 	},
 	data: () => ({
 		user: '',
 		users:[],
 		user_id: '',
 		schedules: '',
-		schedules_id: ''
+		friendsArray: [],
+		AvailabilityOfCar: null,
+		AvailabilityOfCaddy: null,
+		throughOrLunch: null,
+		questionnairesId: '',
+		room_id: '',
+		active: true,
+		answered: false,
+		friendsIdArray: [],
 	}),
 	methods: {
-		schedulesId () {
-		return 	this.$route.params.id;
+		async onClick() {
+			const questionnairesRef = firebase.firestore().collection("questionnaires")
+				const result1 = await questionnairesRef.add({
+					active: this.active,
+					answered: this.answered,
+					room_id: this.room_id,
+					users_id: JSON.stringify(this.friendsIdArray),
+					DeadlineForResponse: this.deadLineDate,
+				})
+				this.questionnairesId = result1.id
+
+			const schedulesRef = firebase.firestore().collection("schedules")
+				await schedulesRef.add({
+				questionnairesId: this.questionnairesId,
+				member: JSON.stringify(this.friendsIdArray),
+				price: this.priceModel,
+				playTime: this.playTimeModel,
+				selectPlace1: this.candidatePrefectureModel1,
+				selectPlace2: this.candidatePrefectureModel2,
+				proposedDate: this.date,
+				AvailabilityOfCar: this.carsModel,
+				throughOrLunch: this.lunchModel,
+				AvailabilityOfCaddy: this.caddyModel,
+				remarks: this.remarkModel,
+			})
+			this.$router.push('/')
 		},
-		backPage() {
-			// console.log("schedulesId", this.schedulesId())
-			this.$router.push(`/newSurvey/${ this.schedules_id }`)
-		}
 	},
+	computed: {
+		friends: {
+			get() {
+				return this.$store.getters.friends;
+			}
+		},
+		priceModel: {
+			get() {
+				return this.$store.getters.price
+			}
+		},
+		playTimeModel: {
+			get() {
+				return this.$store.getters.playTime
+			}
+		},
+		candidatePrefectureModel1: {
+			get() {
+				return this.$store.getters.candidatePrefecture1
+			}
+		},
+		candidatePrefectureModel2: {
+			get() {
+				return this.$store.getters.candidatePrefecture2
+			}
+		},
+		date: {
+			get() {
+				return this.$store.getters.proposedDate
+			},
+		},
+		deadLineDate: {
+			get() {
+				return this.$store.getters.deadlineForResponse
+			},
+		},
+		carsModel: {
+			get() {
+				return this.$store.getters.isCarsModel
+			},
+		},
+		caddyModel: {
+			get() {
+				return this.$store.getters.isCaddyModel
+			}
+		},
+		lunchModel: {
+			get() {
+				return this.$store.getters.isLunchModel
+			}
+		},
+		remarkModel: {
+			get() {
+				return this.$store.getters.remarkModel
+			}
+		},
+	}
 }
 </script>

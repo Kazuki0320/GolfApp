@@ -13,14 +13,19 @@
 		cols="12"
 		sm="6">
 		<v-autocomplete
+			item-text="name"
 			:items="friendNameList"
+			v-model="friends"
 			outlined
+			deletable-chips
 			dense
 			chips
 			small-chips
 			label="友人検索"
+			return-object
 			multiple
-		></v-autocomplete>
+		>
+		</v-autocomplete>
 		</v-col>
 
 		<v-row>
@@ -31,8 +36,32 @@
 					sm="6"
 				>
 				<v-select
+					v-model="priceModel"
+					:items="price"
+					label="価格"
+				>
+				</v-select>
+				</v-col>
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6"
+				>
+				<v-select
+					v-model="playTimeModel"
+					:items="startTime"
+					label="スタート時間"
+				>
+				</v-select>
+				</v-col>
+				<v-col
+					class="d-flex"
+					cols="12"
+					sm="6"
+				>
+				<v-select
 					v-model="prefModel1"
-					:items="prefs1"
+					:items="candidatePrefectureData1"
 					label="開催候補地1"
 				>
 				</v-select>
@@ -44,7 +73,7 @@
 				>
 				<v-select
 					v-model="prefModel2"
-					:items="prefs2"
+					:items="candidatePrefectureData2"
 					label="開催候補地2"
 				>
 				</v-select>
@@ -97,7 +126,7 @@
 					>
 					<template v-slot:activator="{ on, attrs }">
 					<v-text-field
-						v-model="date1"
+						v-model="deadLineDate"
 						prepend-icon="mdi-calendar"
 						readonly
 						v-bind="attrs"
@@ -107,10 +136,10 @@
 					></v-text-field>
 					</template>
 					<v-date-picker
-						v-model="date1"
+						v-model="deadLineDate"
 						@input="menu1 = false"
 						locale="jp-ja"
-						:day-format="date1 => new Date(date1).getDate()">
+						:day-format="deadLineDate => new Date(deadLineDate).getDate()">
 					</v-date-picker>
 					</v-menu>
 				</v-col>
@@ -125,6 +154,7 @@
 				></v-checkbox>
 				</v-col>
 
+				<!--・次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。-->
 				<v-col
 					cols="12"
 					md="4"
@@ -139,11 +169,10 @@
 					cols="12"
 					md="4"
 				>
-				<v-select
+				<v-checkbox
 					v-model="lunchModel"
-					:items="throughOrLunch"
-					label="スルーor昼付き"
-				></v-select>
+					label="昼付き"
+				></v-checkbox>
 				</v-col>
 
 				<v-col
@@ -151,21 +180,20 @@
 					md="4"
 				>
 				<v-text-field
-					v-model="remarks"
+					v-model="remarkModel"
 					label="備考"
 					required
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
-				<!-- <router-link :to="{ path:`/survey/${ this.schedulesIdData }`}"> -->
-					<v-btn
-						@click="onClick"
+				<router-link to="/survey">
+					<v-btn 
 						class="ma-2"
 						color="primary"
 						dark>
 						確認
 					</v-btn>
-				<!-- </router-link> -->
+				</router-link>
 			</v-col>
 		</v-row>
 	</v-main>
@@ -177,82 +205,49 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		// this.auth = JSON.parse(sessionStorage.getItem('user'))// JSONからオブジェクトに変換
-		this.schedules_id = this.$route.params;
-		// console.log("schedules_id", this.schedules_id)
-
 		this.user_id = this.$route.query.user_id;
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
 
-		//一覧から戻るようの新しいコンポーネントを作って、newSurveyBackみたいな名前のコンポーネントpathも作っちゃう。
 		const friendsIdArray =JSON.parse(userDoc.get("friends"))
-
-		friendsIdArray.forEach(async (doc) => {
-			const friendRef = firebase.firestore().collection("users").doc(doc)
+		friendsIdArray.forEach(async (friendId) => {
+			const friendRef = firebase.firestore().collection("users").doc(friendId)
 			const friendDoc = await friendRef.get()
 			const friendGetName = friendDoc.get('userName')
-			this.friendNameList.push(friendGetName)
+			const friend = {
+				id: friendId,
+				name: friendGetName
+			}
+			this.friendNameList.push(friend)
 		});
-
-		const questionnairesRef = firebase.firestore().collection("questionnaires")
-			const result = await questionnairesRef.add({
-				active: this.active,
-				answered: this.answered,
-				room_id: this.room_id,
-				schedules_id: this.schedulesId,
-				users_id: this.user_id,
-			})
-			this.questionnairesId = result.id
-			// console.log("questionnairesId", this.questionnairesId)
-
-		/*
-		schedulesには、本来何もドキュメントが設定されていない状態なので、アンケート作成と共に、ドキュメントを作成し、その中でアンケートの中身も書き換える必要がある。
-		selectboxと表示のvalueを分けたい時があると思うから、その時はvuetifyを使って、うまくデータ保存する。
-		ESLintとprettier後程、インストール。
-		「やっぱ、やめた」の時一覧から戻るときに、firebase上のデータを削除するのが１つの方法。
-		オプションAPI、コンポジションAPI。他の新しい書き方もあるらしい...スクリプトセットアップ。
-		ローカルストレージ使うのも、１つの方法としてあり。
-		firebaseのsetとaddの違い
-		テンプレート構文orテンプレートリテラル
-		*/
 
 	},
 	data: () => ({
-		remarks: '',
-		schedules_id: '',
-		questionnairesId: '',
-		schedulesId: '',
-		room_id: '',
-		active: true,
-		answered: false,
-		lunchModel: 0,
-		carsModel: false,
-		throughOrLunch: [
-			{
-				text: 'スルー',
-				value: 1,
-			},
-			{
-				text: '昼付き',
-				value: 2,
-			}
-		],
-		caddy:false,
 		friendNameList: [],
-		friends: [],
+		friendsId: [],
 		users:[],
 		user_id: '',
 		user:'',
 		auth:null,
 		menu: false,
 		menu1: false,
-		date:new Date().toISOString().substr(0, 10),
-		date1:new Date().toISOString().substr(0, 10),
-		prefModel1: '',
-		prefModel2: '',
-		prefs1: [
+		price: [
+			"1万円以下",
+			"1万円〜1万5千円",
+			"1万5千〜2万円",
+			"2万〜2万5千円",
+			"2万5千〜3万",
+			"3万以上"
+		],
+		startTime: [
+			"7:00~8:00",
+			"8:00~9:00",
+			"9:00~10:00",
+			"10:00~11:00",
+			"午後のみ",
+		],
+		candidatePrefectureData1: [
 			'北海道',
 			'青森',
 			'岩手',
@@ -301,7 +296,7 @@ export default {
 			'鹿児島',
 			'沖縄',
 		],
-		prefs2: [
+		candidatePrefectureData2: [
 			'北海道',
 			'青森',
 			'岩手',
@@ -351,28 +346,107 @@ export default {
 			'沖縄',
 		]
 	}),
-	methods: {
-		async onClick() {
-			const schedulesRef = firebase.firestore().collection("schedules")
-			const result = await schedulesRef.add({
-				questionnairesId: this.questionnairesId,
-				friends: this.friendNameList,
-				selectPlace1: this.prefModel1,
-				selectPlace2: this.prefModel2,
-				proposedDate: this.date,
-				DeadlineForResponse: this.date1,
-				AvailabilityOfCar: this.carsModel,
-				throughOrLunch: this.lunchModel,
-				AvailabilityOfCaddy: this.caddy,
-				remarks: this.remarks,
-			})
-			this.$router.push(`/survey/${ result.id }`)
+	computed: {
+		//[ハードコード用]
+		//-----------------------------------
+		// friends: {
+		// 	get() {
+		// 		return this.$store.getters.friends;
+		// 	},
+		// 	set(value) {
+		// 		this.$store.dispatch(updateSurvey("updateFriends", value))
+		// },
+		//-----------------------------------
+		
+		friends: {
+			get() {
+				return this.$store.getters.friends;
+			},
+			set(value) {
+				this.$store.dispatch("updateFriends", value)
+			}
 		},
-	},
-	// watch:{
-	// 	schedulesIdData(newValue) {
-	// 		console.log("newValue", newValue)
-	// 	}
-	// },
+		priceModel: {
+			get() {
+				return this.$store.getters.price
+			},
+			set(value) {
+				this.$store.dispatch("updatePrice", value)
+			}
+		},
+		playTimeModel: {
+			get() {
+				return this.$store.getters.playTime
+			},
+			set(value) {
+				this.$store.dispatch("updatePlayTime", value)
+			}
+		},
+		prefModel1: {
+			get() {
+				return this.$store.getters.candidatePrefecture1
+			},
+			set(value) {
+				this.$store.dispatch("updateCandidatePrefecture1", value)
+			}
+		},
+		prefModel2: {
+			get() {
+				return this.$store.getters.candidatePrefecture2
+			},
+			set(value) {
+				this.$store.dispatch("updateCandidatePrefecture2", value)
+			}
+		},
+		date: {
+			get() {
+				return this.$store.getters.proposedDate
+			},
+			set(value) {
+				this.$store.dispatch("updateDate", value)
+			}
+		},
+		deadLineDate: {
+			get() {
+				return this.$store.getters.deadlineForResponse
+			},
+			set(value) {
+				this.$store.dispatch("updateDeadLineDate", value)
+			}
+		},
+		carsModel: {
+			get() {
+				return this.$store.getters.isCars
+			},
+			set(value) {
+				this.$store.dispatch("updateIsCars", value)
+			}
+		},
+		caddy: {
+			get() {
+				return this.$store.getters.isCaddy
+			},
+			set(value) {
+				this.$store.dispatch("updateIsCaddy", value)
+			}
+		},
+		lunchModel: {
+			get() {
+				return this.$store.getters.isLunch
+			},
+			set(value) {
+				this.$store.dispatch("updateIsLunch", value)
+			}
+		},
+		remarkModel: {
+			get() {
+				return this.$store.getters.remark
+			},
+			set(value) {
+				this.$store.dispatch("updateRemark", value)
+			}
+		},
+	}
 }
 </script>
+

@@ -33,13 +33,13 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/newSurvey/:id',
+    path: '/newSurvey',
     name: 'NewSurvey',
     component: NewSurvey,
     meta: { requiresAuth: true }
   },
   {
-    path: '/survey/:id',
+    path: '/survey',
     name: 'SurveyConfirmed',
     component: SurveyConfirmed,
     meta: { requiresAuth: true }
@@ -59,12 +59,12 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: Login,
   },
   {
     path: '/signUp',
     name: 'SignUp',
-    component: SignUp
+    component: SignUp,
   },
   {
     path: '/chat',
@@ -124,29 +124,30 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-	if(requiresAuth) {
+  if(requiresAuth) {
     //ユーザーがログイン済みかどうか確認する処理:onAuthStateChanged
-		firebase.auth().onAuthStateChanged(async (user) => {
-			if (!user) {
-				next({
-					path: '/login',
-					query: { redirect: to.fullPath }
-				})
-			} else {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        next({
+          path: '/login',
+          query: { redirect: to.fullPath }
+        })
+      } else {
         next()
           let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
           if (!userDoc.exists) {
-          // firestore にユーザーIDがなければ新しいIDを作る
+          // 新規登録時に、firestore にユーザーIDがなければ新しいIDを作る。
           await userDoc.ref.set({
               userName: user.displayName,
               email: user.email,
           });
         }
-			}
-		})
-	}else {
-		next()
-	}
-	})
+      }
+    })
+  }else {
+    next()
+  }
+  })
 
 export default router
+

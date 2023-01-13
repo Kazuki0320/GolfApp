@@ -1,6 +1,8 @@
 <template>
-	<v-navigation-drawer v-model="drawer" app>
-
+	<v-navigation-drawer
+		v-model="drawer"
+		app
+	>
 		<v-sheet color="grey lighten-4" class="pa-4">
 			<!--マイプロフィールにuserのIDをqueryとして渡している-->
 			<router-link :to="{ path: '/myProfile', query: { user_id: this.user.id } }">
@@ -54,6 +56,7 @@
 			</v-list-item>
 		</v-list>
 	</v-navigation-drawer>
+	
 </template>
 
 <script>
@@ -64,18 +67,19 @@ export default {
     const currentUserId = firebase.auth().currentUser.uid
 		//collection("users")から、ログインユーザーと同じIDを検索する処理
 		const userRef = firebase.firestore().collection("users")
-		const snapshot = await userRef.get()
-		snapshot.forEach(doc => {
-			let data = {
-				id: doc.id
-			}
-			if (currentUserId === data.id) {
-				this.user = data
-			} else {
-				//消したらエラーになるかも？
-				// console.log("success")
-			}
-		})
+			const snapshot = await userRef.get()
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id
+				}
+				//↓コンフリクトが起きるかも？currentUserIdで比べるのが正解
+				if(currentUserId === data.id) {
+					this.user = data
+				}else{
+					//消したらエラーになるかも？
+					// console.log("success")
+				}
+			})
 
 		//検索したIDから、user情報を取得する処理
 		const userDoc = firebase.firestore().collection("users").doc(this.user.id)
