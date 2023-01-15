@@ -6,6 +6,7 @@ import store from './Vuex/store';
 
 Vue.config.productionTip = true;
 
+// test用にコメントを追加
 new Vue({
   vuetify,
   router,
