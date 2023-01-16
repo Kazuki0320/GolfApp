@@ -14,10 +14,4 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'vue/comment-directive': 'off',
   },
-  overrides: [
-    {
-      files: ['*.vue'],
-      processor: 'vue/.vue',
-    },
-  ],
 }
