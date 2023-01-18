@@ -13,5 +13,6 @@ module.exports = {
   rules: {
     'vue/multi-word-component-names': 'off',
     'vue/comment-directive': 'off',
+    "no-unused-vars": "off"
   },
 }
