@@ -54,26 +54,6 @@ export default {
 		console.log("questionnairesActive", questionnairesActive)
 		const questionnairesUser = await questionnairesRef.where("users_id", "array-contains", "z5OszDyVMVcuNBDeR5XvOftNKz53").get()
 		console.log("questionnairesUser", questionnairesUser)
-
-		// const userDoc = firebase.firestore().collection("users").doc(this.userId)
-		// 	const userInfo =await userDoc.get()
-		// 	this.friendsArray = JSON.parse(userInfo.get("friends"))
-		// this.friendsArray = JSON.parse(userInfo.get("friends"))
-
-		// const memberGet = await questionnairesRef.where("users_id", "array-contains", this.currentUserId).get()
-		//.where("users_id", "array-contains", this.currentUserId)
-		// console.log(this.currentUserId)
-		//this.friendsArray = JSON.parse(userInfo.get("friends"))
-		// console.log("memberGet", memberGet)
-		//user_idsの方がわかりやすい
-		// snapshot.forEach(doc => {
-		// 	if(doc.data().active === true) {
-		// 		console.log("active", doc.data())
-		// 	}
-		// })
-		// const querySnapshot = await db.collection('posts')
-		// .where('category', '==', 'life')
-		// .get()
 	},
 	async mounted() {
 		this.getRooms()
