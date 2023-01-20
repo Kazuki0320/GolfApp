@@ -267,7 +267,7 @@ export default {
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加
 			//一旦、追加したフィールドにuser_idを保存。←挙動確認のために入れた適当な値
 			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
-			const messageAdd = await roomId.collection("massage").add({
+			const messageAdd = await roomId.collection("massages").add({
 				message: this.remarkModel,
 				name: this.userData.userName,
 				questionnairesId: this.questionnairesId,
