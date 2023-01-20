@@ -241,54 +241,56 @@ export default {
 	}),
 	methods: {
 		async onClick() {
+			//userNameを取るために、userDataを取得
 			const userRef = firebase.firestore().collection("users").doc(this.user_id)
 			const userGet = await userRef.get()
 			this.userData = userGet.data()
+
+			const questionnairesRef = firebase.firestore().collection("questionnaires")
+				const result1 = await questionnairesRef.add({
+					active: this.active,
+					answered: this.answered,
+					room_id: this.room_id,
+					users_id: JSON.stringify(this.friendsIdArray),
+					DeadlineForResponse: this.deadLineDate,
+				})
+			this.questionnairesId = result1.id
 
 			//roomsのドキュメントIDを作成
 			//フィールドの値も追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
 				user_id: this.user_id,
-				name: this.userData.userName
+				name: this.userData.userName,
+				questionnairesId: this.questionnairesId,
 			})
-			// console.log("roomRef", roomRef)
 
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加
 			//一旦、追加したフィールドにuser_idを保存。←挙動確認のために入れた適当な値
-			const questionnairesRef = firebase.firestore().collection("rooms").doc(roomRef.id)
-			const questionnairesAdd = await questionnairesRef.collection("massage").add({
-				user_id: this.user_id,
+			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
+			const messageAdd = await roomId.collection("massage").add({
+				message: this.remarkModel,
+				name: this.userData.userName,
+				questionnairesId: this.questionnairesId,
+				//後から、photoURLは追加すると思うから、一旦残し
+				// photoURL: this.auth.photoURL,
+				createdAt: firebase.firestore.Timestamp.now()
 			})
-			// console.log("questionnairesRef", questionnairesAdd)
-				// const result1 = await questionnairesRef.add({
-				// 	active: this.active,
-				// 	answered: this.answered,
-				// 	room_id: this.room_id,
-				// 	users_id: JSON.stringify(this.friendsIdArray),
-				// 	DeadlineForResponse: this.deadLineDate,
-				// 	message: this.body,
-				// 	makeUser: this.userData.userName,
-				// 	//後から、photoURLは追加すると思うから、一旦残し
-				// 	// photoURL: this.auth.photoURL,
-				// 	createdAt: firebase.firestore.Timestamp.now()
-				// })
-				// this.questionnairesId = result1.id
 
-			// const schedulesRef = firebase.firestore().collection("schedules")
-			// 	await schedulesRef.add({
-			// 	questionnairesId: this.questionnairesId,
-			// 	member: JSON.stringify(this.friendsIdArray),
-			// 	price: this.priceModel,
-			// 	playTime: this.playTimeModel,
-			// 	selectPlace1: this.candidatePrefectureModel1,
-			// 	selectPlace2: this.candidatePrefectureModel2,
-			// 	proposedDate: this.date,
-			// 	AvailabilityOfCar: this.carsModel,
-			// 	throughOrLunch: this.lunchModel,
-			// 	AvailabilityOfCaddy: this.caddyModel,
-			// 	remarks: this.remarkModel,
-			// })
-			// this.$router.push('/')
+			const schedulesRef = firebase.firestore().collection("schedules")
+				await schedulesRef.add({
+				questionnairesId: this.questionnairesId,
+				member: JSON.stringify(this.friendsIdArray),
+				price: this.priceModel,
+				playTime: this.playTimeModel,
+				selectPlace1: this.candidatePrefectureModel1,
+				selectPlace2: this.candidatePrefectureModel2,
+				proposedDate: this.date,
+				AvailabilityOfCar: this.carsModel,
+				throughOrLunch: this.lunchModel,
+				AvailabilityOfCaddy: this.caddyModel,
+				remarks: this.remarkModel,
+			})
+			this.$router.push('/')
 		},
 	},
 	computed: {
