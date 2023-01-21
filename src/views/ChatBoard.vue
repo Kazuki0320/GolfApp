@@ -32,7 +32,7 @@
 						<v-list-item-subtitle 
 						v-if="data.questionnairesId"
 						class="message">
-						<router-link to="/surveyAnswer">
+						<router-link :to="{ path: '/surveyAnswer', query: { room_id: roomId }}">
 							{{ data.message }}
 						</router-link>
 						</v-list-item-subtitle>
@@ -87,32 +87,24 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 			DefaultSidebar
 		},
 		async created() {
+			//[roomのデータを取得]
 			const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
 			const roomDoc = await roomRef.get()
 			const room = roomDoc.data()
-			console.log("room", room);
 
+			//[questionnairesIdを取得]
 			const questionnairesIdRef = firebase.firestore().collection("questionnaires").doc(room.questionnairesId)
 			const questionnairesGet = await questionnairesIdRef.get()
 			const questionnaires = questionnairesGet.data()
-			console.log("questionnairesData", questionnaires)
-
-			//[schedulesのデータを取得して、出力する処理はアンケート回答者画面で行う]
-			// const schedulesRef = firebase.firestore().collection("schedules").doc(questionnairesData.schedulesId)
-			// const schedulesGet = await schedulesRef.get()
-			// const schedulesData = schedulesGet.data()
-			// console.log("schedulesData", schedulesData)
 
 			//メッセージをfirestoreから取得する
 			const snapshot = await roomRef.collection("messages").orderBy("createdAt", "asc").get()
 			snapshot.forEach(doc => {
-				console.log(doc.data())
 				this.messages.push(doc.data())
 			})
 		},
 		mounted () {
 			this.auth = firebase.auth().currentUser
-			console.log("auth call", this.auth);
 		},
 		data: () => ({
 			questionnairesData: '',
@@ -153,11 +145,9 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 					createdAt: firebase.firestore.Timestamp.now()
 				})
 				.then((result) => {
-					console.log('success', result);
 					this.body = ""
 				})
 				.catch((error) => {
-					console.log('fail', error);
 					alert('メッセージの送信に失敗しました')
 				})
 			}

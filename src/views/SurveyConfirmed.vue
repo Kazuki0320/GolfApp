@@ -20,12 +20,7 @@
 				<tbody>
 					<tr
 					v-for="(friend, index) in friends"
-					:key="`${friend.name}_${index}`"><!--
-					:key="index">
-					↑このやり方は良くない。
-					他で、indexを使った場合、キーが０の値が複数できてしまう。
-					その場合、テンプレートリテラルを使って、表示を行う。
-					-->
+					:key="`${friend.name}_${index}`">
 						<td>{{ friend.name }}</td>
 					</tr>
 				</tbody>
@@ -267,7 +262,7 @@ export default {
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加
 			//一旦、追加したフィールドにuser_idを保存。←挙動確認のために入れた適当な値
 			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
-			const messageAdd = await roomId.collection("massages").add({
+			const messageAdd = await roomId.collection("messages").add({
 				message: this.remarkModel,
 				name: this.userData.userName,
 				questionnairesId: this.questionnairesId,

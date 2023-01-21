@@ -10,7 +10,7 @@
 	<v-main>
 		<v-simple-table>
 			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+				<thead>
 					<tr>
 					<th class="text-center">
 						メンバー
@@ -18,17 +18,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr
-					v-for="index in friend"
-					:key="index">
-						<td>{{ index }}</td>
+					<!--メンバーについてはアンケート回答者画面では人数のみ表示-->
+					<tr>
+						<td>他{{ member }}名</td>
 					</tr>
 				</tbody>
 			</template>
 		</v-simple-table>
 		<v-simple-table>
 			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
+				<thead>
 					<tr>
 					<th class="text-center">
 						開催候補地1
@@ -37,11 +36,7 @@
 				</thead>
 				<tbody>
 					<tr>
-					<td>{{ prefModel1 }}</td>
-					<!--
-					・指定しているユーザーネームを出力したい
-					・ログインしてるユーザー情報は除外する
-					-->
+					<td>{{ questionnaireContent.selectPlace1 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -57,7 +52,7 @@
 				</thead>
 				<tbody>
 					<tr>
-					<td>{{ prefModel2 }}</td>
+					<td>{{ questionnaireContent.selectPlace2 }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -73,7 +68,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ date }}</td>
+						<td>{{ questionnaireContent.proposedDate }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -89,7 +84,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ deadLineDate }}</td>
+						<td>{{ questionnairesId.DeadlineForResponse }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -105,7 +100,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ carsModel }}</td>
+						<td>{{ AvailabilityOfCar }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -121,7 +116,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ lunchModel }}</td>
+						<td>{{ throughOrLunch }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -137,7 +132,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
+						<td>{{ questionnaireContent.price }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -153,7 +148,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ caddyModel }}</td>
+						<td>{{ AvailabilityOfCaddy }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -169,23 +164,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>空白</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							最寄り駅
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>空白</td>
+						<td>{{ questionnaireContent.playTime }}</td>
 					</tr>
 				</tbody>
 			</template>
@@ -201,13 +180,23 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>{{ remarkModel }}</td>
+						<td>{{ questionnaireContent.remarks }}</td>
 					</tr>
 				</tbody>
 			</template>
 		</v-simple-table>
-		<v-btn class="ma-2" color="secondary" dark to="/">断る</v-btn>
-		<v-btn class="ma-2" color="primary" dark to="/">参加</v-btn>
+		<v-btn 
+		class="ma-2"
+		color="secondary" dark
+		@click="unParticipationClick">
+		断る
+		</v-btn>
+		<v-btn 
+		class="ma-2"
+		color="primary" dark
+		@click="participationClick">
+		参加
+		</v-btn>
 	</v-main>
 	</v-app>
 </template>
@@ -217,79 +206,66 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
-		//この画面では、firebaseのIDを取得して、データを出力する。
+		//[queryで、room_idを受け取ってきて、roomsの中から受け取ってきたIDのデータを取得]
+		this.roomId = this.$route.query.room_id;
+		const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
+		const roomGet = await roomRef.get()
+		const roomData = roomGet.data()
+
+		//[回答締め切りのみquestionnairesのフィールドの値としてあるため、ここでDeadlineForResponseのデータを取得]
+		const questionnairesData =firebase.firestore().collection("questionnaires").doc(roomData.questionnairesId)
+		const questionnairesGet =await questionnairesData.get()
+		this.questionnairesId = questionnairesGet.data()
+
+		// [schedulesの中で上記questionnairesIdと同じ値を持つ、IDを検索してきてそのデータを表示する処理]
+		const schedulesRef = firebase.firestore().collection("schedules")
+		const schedulesQuestionnaireId = await schedulesRef.where("questionnairesId", "==", roomData.questionnairesId).get()
+		this.scheduleId = schedulesQuestionnaireId.docs[0]
+		const schedulesCollection = firebase.firestore().collection("schedules").doc(this.scheduleId.id)
+		const schedulesGet = await schedulesCollection.get()
+		this.questionnaireContent = schedulesGet.data()
+
+		//[メンバーの数を集計するための処理]
+		//懸念点:1がマジックナンバーとなること。
+		const membersArray = JSON.parse(schedulesGet.get("member"))
+		this.member = (membersArray.length + 1)
+
 		// //車の有無を表示するための処理
-		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
+		this.AvailabilityOfCar = (this.questionnaireContent.AvailabilityOfCar ? '有' : '無')
 		// //スルーorランチ付きかを判断する処理
-		this.throughOrLunch = (this.lunchModel ? 'スルー' : '昼付き')
+		this.throughOrLunch = (this.questionnaireContent.throughOrLunch ? '昼付き' : 'スルー')
 		// //キャディの有無
-		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
-
-		this.users = []
-		// console.log("userId call", this.userId)//userID取得確認OK
-		const userRef = firebase.firestore().collection("users").doc(this.userId)
-		const userDoc = await userRef.get()
-		const user = userDoc.data()
-		console.log("user", user);
-
-		// 	const snapshot = await userRef.get()
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
+		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
 	},
 	data: () => ({
-		users:[],
-		AvailabilityOfCar: '',
-		throughOrLunch: '',
+		scheduleId: '',
+		member: '',
+		questionnairesId: '',
 		AvailabilityOfCaddy: '',
+		throughOrLunch: '',
+		AvailabilityOfCar:'',
+		questionnaireContent: '',
+		roomId: '',
 	}),
-	computed: {
-		friend: {
-			get() {
-				return this.$store.getters.friend;
-			}
+	methods: {
+		async participationClick() {
+			const answerRef = firebase.firestore().collection("answer")
+			const surveyAnswer = await answerRef.add({
+				schedule_id: this.scheduleId.id,
+				user_id: firebase.auth().currentUser.uid,
+				participationInGroup: true,
+			})
+			this.$router.push('/')
 		},
-		prefModel1: {
-			get() {
-				return this.$store.getters.pref1;
-			}
-		},
-		prefModel2: {
-			get() {
-				return this.$store.getters.pref2;
-			}
-		},
-		date: {
-			get() {
-				return this.$store.getters.date
-			},
-		},
-		deadLineDate: {
-			get() {
-				return this.$store.getters.deadlineDate
-			},
-		},
-		carsModel: {
-			get() {
-				return this.$store.getters.carsModel
-			},
-		},
-		caddyModel: {
-			get() {
-				return this.$store.getters.caddyModel
-			}
-		},
-		lunchModel: {
-			get() {
-				return this.$store.getters.lunchModel
-			}
-		},
-		remarkModel: {
-			get() {
-				return this.$store.getters.remarkModel
-			}
-		},
+		async unParticipationClick() {
+			const answerRef = firebase.firestore().collection("answer")
+			const surveyAnswer = await answerRef.add({
+				schedule_id: this.scheduleId.id,
+				user_id: firebase.auth().currentUser.uid,
+				participationInGroup: false,
+			})
+			this.$router.push('/')
+		}
 	}
 }
 </script>

@@ -22,12 +22,6 @@
 			:key="room.id"
 			cols="4"
 			>
-			<!--this.roomsがpushした後にどういうデータが入っているか？
-				[{id: doc.id},{id: doc.id}]-->
-
-			<!--ここで/chatのパスのqueryとして、idを設定している
-			↓pathとqueryで、room_idを取得してきてる。（ここがChatBoard.vueの$routerと紐づいてる)
-			-->
 			<router-link :to="{ path: '/chat', query: { room_id: room.id }}">
 				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
@@ -47,13 +41,6 @@ import firebase from "@/firebase/firebase"
 export default {
 	components: {
 		DefaultSidebar
-	},
-	async created() {
-		const questionnairesRef = firebase.firestore().collection("questionnaires")
-		const questionnairesActive = await questionnairesRef.where("active", "==", true).get()
-		console.log("questionnairesActive", questionnairesActive)
-		const questionnairesUser = await questionnairesRef.where("users_id", "array-contains", "z5OszDyVMVcuNBDeR5XvOftNKz53").get()
-		console.log("questionnairesUser", questionnairesUser)
 	},
 	async mounted() {
 		this.getRooms()
