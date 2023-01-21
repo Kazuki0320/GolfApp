@@ -209,8 +209,10 @@ export default {
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
-
-		const friendsIdArray =JSON.parse(userDoc.get("friends"))
+		
+		if (userDoc.get("friends") === undefined) return
+		const friendsIdArray = JSON.parse(userDoc.get("friends"))
+		if (friendsIdArray === undefined) return
 		friendsIdArray.forEach(async (friendId) => {
 			const friendRef = firebase.firestore().collection("users").doc(friendId)
 			const friendDoc = await friendRef.get()
