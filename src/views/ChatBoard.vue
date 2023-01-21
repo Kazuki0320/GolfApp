@@ -29,7 +29,16 @@
 
 					<v-list-item-content>
 
-						<v-list-item-subtitle class="message">
+						<v-list-item-subtitle 
+						v-if="data.questionnairesId"
+						class="message">
+						<router-link to="/surveyAnswer">
+							{{ data.message }}
+						</router-link>
+						</v-list-item-subtitle>
+						<v-list-item-subtitle 
+						v-else
+						class="message">
 							{{ data.message }}
 						</v-list-item-subtitle>
 					</v-list-item-content>
@@ -78,11 +87,21 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 			DefaultSidebar
 		},
 		async created() {
-			//firebaseから、ドキュメントを取得
 			const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
 			const roomDoc = await roomRef.get()
 			const room = roomDoc.data()
 			console.log("room", room);
+
+			const questionnairesIdRef = firebase.firestore().collection("questionnaires").doc(room.questionnairesId)
+			const questionnairesGet = await questionnairesIdRef.get()
+			const questionnaires = questionnairesGet.data()
+			console.log("questionnairesData", questionnaires)
+
+			//[schedulesのデータを取得して、出力する処理はアンケート回答者画面で行う]
+			// const schedulesRef = firebase.firestore().collection("schedules").doc(questionnairesData.schedulesId)
+			// const schedulesGet = await schedulesRef.get()
+			// const schedulesData = schedulesGet.data()
+			// console.log("schedulesData", schedulesData)
 
 			//メッセージをfirestoreから取得する
 			const snapshot = await roomRef.collection("messages").orderBy("createdAt", "asc").get()
@@ -96,6 +115,7 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 			console.log("auth call", this.auth);
 		},
 		data: () => ({
+			questionnairesData: '',
 			messages: [],
 			body: "",
 			cards: ['Today'],

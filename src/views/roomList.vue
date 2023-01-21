@@ -31,7 +31,7 @@
 			<router-link :to="{ path: '/chat', query: { room_id: room.id }}">
 				<v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
 			</router-link>
-			<div>グループ1</div>
+			<div></div>
 
 			</v-col>
 		</v-row>
@@ -48,17 +48,24 @@ export default {
 	components: {
 		DefaultSidebar
 	},
+	async created() {
+		const questionnairesRef = firebase.firestore().collection("questionnaires")
+		const questionnairesActive = await questionnairesRef.where("active", "==", true).get()
+		console.log("questionnairesActive", questionnairesActive)
+		const questionnairesUser = await questionnairesRef.where("users_id", "array-contains", "z5OszDyVMVcuNBDeR5XvOftNKz53").get()
+		console.log("questionnairesUser", questionnairesUser)
+	},
 	async mounted() {
 		this.getRooms()
 
-	const currentUserId = firebase.auth().currentUser.uid
+	this.currentUserId = firebase.auth().currentUser.uid
 	const userRef = firebase.firestore().collection("users")
 		const snapshot = await userRef.get()
 		snapshot.forEach(doc => {
 			let data = {
 				id: doc.id
 			}
-			if(currentUserId === data.id) {
+			if(this.currentUserId === data.id) {
 				this.user = data
 			}else{
 				// console.log("success")
@@ -66,6 +73,7 @@ export default {
 		})
 	},
 	data: () => ({
+		currentUserId:'',
 		rooms:[],
 		user:'',
 		users:[],

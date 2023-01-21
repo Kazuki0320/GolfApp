@@ -210,6 +210,8 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
+		this.user_id = this.$route.query.user_id;
+
 		// //車の有無を表示するための処理
 		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
 		// //スルーorランチ付きかを判断する処理
@@ -223,8 +225,7 @@ export default {
 		})
 	},
 	data: () => ({
-		user: '',
-		users:[],
+		userData: '',
 		user_id: '',
 		schedules: '',
 		friendsArray: [],
@@ -236,9 +237,15 @@ export default {
 		active: true,
 		answered: false,
 		friendsIdArray: [],
+		rooms: [],
 	}),
 	methods: {
 		async onClick() {
+			//userNameを取るために、userDataを取得
+			const userRef = firebase.firestore().collection("users").doc(this.user_id)
+			const userGet = await userRef.get()
+			this.userData = userGet.data()
+
 			const questionnairesRef = firebase.firestore().collection("questionnaires")
 				const result1 = await questionnairesRef.add({
 					active: this.active,
@@ -247,7 +254,27 @@ export default {
 					users_id: JSON.stringify(this.friendsIdArray),
 					DeadlineForResponse: this.deadLineDate,
 				})
-				this.questionnairesId = result1.id
+			this.questionnairesId = result1.id
+
+			//roomsのドキュメントIDを作成
+			//フィールドの値も追加
+			const roomRef = await firebase.firestore().collection("rooms").add({
+				user_id: this.user_id,
+				name: this.userData.userName,
+				questionnairesId: this.questionnairesId,
+			})
+
+			//roomsのドキュメントIDの中にサブコレクションmessageを追加
+			//一旦、追加したフィールドにuser_idを保存。←挙動確認のために入れた適当な値
+			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
+			const messageAdd = await roomId.collection("massages").add({
+				message: this.remarkModel,
+				name: this.userData.userName,
+				questionnairesId: this.questionnairesId,
+				//後から、photoURLは追加すると思うから、一旦残し
+				// photoURL: this.auth.photoURL,
+				createdAt: firebase.firestore.Timestamp.now()
+			})
 
 			const schedulesRef = firebase.firestore().collection("schedules")
 				await schedulesRef.add({

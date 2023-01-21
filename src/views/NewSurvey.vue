@@ -154,7 +154,7 @@
 				></v-checkbox>
 				</v-col>
 
-				<!--・次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。-->
+				<!--次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。-->
 				<v-col
 					cols="12"
 					md="4"
@@ -186,11 +186,8 @@
 				></v-text-field>
 				</v-col>
 				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
-				<router-link to="/survey">
-					<v-btn 
-						class="ma-2"
-						color="primary"
-						dark>
+				<router-link :to="{ path: '/survey', query: { user_id: this.user_id }}">
+					<v-btn class="ma-2" color="primary" dark>
 						確認
 					</v-btn>
 				</router-link>
