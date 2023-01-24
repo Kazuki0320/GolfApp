@@ -12,6 +12,22 @@
 			<template v-slot:default>
 				<thead>
 					<tr>
+						<th class="text-center">
+							グループ名
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td>{{ questionnaireContent.groupName }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
 					<th class="text-center">
 						メンバー
 					</th>

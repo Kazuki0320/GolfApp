@@ -13,6 +13,22 @@
 				<thead>
 					<tr>
 						<th class="text-center">
+							グループ名
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<td>{{ groupNameModel }}</td>
+					</tr>
+				</tbody>
+			</template>
+		</v-simple-table>
+		<v-simple-table>
+			<template v-slot:default>
+				<thead>
+					<tr>
+						<th class="text-center">
 							メンバー
 						</th>
 					</tr>
@@ -41,7 +57,8 @@
 					</tr>
 				</tbody>
 			</template>
-		</v-simple-table><v-simple-table>
+		</v-simple-table>
+		<v-simple-table>
 			<template v-slot:default>
 				<thead>
 					<tr>
@@ -255,15 +272,13 @@ export default {
 			//フィールドの値も追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
 				user_id: this.user_id,
-				name: this.userData.userName,
 				questionnairesId: this.questionnairesId,
 			})
 
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加
-			//一旦、追加したフィールドにuser_idを保存。←挙動確認のために入れた適当な値
 			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
 			const messageAdd = await roomId.collection("messages").add({
-				message: this.remarkModel,
+				message: this.groupNameModel,
 				name: this.userData.userName,
 				questionnairesId: this.questionnairesId,
 				//後から、photoURLは追加すると思うから、一旦残し
@@ -273,6 +288,7 @@ export default {
 
 			const schedulesRef = firebase.firestore().collection("schedules")
 				await schedulesRef.add({
+				groupName: this.groupNameModel,
 				questionnairesId: this.questionnairesId,
 				member: JSON.stringify(this.friendsIdArray),
 				price: this.priceModel,
@@ -289,6 +305,14 @@ export default {
 		},
 	},
 	computed: {
+		groupNameModel: {
+			get() {
+				return this.$store.getters.groupName;
+			},
+			set(value) {
+				this.$store.dispatch("updateGroupName", value)
+			}
+		},
 		friends: {
 			get() {
 				return this.$store.getters.friends;
