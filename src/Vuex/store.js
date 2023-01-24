@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
+		groupName: '',
 		friends: [],
 		price: '',
 		playTime: '',
@@ -18,6 +19,7 @@ export default new Vuex.Store({
 		remark: '',
 	},
 	getters: {
+		groupName: state => state.groupName,
 		friends: state => state.friends,
 		price: state => state.price,
 		playTime: state => state.playTime,
@@ -41,6 +43,9 @@ export default new Vuex.Store({
 	//-----------------------------------
 
 	mutations: {
+		updateGroupName(state, newGroupName) {
+			state.groupName = newGroupName
+		},
 		updateFriends(state, newFriends) {
 			state.friends = newFriends
 		},
@@ -97,6 +102,9 @@ export default new Vuex.Store({
 	//-----------------------------------
 
 	actions: {
+		updateGroupName({commit}, newGroupName) {
+			commit("updateGroupName", newGroupName)
+		},
 		updateFriends({commit}, newFriends) {
 			commit("updateFriends", newFriends)
 		},

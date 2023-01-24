@@ -9,6 +9,16 @@
 	</v-app-bar>
 	<v-main>
 		<v-col
+			cols="12"
+			md="4"
+		>
+		<v-text-field
+			v-model="groupNameModel"
+			label="グループ名"
+			required
+		></v-text-field>
+		</v-col>
+		<v-col
 		class="d-flex"
 		cols="12"
 		sm="6">
@@ -356,7 +366,14 @@ export default {
 		// 		this.$store.dispatch(updateSurvey("updateFriends", value))
 		// },
 		//-----------------------------------
-		
+		groupNameModel: {
+			get() {
+				return this.$store.getters.groupName;
+			},
+			set(value) {
+				this.$store.dispatch("updateGroupName", value)
+			}
+		},
 		friends: {
 			get() {
 				return this.$store.getters.friends;
