@@ -17,6 +17,7 @@
 			label="グループ名"
 			required
 		></v-text-field>
+		<p v-if="!groupIsValid" class="errer message">グループ名を入力してください</p>
 		</v-col>
 		<v-col
 		class="d-flex"
@@ -366,6 +367,10 @@ export default {
 		// 		this.$store.dispatch(updateSurvey("updateFriends", value))
 		// },
 		//-----------------------------------
+		groupIsValid () {
+			console.log("groupNameModel:", this.groupNameModel)
+			return this.groupNameModel != ""
+		},
 		groupNameModel: {
 			get() {
 				return this.$store.getters.groupName;
