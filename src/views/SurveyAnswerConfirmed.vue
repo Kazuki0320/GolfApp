@@ -453,6 +453,7 @@
 			<v-flex xs12 sm6 md4 text-center my-5>
 				<router-link to="/">
 				<v-btn
+				label="不参加"
 				@click="unParticipationClick"
 				class="ma-2"
 				color="secondary"
@@ -462,6 +463,7 @@
 			<v-flex xs12 sm6 md4 text-center my-5>
 				<router-link to="/">
 				<v-btn
+				label="参加"
 				@click="participationClick"
 				class="ma-2"
 				color="primary"
@@ -518,6 +520,11 @@ export default {
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
 		//車出しが可能かどうかの処理
 		this.AvailabilityOfCarAnswer = (this.isCarAnswerModel ? '可' : '不可')
+		if(this.AvailabilityOfCarAnswer === '可') {
+			this.carAnswer = true
+		}else {
+			this.carAnswer = false
+		}
 
 		//参加が可能かどうかの表示処理
 		if(this.attendanceAnswerModel === 'yes') {
@@ -527,8 +534,10 @@ export default {
 		} else {
 			this.attendance = "△"
 		}
+
 	},
 	data: () => ({
+		carAnswer: '',
 		attendance: [
 			{value: 'yes', text: "○"},
 			{value: 'fair', text: "△"},
@@ -552,6 +561,8 @@ export default {
 				schedule_id: this.scheduleId.id,
 				user_id: firebase.auth().currentUser.uid,
 				participationInGroup: true,
+                AvailabilityOfCar: this.carAnswer,
+                remark :this.remarkAnswerModel
 			})
 			this.$router.push('/')
 		},
@@ -561,22 +572,13 @@ export default {
 				schedule_id: this.scheduleId.id,
 				user_id: firebase.auth().currentUser.uid,
 				participationInGroup: false,
+                AvailabilityOfCar: this.carAnswer,
+                remark :this.remarkAnswerModel
 			})
 			this.$router.push('/')
 		}
 	},
 	computed: {
-		//[リファクタ用]
-		//-----------------------------------
-		// questionnaireAnswerModel: {
-		// 	get() {
-		// 		return this.$store.getters.questionnaireAnswer
-		// 	},
-		// 	set(value) {
-		// 		this.$store.dispatch("updateQuestionnaireAnswer", value)
-		// 	}
-		// }
-		//-----------------------------------
 		attendanceAnswerModel: {
 			get() {
 				return this.$store.getters.attendanceAnswer
