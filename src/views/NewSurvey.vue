@@ -377,10 +377,10 @@ export default {
 		confirmationValid: false,
 		groupNameRules: [
 			v => !!v || 'グループ名は必須です',
-			v => v.length <= 30 || 'グループ名は30文字以内で入力してください',
+			v => v?.length <= 30 || 'グループ名は30文字以内で入力してください',
 		],
 		remarkNameRules: [
-			v => v.length <= 1000 || '備考は1000文字以内で入力してください',
+			v => v?.length <= 1000 || '備考は1000文字以内で入力してください',
 		],
 	}),
 	computed: {
