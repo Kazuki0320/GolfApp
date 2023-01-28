@@ -204,17 +204,21 @@
 							required
 						></v-text-field>
 					</v-col>
-					<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
-					<router-link :to="{ path: '/survey', query: { user_id: this.user_id }}">
-						<v-btn 
-							:disabled="!confirmationValid"
-							color="primary"
-							class="mr-4"
-							@click="confirmationValidate"
-						>
-							確認
-						</v-btn>
-					</router-link>
+					<v-btn 
+						color="secondary" 
+						:to="{ path:'/', query: {user_id: this.user_id}}"
+					>
+						一覧に戻る
+					</v-btn>
+					<v-btn 
+						color="primary"
+						class="mr-4"
+						@click="confirmationValidate"
+						:disabled="confirmationValid"
+					>
+						確認
+					</v-btn>
+
 				</v-col>
 			</v-row>
 		</v-form>
@@ -475,10 +479,14 @@ export default {
 				this.$store.dispatch("updateRemark", value)
 			}
 		},
+		isValid() {
+			console.log("confirmationValid", this.confirmationValid);
+			return this.confirmationValid;
+		}
 	},
 	methods: {
 		confirmationValidate () {
-        this.$refs.form.confirmationValidate()
+			if (this.isValid) this.$router.push({ path: '/survey', query: { user_id: this.user_id }})
 		},
 	},
 }
