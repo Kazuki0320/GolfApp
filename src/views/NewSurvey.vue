@@ -2,209 +2,220 @@
 	<v-app id="inspire">
 	<v-app-bar
 		app
-		shrink-on-scroll
 	>
 		<v-toolbar-title>アンケート作成</v-toolbar-title>
-		<v-spacer></v-spacer>
 	</v-app-bar>
-	<v-main>
-		<v-col
-			cols="12"
-			md="4"
+	<div style="padding: 0.5%">
+		<v-form
+			ref="form"
+			v-model="valid"
+			lazy-validation
 		>
-		<v-text-field
-			v-model="groupNameModel"
-			label="グループ名"
-			required
-		></v-text-field>
-		<label v-if="!groupIsValid" class="error-message">グループ名を入力してください</label>
-		</v-col>
-		<v-col
-		class="d-flex"
-		cols="12"
-		sm="6">
-		<v-autocomplete
-			item-text="name"
-			:items="friendNameList"
-			v-model="friends"
-			outlined
-			deletable-chips
-			dense
-			chips
-			small-chips
-			label="友人検索"
-			return-object
-			multiple
-		>
-		</v-autocomplete>
-		</v-col>
-
-		<v-row>
-			<v-col cols="12">
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					v-model="priceModel"
-					:items="price"
-					label="価格"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					v-model="playTimeModel"
-					:items="startTime"
-					label="スタート時間"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					v-model="prefModel1"
-					:items="candidatePrefectureData1"
-					label="開催候補地1"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					v-model="prefModel2"
-					:items="candidatePrefectureData2"
-					label="開催候補地2"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						prepend-icon="mdi-calendar"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="候補日"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col>
-
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu1"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="deadLineDate"
-						prepend-icon="mdi-calendar"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="回答締切"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="deadLineDate"
-						@input="menu1 = false"
-						locale="jp-ja"
-						:day-format="deadLineDate => new Date(deadLineDate).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col>
-
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-checkbox
-					v-model="carsModel"
-					label="車の有無"
-				></v-checkbox>
-				</v-col>
-
-				<!--次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。-->
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-checkbox
-					v-model="caddy"
-					label="キャディの有無"
-				></v-checkbox>
-				</v-col>
-
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-checkbox
-					v-model="lunchModel"
-					label="昼付き"
-				></v-checkbox>
-				</v-col>
-
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					v-model="remarkModel"
-					label="備考"
-					required
-				></v-text-field>
-				</v-col>
-				<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
-				<router-link :to="{ path: '/survey', query: { user_id: this.user_id }}">
-					<v-btn :disabled="!groupNameModel" class="ma-2" color="primary" dark>
-						確認
-					</v-btn>
-				</router-link>
+			<v-col
+				cols="12"
+				md="4"
+			>
+			<v-text-field
+				v-model="groupNameModel"
+				label="グループ名"
+				:rules="groupNameRules"
+				:counter="30"
+				clearable
+				required
+			></v-text-field>
 			</v-col>
-		</v-row>
-	</v-main>
+			<v-col
+			class="d-flex"
+			cols="12"
+			sm="6">
+			<v-autocomplete
+				item-text="name"
+				:items="friendNameList"
+				v-model="friends"
+				outlined
+				deletable-chips
+				dense
+				chips
+				small-chips
+				label="友人検索"
+				return-object
+				multiple
+			>
+			</v-autocomplete>
+			</v-col>
+
+			<v-row>
+				<v-col cols="12">
+					<v-col
+						class="d-flex"
+						cols="12"
+						sm="6"
+					>
+					<v-select
+						v-model="priceModel"
+						:items="price"
+						label="価格"
+					>
+					</v-select>
+					</v-col>
+					<v-col
+						class="d-flex"
+						cols="12"
+						sm="6"
+					>
+					<v-select
+						v-model="playTimeModel"
+						:items="startTime"
+						label="スタート時間"
+					>
+					</v-select>
+					</v-col>
+					<v-col
+						class="d-flex"
+						cols="12"
+						sm="6"
+					>
+					<v-select
+						v-model="prefModel1"
+						:items="candidatePrefectureData1"
+						label="開催候補地1"
+					>
+					</v-select>
+					</v-col>
+					<v-col
+						class="d-flex"
+						cols="12"
+						sm="6"
+					>
+					<v-select
+						v-model="prefModel2"
+						:items="candidatePrefectureData2"
+						label="開催候補地2"
+					>
+					</v-select>
+					</v-col>
+					<v-col
+						cols="12"
+						sm="6"
+						md="4"
+					>
+						<v-menu
+							v-model="menu"
+							:close-on-content-click="false"
+							:nudge-right="40"
+							transition="scale-transition"
+							offset-y
+							min-width="auto"
+						>
+						<template v-slot:activator="{ on, attrs }">
+						<v-text-field
+							v-model="date"
+							prepend-icon="mdi-calendar"
+							readonly
+							v-bind="attrs"
+							v-on="on"
+							label="候補日"
+							required
+						></v-text-field>
+						</template>
+						<v-date-picker
+							v-model="date"
+							@input="menu = false"
+							locale="jp-ja"
+							:day-format="date => new Date(date).getDate()">
+						</v-date-picker>
+						</v-menu>
+					</v-col>
+
+					<v-col
+						cols="12"
+						sm="6"
+						md="4"
+					>
+						<v-menu
+							v-model="menu1"
+							:close-on-content-click="false"
+							:nudge-right="40"
+							transition="scale-transition"
+							offset-y
+							min-width="auto"
+						>
+						<template v-slot:activator="{ on, attrs }">
+						<v-text-field
+							v-model="deadLineDate"
+							prepend-icon="mdi-calendar"
+							readonly
+							v-bind="attrs"
+							v-on="on"
+							label="回答締切"
+							required
+						></v-text-field>
+						</template>
+						<v-date-picker
+							v-model="deadLineDate"
+							@input="menu1 = false"
+							locale="jp-ja"
+							:day-format="deadLineDate => new Date(deadLineDate).getDate()">
+						</v-date-picker>
+						</v-menu>
+					</v-col>
+
+					<v-col
+						cols="12"
+						md="4"
+					>
+					<v-checkbox
+						v-model="carsModel"
+						label="車の有無"
+					></v-checkbox>
+					</v-col>
+
+					<!--次の画面から、この画面に戻ってきた時に、キャディを活性にする必要がある。-->
+					<v-col
+						cols="12"
+						md="4"
+					>
+					<v-checkbox
+						v-model="caddy"
+						label="キャディの有無"
+					></v-checkbox>
+					</v-col>
+
+					<v-col
+						cols="12"
+						md="4"
+					>
+					<v-checkbox
+						v-model="lunchModel"
+						label="昼付き"
+					></v-checkbox>
+					</v-col>
+
+					<v-col
+						cols="12"
+						md="4"
+					>
+					<v-text-field
+						v-model="remarkModel"
+						label="備考"
+						required
+					></v-text-field>
+					</v-col>
+					<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
+					<router-link :to="{ path: '/survey', query: { user_id: this.user_id }}">
+						<v-btn 
+							:disabled="!valid"
+							color="primary"
+							class="mr-4"
+							@click="validate"
+						>
+							確認
+						</v-btn>
+					</router-link>
+				</v-col>
+			</v-row>
+		</v-form>
+	</div>
 	</v-app>
 </template>
 
@@ -354,7 +365,12 @@ export default {
 			'宮崎',
 			'鹿児島',
 			'沖縄',
-		]
+		],
+		groupNameRules: [
+			v => !!v || 'グループ名は必須です',
+			v => v.length <= 30 || 'グループ名は30文字以内で入力してください',
+		],
+		valid: true,
 	}),
 	computed: {
 		//[ハードコード用]
@@ -367,10 +383,6 @@ export default {
 		// 		this.$store.dispatch(updateSurvey("updateFriends", value))
 		// },
 		//-----------------------------------
-		groupIsValid () {
-			console.log("groupNameModel:", this.groupNameModel)
-			return this.groupNameModel != ""
-		},
 		groupNameModel: {
 			get() {
 				return this.$store.getters.groupName;
@@ -467,12 +479,11 @@ export default {
 				this.$store.dispatch("updateRemark", value)
 			}
 		},
-	}
+	},
+	methods: {
+		validate () {
+        this.$refs.form.validate()
+		},
+	},
 }
 </script>
-
-<style scoped>
-	.error-message {
-		color: brown;
-	}
-</style>
