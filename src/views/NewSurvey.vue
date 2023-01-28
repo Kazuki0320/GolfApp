@@ -198,6 +198,8 @@
 					<v-text-field
 						v-model="remarkModel"
 						label="備考"
+						:counter="1000"
+						clearable
 						required
 					></v-text-field>
 					</v-col>
