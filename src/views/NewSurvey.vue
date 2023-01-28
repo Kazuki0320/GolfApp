@@ -8,7 +8,7 @@
 	<div style="padding: 0.5%">
 		<v-form
 			ref="form"
-			v-model="valid"
+			v-model="confirmationValid"
 			lazy-validation
 		>
 			<v-col
@@ -207,10 +207,10 @@
 					<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
 					<router-link :to="{ path: '/survey', query: { user_id: this.user_id }}">
 						<v-btn 
-							:disabled="!valid"
+							:disabled="!confirmationValid"
 							color="primary"
 							class="mr-4"
-							@click="validate"
+							@click="confirmationValidate"
 						>
 							確認
 						</v-btn>
@@ -369,7 +369,7 @@ export default {
 			'鹿児島',
 			'沖縄',
 		],
-		valid: true,
+		confirmationValid: true,
 		groupNameRules: [
 			v => !!v || 'グループ名は必須です',
 			v => v.length <= 30 || 'グループ名は30文字以内で入力してください',
@@ -488,8 +488,8 @@ export default {
 		},
 	},
 	methods: {
-		validate () {
-        this.$refs.form.validate()
+		confirmationValidate () {
+        this.$refs.form.confirmationValidate()
 		},
 	},
 }
