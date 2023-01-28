@@ -15,33 +15,33 @@
 				cols="12"
 				md="4"
 			>
-			<v-text-field
-				v-model="groupNameModel"
-				label="グループ名"
-				:rules="groupNameRules"
-				:counter="30"
-				clearable
-				required
-			></v-text-field>
+				<v-text-field
+					v-model="groupNameModel"
+					label="グループ名"
+					:rules="groupNameRules"
+					:counter="30"
+					clearable
+					required
+				></v-text-field>
 			</v-col>
 			<v-col
 			class="d-flex"
 			cols="12"
 			sm="6">
-			<v-autocomplete
-				item-text="name"
-				:items="friendNameList"
-				v-model="friends"
-				outlined
-				deletable-chips
-				dense
-				chips
-				small-chips
-				label="友人検索"
-				return-object
-				multiple
-			>
-			</v-autocomplete>
+				<v-autocomplete
+					item-text="name"
+					:items="friendNameList"
+					v-model="friends"
+					outlined
+					deletable-chips
+					dense
+					chips
+					small-chips
+					label="友人検索"
+					return-object
+					multiple
+				>
+				</v-autocomplete>
 			</v-col>
 
 			<v-row>
@@ -107,23 +107,23 @@
 							offset-y
 							min-width="auto"
 						>
-						<template v-slot:activator="{ on, attrs }">
-						<v-text-field
-							v-model="date"
-							prepend-icon="mdi-calendar"
-							readonly
-							v-bind="attrs"
-							v-on="on"
-							label="候補日"
-							required
-						></v-text-field>
-						</template>
-						<v-date-picker
-							v-model="date"
-							@input="menu = false"
-							locale="jp-ja"
-							:day-format="date => new Date(date).getDate()">
-						</v-date-picker>
+							<template v-slot:activator="{ on, attrs }">
+								<v-text-field
+									v-model="date"
+									prepend-icon="mdi-calendar"
+									readonly
+									v-bind="attrs"
+									v-on="on"
+									label="候補日"
+									required
+								></v-text-field>
+							</template>
+							<v-date-picker
+								v-model="date"
+								@input="menu = false"
+								locale="jp-ja"
+								:day-format="date => new Date(date).getDate()">
+							</v-date-picker>
 						</v-menu>
 					</v-col>
 
@@ -185,23 +185,24 @@
 						cols="12"
 						md="4"
 					>
-					<v-checkbox
-						v-model="lunchModel"
-						label="昼付き"
-					></v-checkbox>
+						<v-checkbox
+							v-model="lunchModel"
+							label="昼付き"
+						></v-checkbox>
 					</v-col>
 
 					<v-col
 						cols="12"
 						md="4"
 					>
-					<v-text-field
-						v-model="remarkModel"
-						label="備考"
-						:counter="1000"
-						clearable
-						required
-					></v-text-field>
+						<v-text-field
+							v-model="remarkModel"
+							label="備考"
+							:counter="1000"
+							:rules="remarkNameRules"
+							clearable
+							required
+						></v-text-field>
 					</v-col>
 					<v-btn color="secondary" :to="{ path:'/', query: {user_id: this.user_id}}">一覧に戻る</v-btn>
 					<router-link :to="{ path: '/survey', query: { user_id: this.user_id }}">
@@ -368,11 +369,15 @@ export default {
 			'鹿児島',
 			'沖縄',
 		],
+		valid: true,
 		groupNameRules: [
 			v => !!v || 'グループ名は必須です',
 			v => v.length <= 30 || 'グループ名は30文字以内で入力してください',
 		],
-		valid: true,
+		remarkNameRules: [
+			v => !!v || 'グループ名は必須です',
+			v => v.length <= 1000 || '備考は1000文字以内で入力してください',
+		],
 	}),
 	computed: {
 		//[ハードコード用]
