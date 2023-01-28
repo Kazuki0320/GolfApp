@@ -478,7 +478,6 @@ export default {
 			}
 		},
 		isValid() {
-			console.log("confirmationValid", this.confirmationValid);
 			return this.confirmationValid;
 		}
 	},
