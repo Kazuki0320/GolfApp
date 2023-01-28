@@ -202,7 +202,6 @@
 							:counter="1000"
 							:rules="remarkNameRules"
 							clearable
-							required
 						></v-text-field>
 					</v-col>
 					<v-btn
@@ -474,7 +473,7 @@ export default {
 		},
 		remarkModel: {
 			get() {
-				return this.$store.getters.remark
+				return this.$store.getters.remarkModel
 			},
 			set(value) {
 				this.$store.dispatch("updateRemark", value)
