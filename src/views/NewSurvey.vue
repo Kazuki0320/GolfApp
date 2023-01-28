@@ -375,21 +375,10 @@ export default {
 			v => v.length <= 30 || 'グループ名は30文字以内で入力してください',
 		],
 		remarkNameRules: [
-			v => !!v || 'グループ名は必須です',
 			v => v.length <= 1000 || '備考は1000文字以内で入力してください',
 		],
 	}),
 	computed: {
-		//[ハードコード用]
-		//-----------------------------------
-		// friends: {
-		// 	get() {
-		// 		return this.$store.getters.friends;
-		// 	},
-		// 	set(value) {
-		// 		this.$store.dispatch(updateSurvey("updateFriends", value))
-		// },
-		//-----------------------------------
 		groupNameModel: {
 			get() {
 				return this.$store.getters.groupName;
