@@ -10,6 +10,7 @@
 			ref="form"
 			v-model="confirmationValid"
 			lazy-validation
+      @input="updateConfirmationValid"
 		>
 			<v-col
 				cols="12"
@@ -204,17 +205,17 @@
 							required
 						></v-text-field>
 					</v-col>
-					<v-btn 
-						color="secondary" 
+					<v-btn
+						color="secondary"
 						:to="{ path:'/', query: {user_id: this.user_id}}"
 					>
 						一覧に戻る
 					</v-btn>
-					<v-btn 
+					<v-btn
 						color="primary"
 						class="mr-4"
 						@click="confirmationValidate"
-						:disabled="confirmationValid"
+						:disabled="!confirmationValid"
 					>
 						確認
 					</v-btn>
@@ -235,7 +236,7 @@ export default {
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
-		
+
 		if (userDoc.get("friends") === undefined) return
 		const friendsIdArray = JSON.parse(userDoc.get("friends"))
 		if (friendsIdArray === undefined) return
@@ -373,7 +374,7 @@ export default {
 			'鹿児島',
 			'沖縄',
 		],
-		confirmationValid: true,
+		confirmationValid: false,
 		groupNameRules: [
 			v => !!v || 'グループ名は必須です',
 			v => v.length <= 30 || 'グループ名は30文字以内で入力してください',
@@ -488,6 +489,9 @@ export default {
 		confirmationValidate () {
 			if (this.isValid) this.$router.push({ path: '/survey', query: { user_id: this.user_id }})
 		},
+    updateConfirmationValid() {
+       this.confirmationValid = [this.groupNameModel].every((val) => val)
+    }
 	},
 }
 </script>
