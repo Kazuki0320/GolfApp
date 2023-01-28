@@ -22,7 +22,6 @@
 					:rules="groupNameRules"
 					:counter="30"
 					clearable
-					required
 				></v-text-field>
 			</v-col>
 			<v-col
@@ -116,7 +115,6 @@
 									v-bind="attrs"
 									v-on="on"
 									label="候補日"
-									required
 								></v-text-field>
 							</template>
 							<v-date-picker
@@ -149,7 +147,7 @@
 							v-bind="attrs"
 							v-on="on"
 							label="回答締切"
-							required
+				
 						></v-text-field>
 						</template>
 						<v-date-picker
