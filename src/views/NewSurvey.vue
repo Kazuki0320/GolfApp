@@ -17,7 +17,7 @@
 			label="グループ名"
 			required
 		></v-text-field>
-		<p v-if="!groupIsValid" class="errer message">グループ名を入力してください</p>
+		<label v-if="!groupIsValid" class="error-message">グループ名を入力してください</label>
 		</v-col>
 		<v-col
 		class="d-flex"
@@ -471,3 +471,8 @@ export default {
 }
 </script>
 
+<style scoped>
+	.error-message {
+		color: brown;
+	}
+</style>
