@@ -5,6 +5,12 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
+		//[リファクタ用]
+		//-----------------------------------
+		// questionnaire: {},
+		// questionnaireAnswer: {},
+		//-----------------------------------
+
 		groupName: '',
 		friends: [],
 		price: '',
@@ -17,8 +23,17 @@ export default new Vuex.Store({
 		isCaddy: false,
 		isLunch: false,
 		remark: '',
+
+		attendanceAnswer: '',
+		isCarAnswer: '',
+		remarkAnswer: '',
 	},
 	getters: {
+		//[リファクタ用]
+		//-----------------------------------
+		// questionnaireAnswer: state => state.questionnaireAnswer,
+		//-----------------------------------
+
 		groupName: state => state.groupName,
 		friends: state => state.friends,
 		price: state => state.price,
@@ -30,7 +45,11 @@ export default new Vuex.Store({
 		isCarsModel: state => state.isCars,
 		isCaddyModel: state => state.isCaddy,
 		isLunchModel: state => state.isLunch,
-		remarkModel: state => state.remark
+		remarkModel: state => state.remark,
+
+		attendanceAnswer: state => state.attendanceAnswer,
+		isCarAnswer: state => state.isCarAnswer,
+		remarkAnswer: state => state.remarkAnswer,
 	},
 
 	//[ハードコード用]
@@ -43,6 +62,13 @@ export default new Vuex.Store({
 	//-----------------------------------
 
 	mutations: {
+		//[リファクタ用]
+		//-----------------------------------
+		// updateQuestionnaireAnswer(state, questionnaireAnswer) {
+		// 	state.questionnaireAnswer = questionnaireAnswer
+		// },
+		//-----------------------------------
+
 		updateGroupName(state, newGroupName) {
 			state.groupName = newGroupName
 		},
@@ -78,7 +104,17 @@ export default new Vuex.Store({
 		},
 		updateRemark(state, newRemark) {
 			state.remark = newRemark
-		}
+		},
+
+		updateAttendanceAnswer(state, newAttendanceAnswer) {
+			state.attendanceAnswer = newAttendanceAnswer
+		},
+		updateIsCarAnswer(state, newIsCarAnswer) {
+			state.isCarAnswer = newIsCarAnswer
+		},
+		updateRemarkAnswer(state, newRemarkAnswer) {
+			state.remarkAnswer = newRemarkAnswer
+		},
 	},
 
 	//[ハードコード用]
@@ -102,6 +138,13 @@ export default new Vuex.Store({
 	//-----------------------------------
 
 	actions: {
+		//[リファクタ用]
+		//-----------------------------------
+		// updateQuestionnaireAnswer({commit}, questionnaireAnswer) {
+		// 	commit("updateQuestionnaireAnswer", questionnaireAnswer)
+		// },
+		//-----------------------------------
+
 		updateGroupName({commit}, newGroupName) {
 			commit("updateGroupName", newGroupName)
 		},
@@ -137,6 +180,19 @@ export default new Vuex.Store({
 		},
 		updateRemark({commit}, newRemark) {
 			commit("updateRemark", newRemark)
-		}
+		},
+		
+		updateAttendanceAnswer({commit}, newAttendanceAnswer) {
+			commit("updateAttendanceAnswer", newAttendanceAnswer)
+		},
+		updateIsCarAnswer({commit}, newIsCarAnswer) {
+			commit("updateIsCarAnswer", newIsCarAnswer)
+		},
+		updateIsCaddyAnswer({commit}, newIsCaddyAnswer) {
+			commit("updateIsCaddyAnswer", newIsCaddyAnswer)
+		},
+		updateRemarkAnswer({commit}, newRemarkAnswer) {
+			commit("updateRemarkAnswer", newRemarkAnswer)
+		},
 	}
 });

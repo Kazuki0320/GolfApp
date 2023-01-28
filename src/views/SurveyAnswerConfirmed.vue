@@ -9,8 +9,8 @@
 	</v-app-bar>
 
 	<v-main>
-	<v-container class="grey lighten-5">
-		<v-row
+		<v-container class="grey lighten-5">
+			<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
 		>
@@ -334,7 +334,7 @@
 		</v-row>
 	</v-container>
 
-	<v-container class="grey lighten-5">
+	<v-container>
 		<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
@@ -358,16 +358,29 @@
 			style="flex-wrap: nowrap;"
 		>
 			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				参加可能可否
+				</v-card>
+			</v-col>
+			<v-col
 				cols="1"
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
 			>
-			<v-select
-				label="参加可能可否"
-				:items="attendance"
-				item-text="text"
-				v-model="attendanceAnswerModel">
-			</v-select>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ attendance }}
+				</v-card>
 			</v-col>
 		</v-row>
 		<v-row
@@ -375,39 +388,91 @@
 			style="flex-wrap: nowrap;"
 		>
 			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				車の有無
+				</v-card>
+			</v-col>
+			<v-col
 				cols="1"
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
 			>
-			<v-select
-				label="車出し"
-				:items="AvailabilityOfCarItems"
-				v-model="isCarAnswerModel">
-			</v-select>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ AvailabilityOfCarAnswer }}
+				</v-card>
 			</v-col>
 		</v-row>
 		<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
 		>
-			<v-col
-				cols="1"
-				style="min-width: 100px; max-width: 100%;"
-				class="flex-grow-1 flex-shrink-0"
+		<v-col
+			cols="2"
+			class="flex-grow-0 flex-shrink-0"
+		>
+			<v-card
+				class="pa-2"
+				outlined
+				tile
 			>
-			<v-textarea
-				label="備考"
-				v-model="remarkAnswerModel"
-				clearable>
-			</v-textarea>
-			</v-col>
+			備考
+			</v-card>
+		</v-col>
+		<v-col
+			cols="1"
+			style="min-width: 100px; max-width: 100%;"
+			class="flex-grow-1 flex-shrink-0"
+		>
+			<v-card
+				class="pa-2"
+				outlined
+				tile
+			>
+			{{ remarkAnswerModel }}
+			</v-card>
+		</v-col>
 		</v-row>
 	</v-container>
 
-	<v-btn color="secondary" to="/">一覧に戻る</v-btn>
-	<router-link :to="{ path: '/surveyAnswerConfirmed', query: { room_id: roomId }}">
-		<v-btn class="ma-2" color="primary" dark>確認</v-btn>
-	</router-link>
+	<v-container>
+		<v-layout wrap>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<v-btn color="secondary" :to="{ path: '/surveyAnswer', query: { room_id: roomId }}">一覧に戻る</v-btn>
+			</v-flex>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<router-link to="/">
+				<v-btn
+				label="不参加"
+				@click="unParticipationClick"
+				class="ma-2"
+				color="secondary"
+				dark>不参加</v-btn>
+				</router-link>
+			</v-flex>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<router-link to="/">
+				<v-btn
+				label="参加"
+				@click="participationClick"
+				class="ma-2"
+				color="primary"
+				dark>参加</v-btn>
+				</router-link>
+			</v-flex>
+		</v-layout>
+	</v-container>
+
 	</v-main>
 	</v-app>
 </template>
@@ -426,7 +491,7 @@ export default {
 		//[回答締め切りのみquestionnairesのフィールドの値としてあるため、ここでDeadlineForResponseのデータを取得]
 		const questionnairesData =firebase.firestore().collection("questionnaires").doc(roomData.questionnairesId)
 		const questionnairesGet =await questionnairesData.get()
-		this.questionnairesId = questionnairesGet.data()
+		this.questionnairesInfo = questionnairesGet.data()
 
 		// [schedulesの中で上記questionnairesIdと同じ値を持つ、IDを検索してきてそのデータを表示する処理]
 		const schedulesRef = firebase.firestore().collection("schedules")
@@ -435,6 +500,7 @@ export default {
 		const schedulesCollection = firebase.firestore().collection("schedules").doc(this.scheduleId.id)
 		const schedulesGet = await schedulesCollection.get()
 		this.questionnaireContent = schedulesGet.data()
+		console.log("questionnaireContent", this.questionnaireContent)
 
 		//[memberを表示するための処理]
 		const memberArray = JSON.parse(this.questionnaireContent.member)
@@ -446,52 +512,79 @@ export default {
 			this.usersName.push(userNameData)
 		})
 
-		// //車の有無を表示するための処理
+		//車の有無を表示するための処理
 		this.AvailabilityOfCar = (this.questionnaireContent.AvailabilityOfCar ? '有' : '無')
-		// //スルーorランチ付きかを判断する処理
+		//スルーorランチ付きかを判断する処理
 		this.throughOrLunch = (this.questionnaireContent.throughOrLunch ? '昼付き' : 'スルー')
-		// //キャディの有無
+		//キャディの有無
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
+		//車出しが可能かどうかの処理
+		this.AvailabilityOfCarAnswer = (this.isCarAnswerModel ? '可' : '不可')
+		if(this.AvailabilityOfCarAnswer === '可') {
+			this.carAnswer = true
+		}else {
+			this.carAnswer = false
+		}
+
+		//参加が可能かどうかの表示処理
+		if(this.attendanceAnswerModel === 'yes') {
+			this.attendance = "○"
+		} else if(this.attendanceAnswerModel === 'no') {
+			this.attendance = "×"
+		} else {
+			this.attendance = "△"
+		}
+
 	},
 	data: () => ({
-		usersName: [],
-		AvailabilityOfCarItems: [
-			{value: true, text: "可"},
-			{value: false, text: "不可"},
-		],
+		carAnswer: '',
 		attendance: [
 			{value: 'yes', text: "○"},
 			{value: 'fair', text: "△"},
 			{value: 'no', text: "×"},
 		],
+		AvailabilityOfCarAnswer: '',
+		usersName: [],
 		scheduleId: '',
 		member: '',
-		questionnairesId: '',
+		questionnairesInfo: '',
 		AvailabilityOfCaddy: '',
 		throughOrLunch: '',
 		AvailabilityOfCar:'',
 		questionnaireContent: '',
 		roomId: '',
 	}),
+	methods: {
+		async participationClick() {
+			const answerRef = firebase.firestore().collection("answer")
+			const surveyAnswer = await answerRef.add({
+				schedule_id: this.scheduleId.id,
+				user_id: firebase.auth().currentUser.uid,
+				participationInGroup: true,
+                AvailabilityOfCar: this.carAnswer,
+                remark :this.remarkAnswerModel
+			})
+			this.$router.push('/')
+		},
+		async unParticipationClick() {
+			const answerRef = firebase.firestore().collection("answer")
+			const surveyAnswer = await answerRef.add({
+				schedule_id: this.scheduleId.id,
+				user_id: firebase.auth().currentUser.uid,
+				participationInGroup: false,
+                AvailabilityOfCar: this.carAnswer,
+                remark :this.remarkAnswerModel
+			})
+			this.$router.push('/')
+		}
+	},
 	computed: {
-		//[リファクタ用]
-		//-----------------------------------
-		// questionnaireAnswerModel: {
-		// 	get() {
-		// 		return this.$store.getters.questionnaireAnswer
-		// 	},
-		// 	set(value) {
-		// 		this.$store.dispatch("updateQuestionnaireAnswer", value)
-		// 	}
-		// }
-		//-----------------------------------
-
 		attendanceAnswerModel: {
 			get() {
 				return this.$store.getters.attendanceAnswer
 			},
 			set(value) {
-				this.$store.dispatch("updateAttendanceAnswer", value)
+				this.$store.dispatch("updateAttendanceAnswer1", value)
 			}
 		},
 		isCarAnswerModel: {

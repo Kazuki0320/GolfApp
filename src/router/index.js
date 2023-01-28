@@ -15,6 +15,8 @@ import NewSurvey from '../views/NewSurvey.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
 import SurveyAnswer from '../views/SurveyAnswer.vue'
 import UsersSearch from '../views/UsersSearch.vue'
+import SurveyAnswerConfirmed from '../views/SurveyAnswerConfirmed.vue'
+
 import firebase from "@/firebase/firebase"
 
 Vue.use(VueRouter)
@@ -76,6 +78,12 @@ const routes = [
     path: '/profile',
     name: 'UserProfile',
     component: UserProfile,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/surveyAnswerConfirmed',
+    name: 'SurveyAnswerConfirmed',
+    component: SurveyAnswerConfirmed,
     meta: { requiresAuth: true }
   },
   {
