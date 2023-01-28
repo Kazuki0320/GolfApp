@@ -10,7 +10,7 @@
 			ref="form"
 			v-model="confirmationValid"
 			lazy-validation
-      @input="updateConfirmationValid"
+			@input="updateConfirmationValid"
 		>
 			<v-col
 				cols="12"
@@ -486,9 +486,15 @@ export default {
 		confirmationValidate () {
 			if (this.isValid) this.$router.push({ path: '/survey', query: { user_id: this.user_id }})
 		},
-    updateConfirmationValid() {
-       this.confirmationValid = [this.groupNameModel].every((val) => val)
-    }
+		updateConfirmationValid() {
+			this.confirmationValid = [this.groupNameModel].every((val) => val)
+			if (
+				this.groupNameModel.length > 30
+				|| this.remarkModel.length > 1000
+				) {
+				this.confirmationValid = false
+			}
+		}
 	},
 }
 </script>
