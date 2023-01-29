@@ -43,42 +43,28 @@ export default {
 		DefaultSidebar
 	},
 	async mounted() {
-		this.getRooms()
+		//[ルーム作成ボタンを押した際、userIdを次の遷移先へ渡すためuserデータを取得]
+		const currentUserId = firebase.auth().currentUser.uid
+		const userRef = firebase.firestore().collection("users").doc(currentUserId)
+		const userGet = await userRef.get()
+		this.user = userGet.data()
 
-	this.currentUserId = firebase.auth().currentUser.uid
-	const userRef = firebase.firestore().collection("users")
-		const snapshot = await userRef.get()
-		snapshot.forEach(doc => {
+		//[ログインユーザーが作成したroomを表示する処理]
+		const roomRef = firebase.firestore().collection("rooms")
+		const roomGet = await roomRef.where("user_id", "==", currentUserId).get()
+		roomGet.forEach(doc => {
 			let data = {
 				id: doc.id
 			}
-			if(this.currentUserId === data.id) {
-				this.user = data
-			}else{
-				// console.log("success")
-			}
+			this.rooms.push(data)
 		})
 	},
 	data: () => ({
-		currentUserId:'',
 		rooms:[],
 		user:'',
 		users:[],
 		open: false,
 		auth: null
 	}),
-	methods: {
-		async getRooms() {
-			const roomRef = firebase.firestore().collection("rooms")
-			const snapshot = await roomRef.get()
-
-			snapshot.forEach(doc => {
-				let data = {
-					id: doc.id
-				}
-				this.rooms.push(data)
-			})
-		},
-	}
 }
 </script>
