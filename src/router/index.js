@@ -38,7 +38,7 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/survey',
+    path: '/surveyConfirmed',
     name: 'SurveyConfirmed',
     component: SurveyConfirmed,
     meta: { requiresAuth: true }

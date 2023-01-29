@@ -483,10 +483,10 @@ export default {
 	},
 	methods: {
 		confirmationValidate () {
-			if (this.isValid) this.$router.push({ path: '/survey', query: { user_id: this.user_id }})
+			if (this.isValid) this.$router.push({ path: '/surveyConfirmed', query: { user_id: this.user_id }})
 		},
 		updateConfirmationValid() {
-      this.confirmationValid = !!this.$refs.form?.validate()
+			this.confirmationValid = !!this.$refs.form?.validate()
 		}
 	},
 }
