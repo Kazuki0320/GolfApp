@@ -147,7 +147,7 @@
 							v-bind="attrs"
 							v-on="on"
 							label="回答締切"
-				
+
 						></v-text-field>
 						</template>
 						<v-date-picker
@@ -486,13 +486,7 @@ export default {
 			if (this.isValid) this.$router.push({ path: '/survey', query: { user_id: this.user_id }})
 		},
 		updateConfirmationValid() {
-			this.confirmationValid = [this.groupNameModel].every((val) => val)
-			if (
-				this.groupNameModel.length > 30
-				|| this.remarkModel.length > 1000
-				) {
-				this.confirmationValid = false
-			}
+      this.confirmationValid = !!this.$refs.form?.validate()
 		}
 	},
 }
