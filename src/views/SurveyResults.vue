@@ -16,13 +16,13 @@
 		<v-main>
 			<v-row>
 				<v-col
-				v-for="survey in surveyMakeUsers"
-				:key="survey.active"
+				v-for="schedules in schedulesInfo"
+				:key="schedules.groupName"
 				>
 				<v-card 
 				class="mx-auto pa-8 survey-form"
 				max-width="374">
-				<router-link :to="{ path: '/surveyResultsAnswer', query: { questionnaire_id: questionnairesId.id }}">
+				<router-link :to="{ path: '/surveyResultsAnswer', query: { schedules_id: schedulesId }}">
 					<v-avatar
 					class="mb-4"
 					color="grey darken-1"
@@ -30,7 +30,9 @@
 					>
 					</v-avatar>
 				</router-link>
-			<v-card-title>グループ１</v-card-title>
+					<v-card-title>
+						{{ schedules.groupName }}
+					</v-card-title>
 				<v-divider class="mx-4"></v-divider>
 			<v-card-title>回答待ち</v-card-title>
 			</v-card>
@@ -47,29 +49,44 @@ import firebase from "@/firebase/firebase"
 		async created() {
 			//[userName取得処理]
 			//※[questionnaireの中のフィールドの値に、アンケート作成者のuserIdを登録する処理を追加]
-			//→userIdから、name or ID検索を行う。
-			const userName = firebase.auth().currentUser.displayName
+			const userId = firebase.auth().currentUser.uid
 
 			//[questionnairesIDにログインユーザーが作成したアンケートがあるか探索する実装]
 			const questionnaireRef = firebase.firestore().collection("questionnaires")
-			const questionnaireUserGet = await questionnaireRef.where("userName", "==", userName).get()
+			const questionnaireUserGet = await questionnaireRef.where("user_id", "==", userId).get()
 			questionnaireUserGet.forEach(async doc => {
+				this.questionnairesId.push(doc.id)
 				let data = {
 					id: doc.id
 				}
-				this.questionnairesId = data
-
 				const questionnairesId = firebase.firestore().collection("questionnaires").doc(data.id)
 				const questionnairesGet = await questionnairesId.get()
 				const questionnairesData = questionnairesGet.data() 
 				this.surveyMakeUsers.push(questionnairesData)
 			})
+
+			//[取得したquestionnairesIdで、schedulesコレクションの中を探索して、データを取得]
+			this.questionnairesId.forEach(async doc => {
+				const schedulesRef = firebase.firestore().collection("schedules")
+				const schedulesGet = await schedulesRef.where("questionnairesId", "==", doc).get()
+				schedulesGet.forEach(async doc => {
+					this.schedulesId = doc.id
+					const schedulesGet = await schedulesRef.doc(doc.id).get()
+					const schedulesData = schedulesGet.data()
+					this.schedulesInfo.push(schedulesData)
+			})
+			})
+
 		},
 		data: () => ({
-			questionnairesId: '',
+			schedulesId: '',
+			schedules: '',
+			questionnairesId: [],
 			surveyMakeUsers: [],
+			schedulesInfo: [],
 		})
 	}
+
 </script>
 <style scoped>
 .survey-form {

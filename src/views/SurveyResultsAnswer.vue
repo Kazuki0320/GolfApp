@@ -16,96 +16,60 @@
 	<v-main>
 		<template>
 		<v-container fluid>
-		<v-data-iterator
-			:items="items"
-			hide-default-footer
-		>
 			<template>
 				<v-row>
 					<v-col
-						v-for="(surveyResult, index) in surveyResultAnswer"
-						:key="`${surveyResult.userName}_${index}`"
+						v-for="(userInfo, index) in usersInfo"
+						:key="`${userInfo.userName}_${index}`"
+					>
+					<v-col
+					v-for="(surveyResult, index) in surveyResultAnswer"
+						:key="`${surveyResult}_${index}`"
 						cols="12"
 						sm="6"
 						md="4"
 						lg="3"
 					>
-						<v-card>
-							<v-card-title class="subheading font-weight-bold">
-								{{ surveyResult.userName }}
+					<v-card>
+						<v-card-title class="subheading font-weight-bold">
+								{{ userInfo.userName }}
 							</v-card-title>
-					<!-- <v-col
-						v-for="item in items"
-						:key="item.name"
-						cols="12"
-						sm="6"
-						md="4"
-						lg="3"
-					>
-						<v-card>
-							<v-card-title class="subheading font-weight-bold">
-								{{ item.name }}
-							</v-card-title> -->
-
-							<!-- <v-divider></v-divider> -->
-
 							<v-list dense>
 								<v-list-item>
-									<v-list-item-content>Calories:</v-list-item-content>
+									<v-list-item-content>参加可否:</v-list-item-content>
 									<v-list-item-content class="align-end">
-										{{ surveyResult }}
-									</v-list-item-content>
-								</v-list-item>
-
-								<!--<v-list-item>
-									<v-list-item-content>Fat:</v-list-item-content>
-									<v-list-item-content class="align-end">
-										{{ item.fat }}
+										{{ participationInGroup }}
 									</v-list-item-content>
 								</v-list-item>
 
 								<v-list-item>
-									<v-list-item-content>Carbs:</v-list-item-content>
+									<v-list-item-content>車出し:</v-list-item-content>
 									<v-list-item-content class="align-end">
-										{{ item.carbs }}
+										{{ AvailabilityOfCar }}
 									</v-list-item-content>
 								</v-list-item>
 
 								<v-list-item>
-									<v-list-item-content>Protein:</v-list-item-content>
+									<v-list-item-content>備考:</v-list-item-content>
 									<v-list-item-content class="align-end">
-										{{ item.protein }}
+										{{ surveyResult.remark }}
 									</v-list-item-content>
 								</v-list-item>
 
-								<v-list-item>
-									<v-list-item-content>Sodium:</v-list-item-content>
-									<v-list-item-content class="align-end">
-										{{ item.sodium }}
-									</v-list-item-content>
-								</v-list-item>
-
-								<v-list-item>
-									<v-list-item-content>Calcium:</v-list-item-content>
-									<v-list-item-content class="align-end">
-										{{ item.calcium }}
-									</v-list-item-content>
-								</v-list-item>
-
-								<v-list-item>
-									<v-list-item-content>Iron:</v-list-item-content>
-									<v-list-item-content class="align-end">
-										{{ item.iron }}
-									</v-list-item-content>
-								</v-list-item>-->
 							</v-list>
 						</v-card>
 					</v-col>
+				</v-col>
 				</v-row>
 			</template>
-			</v-data-iterator>
 			</v-container>
 		</template>
+		<v-btn color="secondary" :to="{path: '/surveyResults', query: { schedules_id: schedulesId }}">一覧に戻る</v-btn>
+		<v-btn
+		@click="roomMakeOnClick"
+		class="ma-2"
+		color="primary"
+		dark>グループ作成</v-btn>
 	</v-main>
 	</v-app>
 </template>
@@ -115,53 +79,96 @@ import firebase from "@/firebase/firebase"
 
 	export default {
 		async created() {
-			this.questionnaireId = this.$route.query.questionnaire_id;
+			//[usersの中から、ログインユーザーの情報を取得]
+			this.userId = firebase.auth().currentUser.uid;
+			const userDoc = firebase.firestore().collection("users").doc(this.userId)
+			const userGet = await userDoc.get()
+			this.userInfo = userGet.data()
 
+			//[schedulesIdを受け取る処理]
+			this.schedulesId = this.$route.query.schedules_id;
+
+			//[受け取ってきたschedulesIdをanswerコレクションの中で、探索してデータを取得]
 			const answerRef = firebase.firestore().collection("answer")
-			const answerGet = await answerRef.where("questionnaire_id", "==", this.questionnaireId).get()
-
+			const answerGet = await answerRef.where("schedule_id", "==", this.schedulesId).get()
 			answerGet.docs.forEach(doc => {
-				let data = doc.id
-				this.answerIds.push(data)
+				this.answerIds.push(doc.id)
 			})
 			this.answerIds.forEach(async doc => {
 				const answerRef = firebase.firestore().collection("answer").doc(doc)
 				const answerGet = await answerRef.get()
 				const answerData = answerGet.data()
+				let userData = {
+					userId:answerData.user_id
+				}
+				//[usersIdを取得して、各ユーザーの名前を表示させるための処理
+				const userDoc = firebase.firestore().collection("users").doc(userData.userId)
+				const userGet = await userDoc.get()
+				const user = userGet.data()
+				this.usersInfo.push(user)
 				this.surveyResultAnswer.push(answerData)
-				// this.surveyResult = answerData
-				// console.log("surveyResult", this.surveyResult)
 			})
-				console.log("surveyResultAnswer", this.surveyResultAnswer)
+
+			//[schedulesの中から、questionnaireIdを探索してデータを取得]
+			const schedulesRef = firebase.firestore().collection("schedules").doc(this.schedulesId)
+			const schedulesGet = await schedulesRef.get()
+			const schedulesData = schedulesGet.data()
+			this.schedulesInfo.push(schedulesData)
+
+			//[schedulesInfoからquestionnairesIdとmemberのIdを取得]
+			this.schedulesInfo.forEach(async doc => {
+				this.questionnaireId = doc.questionnairesId
+				this.memberId = doc.member
+			})
+
+			// //車の有無を表示するための処理
+			this.AvailabilityOfCar = (this.surveyResultAnswer.AvailabilityOfCar ? '有' : '無')
+			// 参加可否を表示するための処理
+			this.participationInGroup = (this.surveyResultAnswer.participationInGroup ? '可' : '不可')
 			},
 		data: () => ({
+			participationInGroup: '',
+			AvailabilityOfCar: '',
+			usersInfo: [],
+			schedulesId: '',
+			userInfo:'',
+			schedulesInfo: [],
+			userId: '',
 			answerIds: [],
 			surveyResult: '',
 			surveyResultAnswer: [],
 			questionnaireId: '',
-			items: [
-				{
-					name: 'Frozen Yogurt',
-					calories: 159,
-					fat: 6.0,
-					carbs: 24,
-					protein: 4.0,
-					sodium: 87,
-					calcium: '14%',
-					iron: '1%',
-				},
-				{
-					name: 'Ice cream sandwich',
-					calories: 237,
-					fat: 9.0,
-					carbs: 37,
-					protein: 4.3,
-					sodium: 129,
-					calcium: '8%',
-					iron: '1%',
-				},
-			],
+			groupName:'',
+			memberId: '',
 		}),
+		methods: {
+			async roomMakeOnClick() {
+			//groupNameの取得処理
+			this.schedulesInfo.forEach(value => {
+				this.groupName = value.groupName
+				this.memberId = value.member
+			})
+			
+			//roomsのドキュメントIDを作成し、フィールドの値を追加
+			const roomRef = await firebase.firestore().collection("rooms").add({
+				user_id: this.userId,
+				member_id: this.memberId,
+				questionnairesId: this.questionnaireId,
+			})
+
+			//roomsのドキュメントIDの中にサブコレクションmessageを追加
+			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
+			const messageAdd = await roomId.collection("messages").add({
+				message: this.groupName,
+				name: this.userInfo.userName,
+				questionnairesId: this.questionnaireId,
+				//後から、photoURLは追加すると思うから、一旦残し
+				// photoURL: this.auth.photoURL,
+				createdAt: firebase.firestore.Timestamp.now()
+			})
+			this.$router.push('/')
+			}
+		}
 	}
 </script>
 <style scoped>
