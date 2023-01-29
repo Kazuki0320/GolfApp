@@ -4,7 +4,7 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>ユーザー検索</v-toolbar-title>
+		<v-toolbar-title>フレンド検索</v-toolbar-title>
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
