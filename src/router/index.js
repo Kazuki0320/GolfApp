@@ -18,7 +18,6 @@ import SurveyAnswerConfirmed from '../views/SurveyAnswerConfirmed.vue'
 import SurveyResults from '../views/SurveyResults.vue'
 import SurveyResultsAnswer from '../views/SurveyResultsAnswer.vue'
 import UsersSearch from '../views/UsersSearch.vue'
-import SurveyAnswerConfirmed from '../views/SurveyAnswerConfirmed.vue'
 
 import firebase from "@/firebase/firebase"
 
