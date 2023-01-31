@@ -263,6 +263,7 @@ export default {
 					active: this.active,
 					answered: this.answered,
 					room_id: this.room_id,
+					user_id: this.user_id,
 					users_id: JSON.stringify(this.friendsIdArray),
 					DeadlineForResponse: this.deadLineDate,
 				})
@@ -299,7 +300,7 @@ export default {
 				AvailabilityOfCar: this.carsModel,
 				throughOrLunch: this.lunchModel,
 				AvailabilityOfCaddy: this.caddyModel,
-				remarks: this.remarkModel,
+				remark: this.remarkModel,
 			})
 			this.$router.push('/')
 		},

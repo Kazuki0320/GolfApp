@@ -14,8 +14,10 @@ import RoomJoinConfirmed from '../views/RoomJoinConfirmed.vue'
 import NewSurvey from '../views/NewSurvey.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
 import SurveyAnswer from '../views/SurveyAnswer.vue'
-import UsersSearch from '../views/UsersSearch.vue'
 import SurveyAnswerConfirmed from '../views/SurveyAnswerConfirmed.vue'
+import SurveyResults from '../views/SurveyResults.vue'
+import SurveyResultsAnswer from '../views/SurveyResultsAnswer.vue'
+import UsersSearch from '../views/UsersSearch.vue'
 
 import firebase from "@/firebase/firebase"
 
@@ -44,6 +46,24 @@ const routes = [
     path: '/surveyAnswer',
     name: 'SurveyAnswer',
     component: SurveyAnswer,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/surveyAnswerConfirmed',
+    name: 'SurveyAnswerConfirmed',
+    component: SurveyAnswerConfirmed,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/surveyResultsAnswer',
+    name: 'SurveyResultsAnswer',
+    component: SurveyResultsAnswer,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/surveyResults',
+    name: 'SurveyResults',
+    component: SurveyResults,
     meta: { requiresAuth: true }
   },
   {
