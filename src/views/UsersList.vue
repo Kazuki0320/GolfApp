@@ -5,7 +5,7 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>ユーザー</v-toolbar-title>
+		<v-toolbar-title>フレンド</v-toolbar-title>
 
 		<v-spacer></v-spacer>
 
@@ -13,7 +13,7 @@
 		<v-icon>mdi-dots-vertical</v-icon>
 		</v-btn> -->
 				<router-link :to="{ path: '/usersSearch', query: { user_id: this.user.id}}">
-					<v-btn class="ma-2" color="primary" dark>ユーザー追加</v-btn>
+					<v-btn class="ma-2" color="primary" dark>フレンド追加</v-btn>
 				</router-link>
 	</v-app-bar>
 
