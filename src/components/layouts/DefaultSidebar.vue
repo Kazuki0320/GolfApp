@@ -106,7 +106,7 @@ export default {
 		drawer: null,
 		links: [
 			['mdi-door-open', 'ルーム', '/'],
-			['mdi-account-multiple', 'ユーザー', '/user'],
+			['mdi-account-multiple', 'フレンド', '/user'],
 		],
 		user: '',
 		userInfo: '',

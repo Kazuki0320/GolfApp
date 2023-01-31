@@ -13,7 +13,7 @@
 			<v-row>
 				<v-col cols="6">
 					<v-text-field
-					label="ユーザー検索"
+					label="フレンド検索"
 					clearable
 					v-model="keyword">
 					</v-text-field>
@@ -30,7 +30,7 @@
 				<v-col cols="3">
 					<v-btn
 						color="primary"
-						@click="search"><!--firestoreで、検索した時の処理をmethodで書く必要がある-->
+						@click="search">
 						検索する
 					</v-btn>
 				</v-col>
@@ -78,11 +78,12 @@ export default {
 		keyword: '',
 		searchResults: [],
 		friendsArray: [],
-		errormessage: ''
+		errormessage: '',
+		userDoc: '',
+		userInfo: '',
 	}),
 	methods: {
 		async search() {
-
 			const userRef = firebase.firestore().collection("users").doc(this.keyword)
 			const userDoc = await userRef.get()
 			this.user = userDoc.data()
@@ -104,20 +105,31 @@ export default {
 			// });
 		},
 		async submit () {
-			const userDoc = firebase.firestore().collection("users").doc(this.userId)
-			const userInfo =await userDoc.get()
-			this.friendsArray = JSON.parse(userInfo.get("friends"))
-			this.friendsArray.push(this.keyword)
-			userDoc.update({
-					friends: JSON.stringify(this.friendsArray)
+			//ログインユーザーが持ってるfriendsに、検索したユーザーを追加する処理
+			this.userDoc = firebase.firestore().collection("users").doc(this.userId)
+			const userGet = await this.userDoc.get()
+			this.userInfo = userGet.data()
+
+			// ログインユーザーがfriendsを持ってない場合の処理
+			if (this.userInfo.friends == undefined) {
+				this.friendsArray.push(this.keyword)
+				this.userDoc.update({
+					friends: this.friendsArray
 				})
+			} else {
+				this.friendsArray = this.userInfo.friends
+				this.friendsArray.push(this.keyword)
+				this.userDoc.update({
+					friends: this.friendsArray
+				})
+			}
+
 			//非同期関数だったら、catchが使えるようになる。
 			//async/awaitを調べる。
 			// .catch((error) => {
 			// 		console.log("fail", error)
 			// 		this.errorMessage = "友達追加に失敗しました"
 			// })
-			console.log("friendsArray", this.friendsArray)
 
 			this.$router.push('/user')
 		},
