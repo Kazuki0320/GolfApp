@@ -191,7 +191,7 @@ export default {
 		this.user = userDoc.data()
 		console.log("user", this.user);
 
-		this.friendsIdArray =JSON.parse(userDoc.get("friends"))
+		// this.friendsIdArray =JSON.parse(userDoc.get("friends"))
 		console.log("friendsIdArray", this.friendsIdArray)
 
 	},

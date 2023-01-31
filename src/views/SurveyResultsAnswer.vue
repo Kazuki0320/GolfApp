@@ -98,6 +98,8 @@ import firebase from "@/firebase/firebase"
 				const answerRef = firebase.firestore().collection("answer").doc(doc)
 				const answerGet = await answerRef.get()
 				const answerData = answerGet.data()
+				this.surveyAnswer = answerData
+
 				let userData = {
 					userId:answerData.user_id
 				}
@@ -115,18 +117,20 @@ import firebase from "@/firebase/firebase"
 			const schedulesData = schedulesGet.data()
 			this.schedulesInfo.push(schedulesData)
 
-			//[schedulesInfoからquestionnairesIdとmemberのIdを取得]
+			//[schedulesInfoからquestionnairesIdとmembersのIdを取得]
 			this.schedulesInfo.forEach(async doc => {
 				this.questionnaireId = doc.questionnairesId
-				this.memberId = doc.member
+				this.membersId = doc.members
 			})
 
 			// //車の有無を表示するための処理
-			this.AvailabilityOfCar = (this.surveyResultAnswer.AvailabilityOfCar ? '有' : '無')
+			this.AvailabilityOfCar = (this.surveyAnswer.AvailabilityOfCar ? '有' : '無')
 			// 参加可否を表示するための処理
-			this.participationInGroup = (this.surveyResultAnswer.participationInGroup ? '可' : '不可')
+			this.participationInGroup = (this.surveyAnswer.participationInGroup ? '可' : '不可')
+
 			},
 		data: () => ({
+			surveyAnswer: '',
 			participationInGroup: '',
 			AvailabilityOfCar: '',
 			usersInfo: [],
@@ -139,21 +143,19 @@ import firebase from "@/firebase/firebase"
 			surveyResultAnswer: [],
 			questionnaireId: '',
 			groupName:'',
-			memberId: '',
+			membersId: [],
 		}),
 		methods: {
 			async roomMakeOnClick() {
 			//groupNameの取得処理
 			this.schedulesInfo.forEach(value => {
 				this.groupName = value.groupName
-				this.memberId = value.member
+				this.membersId = value.members
 			})
-			
+
 			//roomsのドキュメントIDを作成し、フィールドの値を追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
-				user_id: this.userId,
-				member_id: this.memberId,
-				questionnairesId: this.questionnaireId,
+				members_id: this.membersId,
 			})
 
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加

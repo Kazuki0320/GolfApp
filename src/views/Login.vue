@@ -85,7 +85,6 @@ mounted() {
 },
 computed:	{
 	isValid() {
-		console.log("isValid", this.valid);
 		return !this.valid;
 	}
 },
@@ -112,7 +111,6 @@ methods: {
 					this.$router.push('/')
 				})
 				.catch((error) => {
-					console.log("fail", error)
 					this.errorMessage = "ユーザーのログインに失敗しました"
 				})
 		}

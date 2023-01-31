@@ -366,7 +366,7 @@
 					outlined
 					tile
 				>
-				参加可能可否
+				参加可否
 				</v-card>
 			</v-col>
 			<v-col
@@ -485,8 +485,9 @@ export default {
 		//[queryで、room_idを受け取ってきて、roomsの中から受け取ってきたIDのデータを取得]
 		this.roomId = this.$route.query.room_id;
 		const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
-		const roomGet = await roomRef.get()
-		const roomData = roomGet.data()
+		const roomGet = await roomRef.collection("messages").get()
+		const messagesId = roomGet.docs[0]
+		const roomData = messagesId.data()
 
 		//[回答締め切りのみquestionnairesのフィールドの値としてあるため、ここでDeadlineForResponseのデータを取得]
 		const questionnairesData =firebase.firestore().collection("questionnaires").doc(roomData.questionnairesId)
@@ -500,10 +501,9 @@ export default {
 		const schedulesCollection = firebase.firestore().collection("schedules").doc(this.scheduleId.id)
 		const schedulesGet = await schedulesCollection.get()
 		this.questionnaireContent = schedulesGet.data()
-		console.log("questionnaireContent", this.questionnaireContent)
 
 		//[memberを表示するための処理]
-		const memberArray = JSON.parse(this.questionnaireContent.member)
+		const memberArray = JSON.parse(this.questionnaireContent.members)
 		memberArray.forEach(async doc => {
 			const userRef = firebase.firestore().collection("users").doc(doc)
 			const userGet = await userRef.get()
@@ -519,8 +519,8 @@ export default {
 		//キャディの有無
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
 		//車出しが可能かどうかの処理
-		this.AvailabilityOfCarAnswer = (this.isCarAnswerModel ? '可' : '不可')
-		if(this.AvailabilityOfCarAnswer === '可') {
+		this.AvailabilityOfCarAnswer = (this.isCarAnswerModel ? "○" : "×")
+		if(this.AvailabilityOfCarAnswer === "○") {
 			this.carAnswer = true
 		}else {
 			this.carAnswer = false

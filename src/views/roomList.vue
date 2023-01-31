@@ -49,10 +49,10 @@ export default {
 		const userGet = await userRef.get()
 		this.user = userGet.data()
 
-		//[ログインユーザーが作成したroomを表示する処理]
+		//[ログインユーザーが招待されているグループの探索処理]
 		const roomRef = firebase.firestore().collection("rooms")
-		const roomGet = await roomRef.where("user_id", "==", currentUserId).get()
-		roomGet.forEach(doc => {
+		const memberGet = await roomRef.where("members_id", "array-contains",  currentUserId).get()
+		memberGet.forEach(doc => {
 			let data = {
 				id: doc.id
 			}
