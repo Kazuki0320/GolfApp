@@ -363,7 +363,7 @@
 				class="flex-grow-1 flex-shrink-0"
 			>
 			<v-select
-				label="参加可能可否"
+				label="参加可否"
 				:items="attendance"
 				item-text="text"
 				v-model="attendanceAnswerModel">
@@ -420,15 +420,17 @@ export default {
 		//[queryで、room_idを受け取ってきて、roomsの中から受け取ってきたIDのデータを取得]
 		this.roomId = this.$route.query.room_id;
 		const roomRef = firebase.firestore().collection("rooms").doc(this.roomId)
-		const roomGet = await roomRef.get()
-		const roomData = roomGet.data()
+		const roomGet = await roomRef.collection("messages").get()
+		const messagesId = roomGet.docs[0]
+		const roomData = messagesId.data()
 
 		//[回答締め切りのみquestionnairesのフィールドの値としてあるため、ここでDeadlineForResponseのデータを取得]
+		//→回答締切を表示するため
 		const questionnairesData =firebase.firestore().collection("questionnaires").doc(roomData.questionnairesId)
 		const questionnairesGet =await questionnairesData.get()
 		this.questionnairesId = questionnairesGet.data()
 
-		// [schedulesの中で上記questionnairesIdと同じ値を持つ、IDを検索してきてそのデータを表示する処理]
+		// // [schedulesの中で上記questionnairesIdと同じ値を持つ、IDを検索してきてそのデータを表示する処理]
 		const schedulesRef = firebase.firestore().collection("schedules")
 		const schedulesQuestionnaireId = await schedulesRef.where("questionnairesId", "==", roomData.questionnairesId).get()
 		this.scheduleId = schedulesQuestionnaireId.docs[0]
@@ -436,9 +438,9 @@ export default {
 		const schedulesGet = await schedulesCollection.get()
 		this.questionnaireContent = schedulesGet.data()
 
-		//[memberを表示するための処理]
-		const memberArray = JSON.parse(this.questionnaireContent.member)
-		memberArray.forEach(async doc => {
+		// //[memberを表示するための処理]
+		const membersArray = JSON.parse(this.questionnaireContent.members)
+		membersArray.forEach(async doc => {
 			const userRef = firebase.firestore().collection("users").doc(doc)
 			const userGet = await userRef.get()
 			const userData = userGet.data()
@@ -452,12 +454,13 @@ export default {
 		this.throughOrLunch = (this.questionnaireContent.throughOrLunch ? '昼付き' : 'スルー')
 		// //キャディの有無
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
+
 	},
 	data: () => ({
 		usersName: [],
 		AvailabilityOfCarItems: [
-			{value: true, text: "可"},
-			{value: false, text: "不可"},
+			{value: true, text: "○"},
+			{value: false, text: "×"},
 		],
 		attendance: [
 			{value: 'yes', text: "○"},

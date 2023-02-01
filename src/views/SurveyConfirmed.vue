@@ -231,10 +231,13 @@ export default {
 		// //キャディの有無
 		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
 
+		//状態管理から、受け取ってきたfriendsのデータのIDを取得するための処理
 		this.friends.forEach(friends => {
 			const friendId = friends.id
-			this.friendsIdArray.push(friendId)
+			this.members.push(friendId)
 		})
+		//roomのフィールドに作成者＋メンバー含めたIDを持つ配列を作成
+		this.members.push(this.user_id)
 	},
 	data: () => ({
 		userData: '',
@@ -248,7 +251,7 @@ export default {
 		room_id: '',
 		active: true,
 		answered: false,
-		friendsIdArray: [],
+		members: [],
 		rooms: [],
 	}),
 	methods: {
@@ -264,16 +267,15 @@ export default {
 					answered: this.answered,
 					room_id: this.room_id,
 					user_id: this.user_id,
-					users_id: JSON.stringify(this.friendsIdArray),
+					users_id: JSON.stringify(this.members),
 					DeadlineForResponse: this.deadLineDate,
 				})
 			this.questionnairesId = result1.id
 
 			//roomsのドキュメントIDを作成
-			//フィールドの値も追加
+			//フィールドの値には選択したユーザーのIDも含め、users_idとして追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
-				user_id: this.user_id,
-				questionnairesId: this.questionnairesId,
+				members_id: this.members,
 			})
 
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加
@@ -291,7 +293,7 @@ export default {
 				await schedulesRef.add({
 				groupName: this.groupNameModel,
 				questionnairesId: this.questionnairesId,
-				member: JSON.stringify(this.friendsIdArray),
+				members: JSON.stringify(this.members),
 				price: this.priceModel,
 				playTime: this.playTimeModel,
 				selectPlace1: this.candidatePrefectureModel1,
