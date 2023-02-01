@@ -475,18 +475,6 @@ export default {
 		roomId: '',
 	}),
 	computed: {
-		//[リファクタ用]
-		//-----------------------------------
-		// questionnaireAnswerModel: {
-		// 	get() {
-		// 		return this.$store.getters.questionnaireAnswer
-		// 	},
-		// 	set(value) {
-		// 		this.$store.dispatch("updateQuestionnaireAnswer", value)
-		// 	}
-		// }
-		//-----------------------------------
-
 		attendanceAnswerModel: {
 			get() {
 				return this.$store.getters.attendanceAnswer

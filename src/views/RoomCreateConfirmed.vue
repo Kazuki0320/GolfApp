@@ -8,18 +8,6 @@
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> 
-	-->
 		<v-row>
 			<v-col cols="12">
 				<v-col
@@ -63,18 +51,8 @@
 					:items="pref"
 					label="開催候補地1"
 				>
-					<!-- <option v-for="(item) in getPref"
-					:key="item.no">
-					{{ item.name }}
-					</option> -->
 				</v-select>
 				</v-col>
-					<!-- <v-text-field
-						label="都道府県選択1"
-						required
-					></v-text-field> -->
-					<!-- class="mx-2" v-model="book.memo">
-					{{ book.memo }} -->
 				<v-col
 					class="d-flex"
 					cols="12"
@@ -117,37 +95,6 @@
 					</v-date-picker>
 					</v-menu>
 				</v-col>
-				<!-- <v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="回答締切"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
-				</v-col> -->
 				<v-col
 					cols="12"
 					md="4"
@@ -163,18 +110,6 @@
 				</router-link>
 			</v-col>
 		</v-row>
-		<!-- <v-btn
-			class="mr-4"
-			type="submit"
-			:disabled="invalid"
-			@click="submit"
-		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
-		</v-btn> -->
-
 	</v-main>
 	</v-app>
 </template>
@@ -185,15 +120,9 @@ import firebase from "@/firebase/firebase"
 export default {
 	async created() {
 		this.user_id = this.$route.query.user_id;
-		// console.log("user_id", this.user_id);
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
-		console.log("user", this.user);
-
-		// this.friendsIdArray =JSON.parse(userDoc.get("friends"))
-		console.log("friendsIdArray", this.friendsIdArray)
-
 	},
 	data: () => ({
 		menu: false,
@@ -252,10 +181,5 @@ export default {
 			'沖縄',
 		]
 	}),
-	// computed: {
-	// 	userId () {
-	// 	return 	this.$route.query.user_id;
-	// 	},
-	// },
 }
 </script>

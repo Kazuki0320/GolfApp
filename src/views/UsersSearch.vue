@@ -89,20 +89,6 @@ export default {
 			this.user = userDoc.data()
 
 			this.valid = !this.valid
-			//[下記処理はemailや個人IDなどで検索する場合に使用する]
-			// const userDoc = firebase.firestore().collection("users")
-			// await userDoc.where("id", "==", this.keyword).get()
-			// // console.log("query call", query)
-			// .then((result) => {
-			// 	console.log("success",result)
-			// 	result.forEach((doc) => {
-			// 	// doc.data() is never undefined for query doc snapshots
-			// 	console.log(doc.id, " => ", doc.data());
-			// 	});
-			// })
-			// .catch((error) => {
-			// 	console.log("検索に失敗しました", error);
-			// });
 		},
 		async submit () {
 			//ログインユーザーが持ってるfriendsに、検索したユーザーを追加する処理
@@ -123,13 +109,6 @@ export default {
 					friends: this.friendsArray
 				})
 			}
-
-			//非同期関数だったら、catchが使えるようになる。
-			//async/awaitを調べる。
-			// .catch((error) => {
-			// 		console.log("fail", error)
-			// 		this.errorMessage = "友達追加に失敗しました"
-			// })
 
 			this.$router.push('/user')
 		},

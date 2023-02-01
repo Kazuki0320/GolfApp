@@ -68,6 +68,7 @@ import firebase from "@/firebase/firebase"
 			this.questionnairesId.forEach(async doc => {
 				const schedulesRef = firebase.firestore().collection("schedules")
 				const schedulesGet = await schedulesRef.where("questionnairesId", "==", doc).get()
+				
 				schedulesGet.forEach(async doc => {
 					this.schedulesId = doc.id
 					const schedulesGet = await schedulesRef.doc(doc.id).get()

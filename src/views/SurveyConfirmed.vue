@@ -224,11 +224,11 @@ export default {
 	async created() {
 		this.user_id = this.$route.query.user_id;
 
-		// //車の有無を表示するための処理
+		//車の有無を表示するための処理
 		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
-		// //スルーorランチ付きかを判断する処理
+		//スルーorランチ付きかを判断する処理
 		this.throughOrLunch = (this.lunchModel ? '昼付き' : 'スルー')
-		// //キャディの有無
+		//キャディの有無
 		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
 
 		//状態管理から、受け取ってきたfriendsのデータのIDを取得するための処理

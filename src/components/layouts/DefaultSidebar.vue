@@ -91,9 +91,6 @@ export default {
 				//↓コンフリクトが起きるかも？currentUserIdで比べるのが正解
 				if(currentUserId === data.id) {
 					this.user = data
-				}else{
-					//消したらエラーになるかも？
-					// console.log("success")
 				}
 			})
 
