@@ -503,8 +503,7 @@ export default {
 		this.questionnaireContent = schedulesGet.data()
 
 		//[memberを表示するための処理]
-		const memberArray = JSON.parse(this.questionnaireContent.members)
-		memberArray.forEach(async doc => {
+		this.questionnaireContent.members.forEach(async doc => {
 			const userRef = firebase.firestore().collection("users").doc(doc)
 			const userGet = await userRef.get()
 			const userData = userGet.data()
@@ -546,7 +545,6 @@ export default {
 		AvailabilityOfCarAnswer: '',
 		usersName: [],
 		scheduleId: '',
-		member: '',
 		questionnairesInfo: '',
 		AvailabilityOfCaddy: '',
 		throughOrLunch: '',

@@ -438,9 +438,8 @@ export default {
 		const schedulesGet = await schedulesCollection.get()
 		this.questionnaireContent = schedulesGet.data()
 
-		// //[memberを表示するための処理]
-		const membersArray = JSON.parse(this.questionnaireContent.members)
-		membersArray.forEach(async doc => {
+		// // //[memberを表示するための処理]
+		this.questionnaireContent.members.forEach(async doc => {
 			const userRef = firebase.firestore().collection("users").doc(doc)
 			const userGet = await userRef.get()
 			const userData = userGet.data()
@@ -468,7 +467,6 @@ export default {
 			{value: 'no', text: "×"},
 		],
 		scheduleId: '',
-		member: '',
 		questionnairesId: '',
 		AvailabilityOfCaddy: '',
 		throughOrLunch: '',

@@ -261,19 +261,20 @@ export default {
 			const userGet = await userRef.get()
 			this.userData = userGet.data()
 
+			//questionnairesに新規ID＆新規フィールドを追加する処理
 			const questionnairesRef = firebase.firestore().collection("questionnaires")
 				const result1 = await questionnairesRef.add({
 					active: this.active,
 					answered: this.answered,
 					room_id: this.room_id,
 					user_id: this.user_id,
-					users_id: JSON.stringify(this.members),
+					users_id: this.members,
 					DeadlineForResponse: this.deadLineDate,
 				})
 			this.questionnairesId = result1.id
 
 			//roomsのドキュメントIDを作成
-			//フィールドの値には選択したユーザーのIDも含め、users_idとして追加
+			//フィールドの値には選択したユーザーのIDも含め、members_idとして追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
 				members_id: this.members,
 			})
@@ -293,7 +294,7 @@ export default {
 				await schedulesRef.add({
 				groupName: this.groupNameModel,
 				questionnairesId: this.questionnairesId,
-				members: JSON.stringify(this.members),
+				members: this.members,
 				price: this.priceModel,
 				playTime: this.playTimeModel,
 				selectPlace1: this.candidatePrefectureModel1,

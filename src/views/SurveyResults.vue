@@ -48,7 +48,6 @@ import firebase from "@/firebase/firebase"
 	export default {
 		async created() {
 			//[userName取得処理]
-			//※[questionnaireの中のフィールドの値に、アンケート作成者のuserIdを登録する処理を追加]
 			const userId = firebase.auth().currentUser.uid
 
 			//[questionnairesIDにログインユーザーが作成したアンケートがあるか探索する実装]
