@@ -9,8 +9,6 @@ import UserProfile from '../views/UserProfile.vue'
 import MyProfile from '../views/MyProfile.vue'
 import EditProfile from '../views/EditProfile.vue'
 import RoomCreateConfirmed from '../views/RoomCreateConfirmed.vue'
-import MemberConfirmed from '../views/MemberConfirmed.vue'
-import RoomJoinConfirmed from '../views/RoomJoinConfirmed.vue'
 import NewSurvey from '../views/NewSurvey.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
 import SurveyAnswer from '../views/SurveyAnswer.vue'
@@ -122,18 +120,6 @@ const routes = [
     path: '/roomCreateConfirmed',
     name: 'RoomCreateConfirmed',
     component: RoomCreateConfirmed,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/memberConfirmed',
-    name: 'MemberConfirmed',
-    component: MemberConfirmed,
-    meta: { requiresAuth: true }
-  },
-  {
-    path:'/roomJoinConfirmed',
-    name: 'RoomJoinConfirmed',
-    component: RoomJoinConfirmed,
     meta: { requiresAuth: true }
   },
 ]

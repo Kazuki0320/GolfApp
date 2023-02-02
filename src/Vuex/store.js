@@ -17,7 +17,7 @@ export default new Vuex.Store({
 		playTime: '',
 		candidatePrefecture1: '',
 		candidatePrefecture2: '',
-		proposedDate: new Date().toISOString().substr(0, 10),
+		proposedDate: [],
 		deadlineForResponse: new Date().toISOString().substr(0, 10),
 		isCars: false,
 		isCaddy: false,
