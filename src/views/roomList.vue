@@ -9,7 +9,7 @@
 
 		<v-spacer></v-spacer>
 
-		<router-link :to="{ path: '/roomCreateConfirmed', query: { user_id: this.user.id }}">
+		<router-link :to="{ path: '/roomCreate', query: { user_id: this.currentUserId }}">
 			<v-btn class="ma-2" color="primary" dark>ルーム作成</v-btn>
 		</router-link>
 	</v-app-bar>
@@ -43,15 +43,12 @@ export default {
 		DefaultSidebar
 	},
 	async mounted() {
-		//[ルーム作成ボタンを押した際、userIdを次の遷移先へ渡すためuserデータを取得]
-		const currentUserId = firebase.auth().currentUser.uid
-		const userRef = firebase.firestore().collection("users").doc(currentUserId)
-		const userGet = await userRef.get()
-		this.user = userGet.data()
+		//[ルーム作成ボタンを押した際、userIdを次の遷移先へ渡すための処理]
+		this.currentUserId = firebase.auth().currentUser.uid
 
 		//[ログインユーザーが招待されているグループの探索処理]
 		const roomRef = firebase.firestore().collection("rooms")
-		const memberGet = await roomRef.where("members_id", "array-contains",  currentUserId).get()
+		const memberGet = await roomRef.where("members_id", "array-contains",  this.currentUserId).get()
 		memberGet.forEach(doc => {
 			let data = {
 				id: doc.id
@@ -60,6 +57,7 @@ export default {
 		})
 	},
 	data: () => ({
+		currentUserId: '',
 		rooms:[],
 		user:'',
 		users:[],

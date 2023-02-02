@@ -210,13 +210,12 @@
 					</v-btn>
 					<v-btn
 						color="primary"
-						class="mr-4"
+						class="ma-2"
 						@click="confirmationValidate"
 						:disabled="!confirmationValid"
 					>
 						確認
 					</v-btn>
-
 				</v-col>
 			</v-row>
 		</v-form>

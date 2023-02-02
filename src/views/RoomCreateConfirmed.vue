@@ -4,112 +4,411 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>グループ作成</v-toolbar-title>
+		<v-toolbar-title>グループ作成確認</v-toolbar-title>
 		<v-spacer></v-spacer>
 	</v-app-bar>
+
 	<v-main>
-		<v-row>
-			<v-col cols="12">
+		<v-container class="grey lighten-5">
+			<v-row
+				no-gutters
+				style="flex-wrap: nowrap;"
+			>
 				<v-col
-					cols="12"
-					md="4"
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
 				>
-				<v-text-field
-					label="グループ名"
-					required
-				></v-text-field>
-				</v-col>
-				<v-col
-					cols="12"
-					md="4"
-				>
-				<v-text-field
-					label="ゴルフ場"
-					required
-				></v-text-field>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6">
-					<v-autocomplete
-						:items="friendsIdArray"
+					<v-card
+						class="pa-2"
 						outlined
-						dense
-						chips
-						small-chips
-						label="友人検索"
-						multiple
-					></v-autocomplete>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					:items="pref"
-					label="開催候補地1"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					class="d-flex"
-					cols="12"
-					sm="6"
-				>
-				<v-select
-					:items="pref"
-					label="開催候補地2"
-				>
-				</v-select>
-				</v-col>
-				<v-col
-					cols="12"
-					sm="6"
-					md="4"
-				>
-					<v-menu
-						v-model="menu"
-						:close-on-content-click="false"
-						:nudge-right="40"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
+						tile
 					>
-					<template v-slot:activator="{ on, attrs }">
-					<v-text-field
-						v-model="date"
-						readonly
-						v-bind="attrs"
-						v-on="on"
-						label="候補日"
-						required
-					></v-text-field>
-					</template>
-					<v-date-picker
-						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
-					</v-menu>
+					グループ作成内容
+					</v-card>
 				</v-col>
-				<v-col
-					cols="12"
-					md="4"
+			</v-row>
+			<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
 				>
-				<v-text-field
-					label="備考"
-					required
-				></v-text-field>
-				</v-col>
-				<v-btn color="secondary" to="/">一覧に戻る</v-btn>
-				<router-link :to="{ path: '/memberConfirmed', query: { user_id: this.user_id} }">
-					<v-btn class="ma-2" color="primary" dark>確認</v-btn>
-				</router-link>
+				グループ名
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ groupNameModel }}
+				</v-card>
 			</v-col>
 		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+				v-for="userName in usersName"
+				:key="userName"
+				class="pa-2"
+				outlined
+				tile
+				>
+				メンバー
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+				v-for="userName in usersName"
+				:key="userName"
+				class="pa-2"
+				outlined
+				tile
+				>
+				{{ userName }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				価格
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ priceModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				スタート時間
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ playTimeModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				開催候補地1
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ prefModel1 }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				開催候補地2
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ prefModel2 }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				候補日
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ date }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				回答締切
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ deadLineDate }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				車の有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ AvailabilityOfCar }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				キャディの有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ AvailabilityOfCaddy }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				ランチの有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ throughOrLunch }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				備考
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ remarkModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		</v-container>
+
+	<v-container>
+		<v-layout wrap>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<v-btn color="secondary" :to="{ path: '/roomCreate', query: { user_id: this.user_id }}">一覧に戻る</v-btn>
+			</v-flex>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<v-btn
+				label="参加"
+				@click="onClick"
+				class="ma-2"
+				color="primary"
+				dark>グループ作成</v-btn>
+			</v-flex>
+		</v-layout>
+	</v-container>
 	</v-main>
 	</v-app>
 </template>
@@ -120,66 +419,206 @@ import firebase from "@/firebase/firebase"
 export default {
 	async created() {
 		this.user_id = this.$route.query.user_id;
-		const userRef = firebase.firestore().collection("users").doc(this.user_id)
-		const userDoc = await userRef.get()
-		this.user = userDoc.data()
+
+		// //車の有無を表示するための処理
+		this.AvailabilityOfCar = (this.carsModel ? "○" : "×")
+		if(this.AvailabilityOfCar === "○") {
+			this.carAnswer = true
+		}else {
+			this.carAnswer = false
+		}
+		// //スルーorランチ付きかを判断する処理
+		this.throughOrLunch = (this.lunchModel ? '○' : '×')
+		// //キャディの有無
+		this.AvailabilityOfCaddy = (this.caddy ? '○' : '×')
+
+		//状態管理から、受け取ってきたfriendsのデータのIDを取得するための処理
+		this.friends.forEach(friends => {
+			const friendId = friends.id
+			this.members.push(friendId)
+		})
+
+		//roomのフィールドに作成者＋メンバー含めたIDを持つ配列を作成
+		this.members.push(this.user_id)
+
+		//[memberを表示するための処理]
+		this.members.forEach(async doc => {
+			const userRef = firebase.firestore().collection("users").doc(doc)
+			const userGet = await userRef.get()
+			const userData = userGet.data()
+			const userNameData = userData.userName
+			this.usersName.push(userNameData)
+		})
 	},
 	data: () => ({
-		menu: false,
-		friendsIdArray: [],
-		date:new Date().toISOString().substr(0, 10),
-		user:'',
-		user_id: '',
-		users:[],
-		pref: [
-			'北海道',
-			'青森',
-			'岩手',
-			'宮城',
-			'秋田',
-			'山形',
-			'福島',
-			'茨城',
-			'栃木',
-			'群馬',
-			'埼玉',
-			'千葉',
-			'東京都',
-			'神奈川',
-			'新潟',
-			'富山',
-			'石川',
-			'福井',
-			'山梨',
-			'長野',
-			'岐阜',
-			'静岡',
-			'愛知',
-			'三重',
-			'滋賀',
-			'京都府',
-			'大阪府',
-			'兵庫',
-			'奈良',
-			'和歌山',
-			'鳥取',
-			'島根',
-			'岡山',
-			'広島',
-			'山口',
-			'徳島',
-			'香川',
-			'愛媛',
-			'高知',
-			'福岡',
-			'佐賀',
-			'長崎',
-			'熊本',
-			'大分',
-			'宮崎',
-			'鹿児島',
-			'沖縄',
-		]
+		members: [],
+		carAnswer: '',
+		usersName: [],
+		scheduleId: '',
+		questionnairesInfo: '',
+		AvailabilityOfCaddy: '',
+		throughOrLunch: '',
+		AvailabilityOfCar:'',
+		questionnaireContent: '',
+		room_id: '',
+		questionnairesId: '',
+		active: true,
+		answered: false,
 	}),
+	methods: {
+		async onClick() {
+			//userNameを取るために、userDataを取得
+			const userRef = firebase.firestore().collection("users").doc(this.user_id)
+			const userGet = await userRef.get()
+			this.userData = userGet.data()
+
+			//questionnairesに新規ID＆新規フィールドを追加する処理
+			const questionnairesRef = firebase.firestore().collection("questionnaires")
+				const result = await questionnairesRef.add({
+					active: this.active,
+					answered: this.answered,
+					room_id: this.room_id,
+					user_id: this.user_id,
+					users_id: this.members,
+					DeadlineForResponse: this.deadLineDate,
+				})
+			this.questionnairesId = result.id
+
+			//roomsのドキュメントIDを作成
+			//フィールドの値には選択したユーザーのIDも含め、members_idとして追加
+			const roomRef = await firebase.firestore().collection("rooms").add({
+				members_id: this.members,
+			})
+
+			//roomsのドキュメントIDの中にサブコレクションmessageを追加
+			const roomId = firebase.firestore().collection("rooms").doc(roomRef.id)
+			const messageAdd = await roomId.collection("messages").add({
+				message: this.groupNameModel,
+				name: this.userData.userName,
+				questionnairesId: this.questionnairesId,
+				//後から、photoURLは追加すると思うから、一旦残し
+				// photoURL: this.auth.photoURL,
+				createdAt: firebase.firestore.Timestamp.now()
+			})
+
+			const schedulesRef = firebase.firestore().collection("schedules")
+				await schedulesRef.add({
+				groupName: this.groupNameModel,
+				questionnairesId: this.questionnairesId,
+				members: this.members,
+				price: this.priceModel,
+				playTime: this.playTimeModel,
+				selectPlace1: this.prefModel1,
+				selectPlace2: this.prefModel2,
+				proposedDate: this.date,
+				AvailabilityOfCar: this.carsModel,
+				throughOrLunch: this.lunchModel,
+				AvailabilityOfCaddy: this.caddy,
+				remark: this.remarkModel,
+			})
+			this.$router.push('/')
+		}
+	},
+	computed: {
+		groupNameModel: {
+			get() {
+				return this.$store.getters.groupName;
+			},
+			set(value) {
+				this.$store.dispatch("updateGroupName", value)
+			}
+		},
+		friends: {
+			get() {
+				return this.$store.getters.friends;
+			},
+			set(value) {
+				this.$store.dispatch("updateFriends", value)
+			}
+		},
+		priceModel: {
+			get() {
+				return this.$store.getters.price
+			},
+			set(value) {
+				this.$store.dispatch("updatePrice", value)
+			}
+		},
+		playTimeModel: {
+			get() {
+				return this.$store.getters.playTime
+			},
+			set(value) {
+				this.$store.dispatch("updatePlayTime", value)
+			}
+		},
+		prefModel1: {
+			get() {
+				return this.$store.getters.candidatePrefecture1
+			},
+			set(value) {
+				this.$store.dispatch("updateCandidatePrefecture1", value)
+			}
+		},
+		prefModel2: {
+			get() {
+				return this.$store.getters.candidatePrefecture2
+			},
+			set(value) {
+				this.$store.dispatch("updateCandidatePrefecture2", value)
+			}
+		},
+		date: {
+			get() {
+				return this.$store.getters.proposedDate
+			},
+			set(value) {
+				this.$store.dispatch("updateDate", value)
+			}
+		},
+		deadLineDate: {
+			get() {
+				return this.$store.getters.deadlineForResponse
+			},
+			set(value) {
+				this.$store.dispatch("updateDeadLineDate", value)
+			}
+		},
+		carsModel: {
+			get() {
+				return this.$store.getters.isCarsModel
+			},
+			set(value) {
+				this.$store.dispatch("updateIsCars", value)
+			}
+		},
+		caddy: {
+			get() {
+				return this.$store.getters.isCaddyModel
+			},
+			set(value) {
+				this.$store.dispatch("updateIsCaddy", value)
+			}
+		},
+		lunchModel: {
+			get() {
+				return this.$store.getters.isLunchModel
+			},
+			set(value) {
+				this.$store.dispatch("updateIsLunch", value)
+			}
+		},
+		remarkModel: {
+			get() {
+				return this.$store.getters.remarkModel
+			},
+			set(value) {
+				this.$store.dispatch("updateRemark", value)
+			}
+		},
+		isValid() {
+			return this.confirmationValid;
+		}
+	},
 }
 </script>
