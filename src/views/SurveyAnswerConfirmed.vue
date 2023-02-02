@@ -498,13 +498,13 @@ export default {
 		const schedulesRef = firebase.firestore().collection("schedules")
 		const schedulesQuestionnaireId = await schedulesRef.where("questionnairesId", "==", roomData.questionnairesId).get()
 		this.scheduleId = schedulesQuestionnaireId.docs[0]
+
 		const schedulesCollection = firebase.firestore().collection("schedules").doc(this.scheduleId.id)
 		const schedulesGet = await schedulesCollection.get()
 		this.questionnaireContent = schedulesGet.data()
 
 		//[memberを表示するための処理]
-		const memberArray = JSON.parse(this.questionnaireContent.members)
-		memberArray.forEach(async doc => {
+		this.questionnaireContent.members.forEach(async doc => {
 			const userRef = firebase.firestore().collection("users").doc(doc)
 			const userGet = await userRef.get()
 			const userData = userGet.data()
@@ -514,10 +514,13 @@ export default {
 
 		//車の有無を表示するための処理
 		this.AvailabilityOfCar = (this.questionnaireContent.AvailabilityOfCar ? '有' : '無')
+
 		//スルーorランチ付きかを判断する処理
 		this.throughOrLunch = (this.questionnaireContent.throughOrLunch ? '昼付き' : 'スルー')
+
 		//キャディの有無
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
+		
 		//車出しが可能かどうかの処理
 		this.AvailabilityOfCarAnswer = (this.isCarAnswerModel ? "○" : "×")
 		if(this.AvailabilityOfCarAnswer === "○") {
@@ -546,7 +549,6 @@ export default {
 		AvailabilityOfCarAnswer: '',
 		usersName: [],
 		scheduleId: '',
-		member: '',
 		questionnairesInfo: '',
 		AvailabilityOfCaddy: '',
 		throughOrLunch: '',

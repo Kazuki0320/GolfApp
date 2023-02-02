@@ -228,15 +228,16 @@ import firebase from "@/firebase/firebase"
 
 export default {
 	async created() {
+		// ログインユーザーのIDを取得する処理
 		this.user_id = this.$route.query.user_id;
+		//ログインユーザーの情報をfirebaseから取得する処理
 		const userRef = firebase.firestore().collection("users").doc(this.user_id)
 		const userDoc = await userRef.get()
 		this.user = userDoc.data()
-
 		if (userDoc.get("friends") === undefined) return
-		const friendsIdArray = JSON.parse(userDoc.get("friends"))
-		if (friendsIdArray === undefined) return
-		friendsIdArray.forEach(async (friendId) => {
+
+		//フレンド追加してるユーザーのIDを取得して、データを取得する処理
+		this.user.friends.forEach(async (friendId) => {
 			const friendRef = firebase.firestore().collection("users").doc(friendId)
 			const friendDoc = await friendRef.get()
 			const friendGetName = friendDoc.get('userName')
@@ -246,11 +247,9 @@ export default {
 			}
 			this.friendNameList.push(friend)
 		});
-
 	},
 	data: () => ({
 		friendNameList: [],
-		friendsId: [],
 		users:[],
 		user_id: '',
 		user:'',

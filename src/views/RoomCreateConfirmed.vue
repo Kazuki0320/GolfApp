@@ -409,7 +409,6 @@
 			</v-flex>
 		</v-layout>
 	</v-container>
-
 	</v-main>
 	</v-app>
 </template>
