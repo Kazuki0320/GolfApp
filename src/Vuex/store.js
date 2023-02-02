@@ -19,9 +19,9 @@ export default new Vuex.Store({
 		candidatePrefecture2: '',
 		proposedDate: new Date().toISOString().substr(0, 10),
 		deadlineForResponse: new Date().toISOString().substr(0, 10),
-		isCars: false,
-		isCaddy: false,
-		isLunch: false,
+		isCars: '',
+		isCaddy: '',
+		isLunch: '',
 		remark: '',
 
 		attendanceAnswer: '',
