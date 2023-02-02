@@ -48,7 +48,6 @@ import firebase from "@/firebase/firebase"
 	export default {
 		async created() {
 			//[userName取得処理]
-			//※[questionnaireの中のフィールドの値に、アンケート作成者のuserIdを登録する処理を追加]
 			const userId = firebase.auth().currentUser.uid
 
 			//[questionnairesIDにログインユーザーが作成したアンケートがあるか探索する実装]
@@ -69,6 +68,7 @@ import firebase from "@/firebase/firebase"
 			this.questionnairesId.forEach(async doc => {
 				const schedulesRef = firebase.firestore().collection("schedules")
 				const schedulesGet = await schedulesRef.where("questionnairesId", "==", doc).get()
+				
 				schedulesGet.forEach(async doc => {
 					this.schedulesId = doc.id
 					const schedulesGet = await schedulesRef.doc(doc.id).get()

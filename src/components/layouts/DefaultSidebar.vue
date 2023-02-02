@@ -91,9 +91,6 @@ export default {
 				//↓コンフリクトが起きるかも？currentUserIdで比べるのが正解
 				if(currentUserId === data.id) {
 					this.user = data
-				}else{
-					//消したらエラーになるかも？
-					// console.log("success")
 				}
 			})
 
@@ -106,7 +103,7 @@ export default {
 		drawer: null,
 		links: [
 			['mdi-door-open', 'ルーム', '/'],
-			['mdi-account-multiple', 'ユーザー', '/user'],
+			['mdi-account-multiple', 'フレンド', '/user'],
 		],
 		user: '',
 		userInfo: '',
