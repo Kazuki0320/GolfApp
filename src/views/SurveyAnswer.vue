@@ -48,13 +48,15 @@
 				cols="1"
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
+				v-for=" proposedDate in questionnaireContent.proposedDate "
+				:key="proposedDate"
 			>
 				<v-card
 					class="pa-2"
 					outlined
 					tile
 				>
-				{{ questionnaireContent.proposedDate}}
+				{{ proposedDate }}
 				</v-card>
 			</v-col>
 		</v-row>
@@ -353,7 +355,21 @@
 				</v-card>
 			</v-col>
 		</v-row>
-		<v-row
+		<v-col
+			cols="1"
+			style="min-width: 100px; max-width: 100%;"
+			class="flex-grow-1 flex-shrink-0"
+			v-for=" proposedDate in questionnaireContent.proposedDate "
+			:key="proposedDate"
+		>
+			<v-card
+				class="pa-2"
+				outlined
+				tile
+			>
+			{{ proposedDate }}
+			</v-card>
+			<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
 		>
@@ -395,13 +411,14 @@
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
 			>
-			<v-textarea
+			<!-- <v-textarea
 				label="備考"
 				v-model="remarkAnswerModel"
 				clearable>
-			</v-textarea>
+			</v-textarea> -->
 			</v-col>
 		</v-row>
+		</v-col>
 	</v-container>
 
 	<v-btn color="secondary" to="/">一覧に戻る</v-btn>
@@ -456,6 +473,7 @@ export default {
 
 	},
 	data: () => ({
+		attendanceAnswerArray: [],
 		usersName: [],
 		AvailabilityOfCarItems: [
 			{value: true, text: "○"},
@@ -491,14 +509,14 @@ export default {
 				this.$store.dispatch("updateIsCarAnswer", value)
 			}
 		},
-		remarkAnswerModel: {
-			get() {
-				return this.$store.getters.remarkAnswer;
-			},
-			set(value) {
-				this.$store.dispatch("updateRemarkAnswer", value)
-			}
-		}
+		// remarkAnswerModel: {
+		// 	get() {
+		// 		return this.$store.getters.remarkAnswer;
+		// 	},
+		// 	set(value) {
+		// 		this.$store.dispatch("updateRemarkAnswer", value)
+		// 	}
+		// }
 	}
 }
 </script>

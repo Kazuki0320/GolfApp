@@ -48,13 +48,15 @@
 				cols="1"
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
+				v-for=" proposedDate in date"
+				:key="proposedDate"
 			>
 				<v-card
 					class="pa-2"
 					outlined
 					tile
 				>
-				{{ questionnaireContent.proposedDate}}
+				{{ proposedDate }}
 				</v-card>
 			</v-col>
 		</v-row>
@@ -555,6 +557,7 @@ export default {
 		AvailabilityOfCar:'',
 		questionnaireContent: '',
 		roomId: '',
+		date: '',
 	}),
 	methods: {
 		async participationClick() {

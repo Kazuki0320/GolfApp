@@ -8,6 +8,7 @@ import UsersList from '../views/UsersList.vue'
 import UserProfile from '../views/UserProfile.vue'
 import MyProfile from '../views/MyProfile.vue'
 import EditProfile from '../views/EditProfile.vue'
+import RoomCreate from '../views/RoomCreate.vue'
 import RoomCreateConfirmed from '../views/RoomCreateConfirmed.vue'
 import NewSurvey from '../views/NewSurvey.vue'
 import SurveyConfirmed from '../views/SurveyConfirmed.vue'
@@ -114,6 +115,12 @@ const routes = [
     path: '/editProfile',
     name: 'EditProfile',
     component: EditProfile,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/roomCreate',
+    name: 'RoomCreate',
+    component: RoomCreate,
     meta: { requiresAuth: true }
   },
   {

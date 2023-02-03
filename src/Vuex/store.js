@@ -10,7 +10,6 @@ export default new Vuex.Store({
 		// questionnaire: {},
 		// questionnaireAnswer: {},
 		//-----------------------------------
-
 		groupName: '',
 		friends: [],
 		price: '',
@@ -19,15 +18,18 @@ export default new Vuex.Store({
 		candidatePrefecture2: '',
 		proposedDate: [],
 		deadlineForResponse: new Date().toISOString().substr(0, 10),
-		isCars: false,
-		isCaddy: false,
-		isLunch: false,
+		isCars: '',
+		isCaddy: '',
+		isLunch: '',
 		remark: '',
 
-		attendanceAnswer: '',
-		isCarAnswer: '',
-		remarkAnswer: '',
+		attendanceAnswer: [],
+		isCarAnswer: [],
+		// remarkAnswer: [],
 	},
+	// state: {
+		
+	// },
 	getters: {
 		//[リファクタ用]
 		//-----------------------------------
@@ -49,7 +51,7 @@ export default new Vuex.Store({
 
 		attendanceAnswer: state => state.attendanceAnswer,
 		isCarAnswer: state => state.isCarAnswer,
-		remarkAnswer: state => state.remarkAnswer,
+		// remarkAnswer: state => state.remarkAnswer,
 	},
 
 	//[ハードコード用]
@@ -107,14 +109,14 @@ export default new Vuex.Store({
 		},
 
 		updateAttendanceAnswer(state, newAttendanceAnswer) {
-			state.attendanceAnswer = newAttendanceAnswer
+			state.attendanceAnswer.push(newAttendanceAnswer)
 		},
 		updateIsCarAnswer(state, newIsCarAnswer) {
-			state.isCarAnswer = newIsCarAnswer
+			state.isCarAnswer.push(newIsCarAnswer)
 		},
-		updateRemarkAnswer(state, newRemarkAnswer) {
-			state.remarkAnswer = newRemarkAnswer
-		},
+		// updateRemarkAnswer(state, newRemarkAnswer) {
+		// 	state.remarkAnswer.push(newRemarkAnswer)
+		// },
 	},
 
 	//[ハードコード用]
@@ -188,11 +190,8 @@ export default new Vuex.Store({
 		updateIsCarAnswer({commit}, newIsCarAnswer) {
 			commit("updateIsCarAnswer", newIsCarAnswer)
 		},
-		updateIsCaddyAnswer({commit}, newIsCaddyAnswer) {
-			commit("updateIsCaddyAnswer", newIsCaddyAnswer)
-		},
-		updateRemarkAnswer({commit}, newRemarkAnswer) {
-			commit("updateRemarkAnswer", newRemarkAnswer)
-		},
+		// updateRemarkAnswer({commit}, newRemarkAnswer) {
+		// 	commit("updateRemarkAnswer", newRemarkAnswer)
+		// },
 	}
 });
