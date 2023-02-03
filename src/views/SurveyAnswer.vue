@@ -402,7 +402,7 @@
 			</v-select>
 			</v-col>
 		</v-row>
-		<v-row
+		<!-- <v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
 		>
@@ -411,13 +411,13 @@
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
 			>
-			<!-- <v-textarea
+			<v-textarea
 				label="備考"
-				v-model="remarkAnswerModel"
+				v-model="text"
 				clearable>
-			</v-textarea> -->
+			</v-textarea>
 			</v-col>
-		</v-row>
+		</v-row> -->
 		</v-col>
 	</v-container>
 
@@ -464,16 +464,21 @@ export default {
 			this.usersName.push(userNameData)
 		})
 
-		// //車の有無を表示するための処理
+		//車の有無を表示するための処理
 		this.AvailabilityOfCar = (this.questionnaireContent.AvailabilityOfCar ? '有' : '無')
-		// //スルーorランチ付きかを判断する処理
+		//スルーorランチ付きかを判断する処理
 		this.throughOrLunch = (this.questionnaireContent.throughOrLunch ? '昼付き' : 'スルー')
-		// //キャディの有無
+		//キャディの有無
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
+		
+		// this.remarkAnswerModel = {
+		// 	text: this.text
+		// }
 
+		// console.log("text", this.text)
 	},
 	data: () => ({
-		attendanceAnswerArray: [],
+		text: '',
 		usersName: [],
 		AvailabilityOfCarItems: [
 			{value: true, text: "○"},
@@ -495,7 +500,17 @@ export default {
 	computed: {
 		attendanceAnswerModel: {
 			get() {
-				return this.$store.getters.attendanceAnswer
+				// //状態管理のgettersから、返ってきた値を記号に変換する処理
+				return this.$store.getters.attendanceAnswer.forEach(value => {
+					if(value === 'yes') {
+						'○'
+					} else if(value === 'fair') {
+						'△'
+					} else {
+						'×'
+					}
+				})
+
 			},
 			set(value) {
 				this.$store.dispatch("updateAttendanceAnswer", value)
@@ -503,7 +518,14 @@ export default {
 		},
 		isCarAnswerModel: {
 			get() {
-				return this.$store.getters.isCarAnswer;
+				// //状態管理のgettersから、返ってきた値を記号に変換する処理
+				return this.$store.getters.isCarAnswer.forEach(value => {
+					if(value === true) {
+						'○'
+					} else {
+						'×'
+					}
+				})
 			},
 			set(value) {
 				this.$store.dispatch("updateIsCarAnswer", value)
@@ -511,10 +533,13 @@ export default {
 		},
 		// remarkAnswerModel: {
 		// 	get() {
+		// 		console.log(this.$store.getters.remarkAnswer)
+
 		// 		return this.$store.getters.remarkAnswer;
 		// 	},
 		// 	set(value) {
-		// 		this.$store.dispatch("updateRemarkAnswer", value)
+		// 		console.log(value)
+		// 		// this.$store.dispatch("updateRemarkAnswer", value)
 		// 	}
 		// }
 	}

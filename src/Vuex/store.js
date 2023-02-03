@@ -27,9 +27,6 @@ export default new Vuex.Store({
 		isCarAnswer: [],
 		// remarkAnswer: [],
 	},
-	// state: {
-		
-	// },
 	getters: {
 		//[リファクタ用]
 		//-----------------------------------
