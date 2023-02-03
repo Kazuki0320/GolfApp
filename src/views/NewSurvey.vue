@@ -1,33 +1,64 @@
 <template>
 	<v-app id="inspire">
-	<v-app-bar
+		<v-app-bar
 		app
 	>
-		<v-toolbar-title>アンケート作成</v-toolbar-title>
+	<v-toolbar-title>アンケート作成</v-toolbar-title>
 	</v-app-bar>
-	<div style="padding: 0.5%">
-		<v-form
-			ref="form"
-			v-model="confirmationValid"
-			lazy-validation
-			@input="updateConfirmationValid"
-		>
-			<v-col
-				cols="12"
-				md="4"
+		<v-main>
+			<v-container class="grey lighten-5">
+			<v-row
+				no-gutters
+				style="flex-wrap: nowrap;"
 			>
-				<v-text-field
-					v-model="groupNameModel"
-					label="グループ名"
-					:rules="groupNameRules"
-					:counter="30"
-					clearable
-				></v-text-field>
-			</v-col>
-			<v-col
-			class="d-flex"
-			cols="12"
-			sm="6">
+				<v-col
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
+				>
+					<v-card
+						class="pa-2"
+						outlined
+						tile
+					>
+					グループ作成内容
+					</v-card>
+				</v-col>
+			</v-row>
+			<v-container class="grey lighten-5">
+			<v-form
+				ref="form"
+				v-model="confirmationValid"
+				lazy-validation
+				@input="updateConfirmationValid"
+			>
+			<v-row
+				no-gutters
+				style="flex-wrap: nowrap;"
+			>
+				<v-col
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
+				>
+					<v-text-field
+						v-model="groupNameModel"
+						label="グループ名"
+						:rules="groupNameRules"
+						:counter="30"
+						clearable
+					></v-text-field>
+				</v-col>
+			</v-row>
+			<v-row
+				no-gutters
+				style="flex-wrap: nowrap;"
+			>
+				<v-col
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
+				>
 				<v-autocomplete
 					item-text="name"
 					:items="friendNameList"
@@ -94,36 +125,41 @@
 					>
 					</v-select>
 					</v-col>
+					
 					<v-col
 						cols="12"
 						sm="6"
 						md="4"
 					>
-						<v-menu
-							v-model="menu"
-							:close-on-content-click="false"
-							:nudge-right="40"
-							transition="scale-transition"
-							offset-y
-							min-width="auto"
-						>
-							<template v-slot:activator="{ on, attrs }">
-								<v-text-field
-									v-model="date"
-									prepend-icon="mdi-calendar"
-									readonly
-									v-bind="attrs"
-									v-on="on"
-									label="候補日"
-								></v-text-field>
-							</template>
-							<v-date-picker
+					<v-menu
+						v-model="menu"
+						:close-on-content-click="false"
+						:nudge-right="40"
+						transition="scale-transition"
+						offset-y
+						min-width="auto"
+					>
+						<template v-slot:activator="{ on, attrs }">
+							<v-combobox
 								v-model="date"
-								@input="menu = false"
-								locale="jp-ja"
-								:day-format="date => new Date(date).getDate()">
-							</v-date-picker>
-						</v-menu>
+								multiple
+								chips
+								small-chips
+								label="候補日"
+								prepend-icon="mdi-calendar"
+								readonly
+								v-bind="attrs"
+								v-on="on"
+							></v-combobox>
+						</template>
+						<v-date-picker
+							v-model="date"
+							locale="jp-ja"
+							multiple
+							:day-format="date => new Date(date).getDate()">
+						>
+						</v-date-picker>
+					</v-menu>
 					</v-col>
 
 					<v-col
@@ -210,12 +246,13 @@
 					</v-btn>
 					<v-btn
 						color="primary"
-						class="ma-2"
+						class="mr-4"
 						@click="confirmationValidate"
 						:disabled="!confirmationValid"
 					>
 						確認
 					</v-btn>
+
 				</v-col>
 			</v-row>
 		</v-form>
@@ -249,6 +286,18 @@ export default {
 		});
 	},
 	data: () => ({
+		AvailabilityOfCarItems: [
+			{value: true, text: "○"},
+			{value: false, text: "×"},
+		],
+		AvailabilityOfCaddyItems: [
+			{value: true, text: "○"},
+			{value: false, text: "×"},
+		],
+		throughOrLunchItems: [
+			{value: true, text: "○"},
+			{value: false, text: "×"},
+		],
 		friendNameList: [],
 		users:[],
 		user_id: '',
