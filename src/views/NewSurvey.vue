@@ -167,9 +167,10 @@
 				<template v-slot:activator="{ on, attrs }">
 					<v-combobox
 						v-model="date"
-						multiple
+						multiple="candidateRules"
 						chips
 						small-chips
+						:counter="3"
 						label="候補日"
 						prepend-icon="mdi-calendar"
 						readonly
@@ -583,6 +584,11 @@ export default {
 		},
 		updateConfirmationValid() {
 			this.confirmationValid = !!this.$refs.form?.validate()
+		},
+		candidateRules (value) {
+			if(value.index === 2) {
+				return value
+			}
 		}
 	},
 }
