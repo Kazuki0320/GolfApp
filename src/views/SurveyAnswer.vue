@@ -413,7 +413,8 @@
 			>
 			<v-textarea
 				label="備考"
-				v-model="text"
+				autocomplete
+				v-model="remarkAnswerModel"
 				clearable>
 			</v-textarea>
 			</v-col>
@@ -470,15 +471,10 @@ export default {
 		this.throughOrLunch = (this.questionnaireContent.throughOrLunch ? '昼付き' : 'スルー')
 		//キャディの有無
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
-		
-		// this.remarkAnswerModel = {
-		// 	text: this.text
-		// }
 
-		// console.log("text", this.text)
 	},
 	data: () => ({
-		text: '',
+		// text: '',
 		usersName: [],
 		AvailabilityOfCarItems: [
 			{value: true, text: "○"},
@@ -531,17 +527,16 @@ export default {
 				this.$store.dispatch("updateIsCarAnswer", value)
 			}
 		},
-		// remarkAnswerModel: {
-		// 	get() {
-		// 		console.log(this.$store.getters.remarkAnswer)
+		remarkAnswerModel: {
+			get() {
+				console.log(this.$store.getters.remarkAnswer)
 
-		// 		return this.$store.getters.remarkAnswer;
-		// 	},
-		// 	set(value) {
-		// 		console.log(value)
-		// 		// this.$store.dispatch("updateRemarkAnswer", value)
-		// 	}
-		// }
+				return this.$store.getters.remarkAnswer;
+			},
+			set(value) {
+				this.$store.dispatch("updateRemarkAnswer", value)
+			}
+		}
 	}
 }
 </script>

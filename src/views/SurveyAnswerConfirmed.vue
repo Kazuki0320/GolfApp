@@ -48,7 +48,7 @@
 				cols="1"
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
-				v-for=" proposedDate in date"
+				v-for=" proposedDate in questionnaireContent.proposedDate "
 				:key="proposedDate"
 			>
 				<v-card
@@ -336,7 +336,7 @@
 		</v-row>
 	</v-container>
 
-	<v-container>
+	<v-container class="grey lighten-5">
 		<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
@@ -355,13 +355,33 @@
 				</v-card>
 			</v-col>
 		</v-row>
+
 		<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
 		>
+		<v-col
+			cols="1"
+			style="min-width: 100px; max-width: 100%;"
+			class="flex-grow-1 flex-shrink-0"
+			v-for="index in surveyAnswer"
+			:key="index.index_id"
+		>
+			<v-card
+				class="pa-2"
+				outlined
+				tile
+			>
+				{{ index.date }}
+			</v-card>
+			<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+			>
 			<v-col
-				cols="2"
-				class="flex-grow-0 flex-shrink-0"
+			cols="1"
+			style="min-width: 100px; max-width: 100%;"
+			class="flex-grow-1 flex-shrink-0"
 			>
 				<v-card
 					class="pa-2"
@@ -372,50 +392,55 @@
 				</v-card>
 			</v-col>
 			<v-col
-				cols="1"
-				style="min-width: 100px; max-width: 100%;"
-				class="flex-grow-1 flex-shrink-0"
-			>
+			cols="1"
+			style="min-width: 100px; max-width: 100%;"
+			class="flex-grow-1 flex-shrink-0"
+			>			
 				<v-card
 					class="pa-2"
 					outlined
 					tile
 				>
-				{{ attendance }}
+					{{ index.attendance }}
 				</v-card>
 			</v-col>
-		</v-row>
-		<v-row
+			</v-row>
+			<v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
-		>
-			<v-col
-				cols="2"
-				class="flex-grow-0 flex-shrink-0"
 			>
-				<v-card
-					class="pa-2"
-					outlined
-					tile
-				>
-				車の有無
-				</v-card>
-			</v-col>
-			<v-col
+				<v-col
 				cols="1"
 				style="min-width: 100px; max-width: 100%;"
 				class="flex-grow-1 flex-shrink-0"
-			>
-				<v-card
-					class="pa-2"
-					outlined
-					tile
+				>	
+					<v-card
+						class="pa-2"
+						outlined
+						tile
+					>
+					車の有無
+					</v-card>
+				</v-col>
+				<v-col
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
 				>
-				{{ AvailabilityOfCarAnswer }}
-				</v-card>
-			</v-col>
+					<v-card
+						class="pa-2"
+						outlined
+						tile
+					>
+						{{ index.carAnswer }}
+					</v-card>
+				</v-col>
+			</v-row>
+		</v-col>
 		</v-row>
-		<v-row
+
+		<!--[備考の状態管理でのデータ構造がよくわかんないため一旦保留]-->
+		<!-- <v-row
 			no-gutters
 			style="flex-wrap: nowrap;"
 		>
@@ -444,7 +469,8 @@
 			{{ remarkAnswerModel }}
 			</v-card>
 		</v-col>
-		</v-row>
+		</v-row> -->
+		<!-- </v-col> -->
 	</v-container>
 
 	<v-container>
@@ -455,21 +481,11 @@
 			<v-flex xs12 sm6 md4 text-center my-5>
 				<router-link to="/">
 				<v-btn
-				label="不参加"
-				@click="unParticipationClick"
-				class="ma-2"
-				color="secondary"
-				dark>不参加</v-btn>
-				</router-link>
-			</v-flex>
-			<v-flex xs12 sm6 md4 text-center my-5>
-				<router-link to="/">
-				<v-btn
 				label="参加"
-				@click="participationClick"
+				@click="onClick"
 				class="ma-2"
 				color="primary"
-				dark>参加</v-btn>
+				dark>回答</v-btn>
 				</router-link>
 			</v-flex>
 		</v-layout>
@@ -524,25 +540,44 @@ export default {
 		this.AvailabilityOfCaddy = (this.questionnaireContent.AvailabilityOfCaddy ? '有' : '無')
 		
 		//車出しが可能かどうかの処理
-		this.AvailabilityOfCarAnswer = (this.isCarAnswerModel ? "○" : "×")
-		if(this.AvailabilityOfCarAnswer === "○") {
-			this.carAnswer = true
-		}else {
-			this.carAnswer = false
-		}
+		this.isCarAnswerModel.forEach(text => {
+			if(text === true) {
+				this.carText = '○'
+			} else if (text === false) {
+				this.carText = '×'
+			}
+			this.carAnswerArray.push(this.carText)
+		})
 
-		//参加が可能かどうかの表示処理
-		if(this.attendanceAnswerModel === 'yes') {
-			this.attendance = "○"
-		} else if(this.attendanceAnswerModel === 'no') {
-			this.attendance = "×"
-		} else {
-			this.attendance = "△"
-		}
+		//参加可否の処理
+		this.attendanceAnswerModel.forEach(text => {
+			if(text === 'yes') {
+				this.attendanceText = '○'
+			} else if (text === 'no') {
+				this.attendanceText = '×'
+			}	else if (text === 'fair') {
+				this.attendanceText = '△'
+			}
+			this.attendanceArray.push(this.attendanceText)
+		})
 
+		//複数候補日・参加可否・車の有無のデータを日付ごとにまとめたオブジェクト
+		for(let i = 0; i < 3; i++) {
+			this.surveyAnswerData = {
+				date: this.questionnaireContent.proposedDate[i],
+				attendance: this.attendanceArray[i],
+				carAnswer: this.carAnswerArray[i],
+			}
+			this.surveyAnswer.push(this.surveyAnswerData)
+		}
 	},
 	data: () => ({
-		carAnswer: '',
+		surveyAnswer: [],
+		surveyAnswerData: '',
+		carAnswerArray: [],
+		carText: '',
+		attendanceArray: [],
+		attendanceText: '',
 		attendance: [
 			{value: 'yes', text: "○"},
 			{value: 'fair', text: "△"},
@@ -560,41 +595,31 @@ export default {
 		date: '',
 	}),
 	methods: {
-		async participationClick() {
+		async onClick() {
 			const answerRef = firebase.firestore().collection("answer")
 			const surveyAnswer = await answerRef.add({
 				schedule_id: this.scheduleId.id,
 				user_id: firebase.auth().currentUser.uid,
-				participationInGroup: true,
-                AvailabilityOfCar: this.carAnswer,
-                remark :this.remarkAnswerModel
+				surveyAnswers: this.surveyAnswer,
+                // remark :this.remarkAnswerModel
 			})
 			this.$router.push('/')
 		},
-		async unParticipationClick() {
-			const answerRef = firebase.firestore().collection("answer")
-			const surveyAnswer = await answerRef.add({
-				schedule_id: this.scheduleId.id,
-				user_id: firebase.auth().currentUser.uid,
-				participationInGroup: false,
-                AvailabilityOfCar: this.carAnswer,
-                remark :this.remarkAnswerModel
-			})
-			this.$router.push('/')
-		}
 	},
 	computed: {
 		attendanceAnswerModel: {
 			get() {
+				// //状態管理のgettersから、返ってきた値を記号に変換する処理
 				return this.$store.getters.attendanceAnswer
 			},
 			set(value) {
-				this.$store.dispatch("updateAttendanceAnswer1", value)
+				this.$store.dispatch("updateAttendanceAnswer", value)
 			}
 		},
 		isCarAnswerModel: {
 			get() {
-				return this.$store.getters.isCarAnswer;
+				// //状態管理のgettersから、返ってきた値を記号に変換する処理
+				return this.$store.getters.isCarAnswer
 			},
 			set(value) {
 				this.$store.dispatch("updateIsCarAnswer", value)
@@ -602,6 +627,8 @@ export default {
 		},
 		remarkAnswerModel: {
 			get() {
+				console.log(this.$store.getters.remarkAnswer)
+
 				return this.$store.getters.remarkAnswer;
 			},
 			set(value) {

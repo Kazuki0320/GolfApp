@@ -25,7 +25,7 @@ export default new Vuex.Store({
 
 		attendanceAnswer: [],
 		isCarAnswer: [],
-		// remarkAnswer: [],
+		// remarkAnswer: '',
 	},
 	getters: {
 		//[リファクタ用]
@@ -112,7 +112,7 @@ export default new Vuex.Store({
 			state.isCarAnswer.push(newIsCarAnswer)
 		},
 		// updateRemarkAnswer(state, newRemarkAnswer) {
-		// 	state.remarkAnswer.push(newRemarkAnswer)
+		// 	state.remarkAnswer = newRemarkAnswer
 		// },
 	},
 
