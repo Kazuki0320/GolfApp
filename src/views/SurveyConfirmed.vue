@@ -4,215 +4,412 @@
 		app
 		shrink-on-scroll
 	>
-		<v-toolbar-title>アンケート作成（メッセージ送信）</v-toolbar-title>
+		<v-toolbar-title>アンケート確認</v-toolbar-title>
 		<v-spacer></v-spacer>
 	</v-app-bar>
 	<v-main>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							グループ名
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					<td>{{ groupNameModel }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							メンバー
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr
-					v-for="(friend, index) in friends"
-					:key="`${friend.name}_${index}`">
-						<td>{{ friend.name }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							価格
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ priceModel }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							スタート時間
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ playTimeModel }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							開催候補地1
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ candidatePrefectureModel1 }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							開催候補地2
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ candidatePrefectureModel2 }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							候補日
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ date }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							回答締切
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ deadLineDate }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							車の有無
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ AvailabilityOfCar }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							スルーor昼付き
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ throughOrLunch }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							キャディの有無
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ AvailabilityOfCaddy }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-						<th class="text-center">
-							備考
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>{{ remarkModel }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-			<v-btn 
-				to="/newSurvey"
-				color="secondary">
-				一覧に戻る
-			</v-btn>
-			<v-btn 
-			@click="onClick"
-			class="ma-2"
-			color="primary"
-			dark
-			>メッセージ送信</v-btn>
+		<v-container class="grey lighten-5">
+			<v-row
+				no-gutters
+				style="flex-wrap: nowrap;"
+			>
+				<v-col
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
+				>
+					<v-card
+						class="pa-2"
+						outlined
+						tile
+					>
+					グループ作成内容
+					</v-card>
+				</v-col>
+			</v-row>
+			<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				グループ名
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ groupNameModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+				v-for="userName in usersName"
+				:key="userName"
+				class="pa-2"
+				outlined
+				tile
+				>
+				メンバー
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+				v-for="userName in usersName"
+				:key="userName"
+				class="pa-2"
+				outlined
+				tile
+				>
+				{{ userName }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				価格
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ priceModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				スタート時間
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ playTimeModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				開催候補地1
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ candidatePrefectureModel1 }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				開催候補地2
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ candidatePrefectureModel2 }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				候補日
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+				v-for=" proposedDate in date"
+				:key="proposedDate"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ proposedDate }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				回答締切
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ deadLineDate }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				車の有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ AvailabilityOfCar }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				キャディの有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ AvailabilityOfCaddy }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				ランチの有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ throughOrLunch }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				備考
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ remarkModel }}
+				</v-card>
+			</v-col>
+		</v-row>
+		</v-container>
+
+	<v-container>
+		<v-layout wrap>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<v-btn color="secondary" :to="{ path: '/roomCreate', query: { user_id: this.user_id }}">一覧に戻る</v-btn>
+			</v-flex>
+			<v-flex xs12 sm6 md4 text-center my-5>
+				<v-btn
+				label="参加"
+				@click="onClick"
+				class="ma-2"
+				color="primary"
+				dark>グループ作成</v-btn>
+			</v-flex>
+		</v-layout>
+	</v-container>
 	</v-main>
 	</v-app>
 </template>
@@ -224,35 +421,53 @@ export default {
 	async created() {
 		this.user_id = this.$route.query.user_id;
 
-		//車の有無を表示するための処理
-		this.AvailabilityOfCar = (this.carsModel ? '有' : '無')
-		//スルーorランチ付きかを判断する処理
-		this.throughOrLunch = (this.lunchModel ? '昼付き' : 'スルー')
-		//キャディの有無
-		this.AvailabilityOfCaddy = (this.caddyModel ? '有' : '無')
+		// //車の有無を表示するための処理
+		this.AvailabilityOfCar = (this.carsModel ? "○" : "×")
+		if(this.AvailabilityOfCar === "○") {
+			this.carAnswer = true
+		}else {
+			this.carAnswer = false
+		}
+		// //スルーorランチ付きかを判断する処理
+		this.throughOrLunch = (this.lunchModel ? '○' : '×')
+		// //キャディの有無
+		this.AvailabilityOfCaddy = (this.caddyModel ? '○' : '×')
 
 		//状態管理から、受け取ってきたfriendsのデータのIDを取得するための処理
 		this.friends.forEach(friends => {
 			const friendId = friends.id
 			this.members.push(friendId)
 		})
+
 		//roomのフィールドに作成者＋メンバー含めたIDを持つ配列を作成
 		this.members.push(this.user_id)
+
+		//[memberを表示するための処理]
+		this.members.forEach(async doc => {
+			const userRef = firebase.firestore().collection("users").doc(doc)
+			const userGet = await userRef.get()
+			const userData = userGet.data()
+			const userNameData = userData.userName
+			this.usersName.push(userNameData)
+		})
 	},
 	data: () => ({
 		userData: '',
 		user_id: '',
 		schedules: '',
 		friendsArray: [],
-		AvailabilityOfCar: null,
-		AvailabilityOfCaddy: null,
-		throughOrLunch: null,
+		AvailabilityOfCar: '',
+		AvailabilityOfCaddy: '',
+		throughOrLunch: '',
 		questionnairesId: '',
 		room_id: '',
 		active: true,
 		answered: false,
 		members: [],
 		rooms: [],
+		carAnswer: '',
+		usersName: [],
+		questionnaireContent: '',
 	}),
 	methods: {
 		async onClick() {

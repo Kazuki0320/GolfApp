@@ -22,7 +22,7 @@
 			<v-card>
 
 				<v-list two-line>
-				<div v-for="(data, index) in messages" :key="index">
+				<div v-for="(data, index) in message" :key="index">
 					<v-list-item>
 					<v-list-item-avatar color="grey darken-1">
 					</v-list-item-avatar>
@@ -100,7 +100,7 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 			//メッセージをfirestoreから取得する
 			const snapshot = await roomRef.collection("messages").orderBy("createdAt", "asc").get()
 			snapshot.forEach(doc => {
-				this.messages.push(doc.data())
+				this.message.push(doc.data())
 			})
 		},
 		mounted () {
@@ -108,7 +108,7 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 		},
 		data: () => ({
 			questionnairesData: '',
-			messages: [],
+			message: [],
 			body: "",
 			cards: ['Today'],
 			drawer: null,

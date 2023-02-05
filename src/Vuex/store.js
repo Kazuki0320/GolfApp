@@ -10,23 +10,22 @@ export default new Vuex.Store({
 		// questionnaire: {},
 		// questionnaireAnswer: {},
 		//-----------------------------------
-
 		groupName: '',
 		friends: [],
 		price: '',
 		playTime: '',
 		candidatePrefecture1: '',
 		candidatePrefecture2: '',
-		proposedDate: new Date().toISOString().substr(0, 10),
+		proposedDate: [],
 		deadlineForResponse: new Date().toISOString().substr(0, 10),
 		isCars: '',
 		isCaddy: '',
 		isLunch: '',
 		remark: '',
 
-		attendanceAnswer: '',
-		isCarAnswer: '',
-		remarkAnswer: '',
+		attendanceAnswer: [],
+		isCarAnswer: [],
+		// remarkAnswer: '',
 	},
 	getters: {
 		//[リファクタ用]
@@ -49,7 +48,7 @@ export default new Vuex.Store({
 
 		attendanceAnswer: state => state.attendanceAnswer,
 		isCarAnswer: state => state.isCarAnswer,
-		remarkAnswer: state => state.remarkAnswer,
+		// remarkAnswer: state => state.remarkAnswer,
 	},
 
 	//[ハードコード用]
@@ -107,14 +106,14 @@ export default new Vuex.Store({
 		},
 
 		updateAttendanceAnswer(state, newAttendanceAnswer) {
-			state.attendanceAnswer = newAttendanceAnswer
+			state.attendanceAnswer.push(newAttendanceAnswer)
 		},
 		updateIsCarAnswer(state, newIsCarAnswer) {
-			state.isCarAnswer = newIsCarAnswer
+			state.isCarAnswer.push(newIsCarAnswer)
 		},
-		updateRemarkAnswer(state, newRemarkAnswer) {
-			state.remarkAnswer = newRemarkAnswer
-		},
+		// updateRemarkAnswer(state, newRemarkAnswer) {
+		// 	state.remarkAnswer = newRemarkAnswer
+		// },
 	},
 
 	//[ハードコード用]
@@ -188,11 +187,8 @@ export default new Vuex.Store({
 		updateIsCarAnswer({commit}, newIsCarAnswer) {
 			commit("updateIsCarAnswer", newIsCarAnswer)
 		},
-		updateIsCaddyAnswer({commit}, newIsCaddyAnswer) {
-			commit("updateIsCaddyAnswer", newIsCaddyAnswer)
-		},
-		updateRemarkAnswer({commit}, newRemarkAnswer) {
-			commit("updateRemarkAnswer", newRemarkAnswer)
-		},
+		// updateRemarkAnswer({commit}, newRemarkAnswer) {
+		// 	commit("updateRemarkAnswer", newRemarkAnswer)
+		// },
 	}
 });
