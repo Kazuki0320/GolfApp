@@ -160,22 +160,27 @@
 					offset-y
 					min-width="auto"
 				>
-					<template v-slot:activator="{ on, attrs }">
-						<v-text-field
-							v-model="date"
-							prepend-icon="mdi-calendar"
-							readonly
-							v-bind="attrs"
-							v-on="on"
-							label="候補日"
-						></v-text-field>
-					</template>
-					<v-date-picker
+				<template v-slot:activator="{ on, attrs }">
+					<v-combobox
 						v-model="date"
-						@input="menu = false"
-						locale="jp-ja"
-						:day-format="date => new Date(date).getDate()">
-					</v-date-picker>
+						multiple
+						chips
+						small-chips
+						:counter="3"
+						label="候補日"
+						prepend-icon="mdi-calendar"
+						readonly
+						v-bind="attrs"
+						v-on="on"
+					></v-combobox>
+				</template>
+				<v-date-picker
+					v-model="date"
+					locale="jp-ja"
+					multiple
+					:day-format="date => new Date(date).getDate()">
+				>
+				</v-date-picker>
 				</v-menu>
 				</v-col>
 			</v-row>
