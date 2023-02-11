@@ -492,6 +492,7 @@ export default {
 			//フィールドの値には選択したユーザーのIDも含め、members_idとして追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
 				members_id: this.members,
+				createdAt: firebase.firestore.Timestamp.now()
 			})
 
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加

@@ -63,16 +63,17 @@
 			prepend-icon="mdi-comment"
 			auto-grow
 		></v-textarea>
+		<v-btn @click="clear">
+			クリア
+		</v-btn>
 		<v-btn
-			class="mr-4"
+			color="primary"
+			class="ma-2"
 			type="submit"
 			:disabled="invalid"
 			@click="submit"
 		>
-			submit
-		</v-btn>
-		<v-btn @click="clear">
-			clear
+			メッセージ送信
 		</v-btn>
 	</v-main>
 	</v-app>
@@ -98,9 +99,11 @@ import DefaultSidebar from '@/components/layouts/DefaultSidebar'
 			const questionnaires = questionnairesGet.data()
 
 			//メッセージをfirestoreから取得する
-			const snapshot = await roomRef.collection("messages").orderBy("createdAt", "asc").get()
-			snapshot.forEach(doc => {
-				this.message.push(doc.data())
+			roomRef.collection('messages').orderBy('createdAt', "asc")
+			.onSnapshot(snapshot => {
+				snapshot.docChanges().forEach(change => {
+					this.message.push(change.doc.data())
+				})
 			})
 		},
 		mounted () {
