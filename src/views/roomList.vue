@@ -52,16 +52,16 @@ export default {
 		const roomRef = firebase.firestore().collection("rooms").orderBy('createdAt', "desc")
 		const memberGet = await roomRef.where("members_id", "array-contains",  this.currentUserId).get()
 			memberGet.docChanges().forEach(change => {
-				if (this.rooms.length == 0) {
+				if (this.rooms.length === 0) {//1回目は必ずpush
 					this.rooms.push(change)
 				} else {
-					let flag = true
+					let existenceCheck = true
 					this.rooms.forEach(val =>{
 						if (change.doc.id === val.doc.id) {
-							flag = false
+							existenceCheck = false
 						}
 					})
-					if (flag) this.rooms.push(change)
+					if (existenceCheck) this.rooms.push(change)
 				}
 			})
 		})
