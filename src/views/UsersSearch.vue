@@ -81,12 +81,18 @@ export default {
 		errormessage: '',
 		userDoc: '',
 		userInfo: '',
+		friendId: '',
 	}),
 	methods: {
 		async search() {
-			const userRef = firebase.firestore().collection("users").doc(this.keyword)
-			const userDoc = await userRef.get()
-			this.user = userDoc.data()
+			const userRef = firebase.firestore().collection("users")
+			const userDoc =  await userRef.where("email", "==", this.keyword).get()
+			userDoc.forEach(async doc => {
+				this.friendId = doc.id
+				const userDoc = firebase.firestore().collection("users").doc(this.friendId)
+				const userGet = await userDoc.get()
+				this.user = userGet.data()
+			})
 
 			this.valid = !this.valid
 		},
@@ -98,24 +104,23 @@ export default {
 
 			// ログインユーザーがfriendsを持ってない場合の処理
 			if (this.userInfo.friends == undefined) {
-				this.friendsArray.push(this.keyword)
+				this.friendsArray.push(this.friendId)
 				this.userDoc.update({
 					friends: this.friendsArray
 				})
 			} else {
 				this.friendsArray = this.userInfo.friends
-				this.friendsArray.push(this.keyword)
+				this.friendsArray.push(this.friendId)
 				this.userDoc.update({
 					friends: this.friendsArray
 				})
 			}
-
 			this.$router.push('/user')
 		},
 	},
 	computed:	{
 		isValid () {
-			return !this.valid //this.userに値があるかどうかで、判定するのもアリ。
+			return !this.valid 
 		},
 		userId () {
 		return 	this.$route.query.user_id;
