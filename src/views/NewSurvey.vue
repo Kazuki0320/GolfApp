@@ -473,6 +473,9 @@ export default {
 			v => !!v || 'グループ名は必須です',
 			v => v?.length <= 30 || 'グループ名は30文字以内で入力してください',
 		],
+		candidateRules: [
+
+		],
 		remarkNameRules: [
 			v => v?.length <= 1000 || '備考は1000文字以内で入力してください',
 		],
@@ -584,11 +587,6 @@ export default {
 		},
 		updateConfirmationValid() {
 			this.confirmationValid = !!this.$refs.form?.validate()
-		},
-		candidateRules (value) {
-			if(value.index === 2) {
-				return value
-			}
 		}
 	},
 }

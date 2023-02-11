@@ -17,50 +17,85 @@
 		<template>
 		<v-container fluid>
 			<template>
-				<v-row>
-					<v-col
-						v-for="(userInfo, index) in usersInfo"
-						:key="`${userInfo.userName}_${index}`"
-					>
-					<v-col
-					v-for="(surveyResult, index) in surveyResultAnswer"
-						:key="`${surveyResult}_${index}`"
-						cols="12"
-						sm="6"
-						md="4"
-						lg="3"
-					>
-					<v-card>
-						<v-card-title class="subheading font-weight-bold">
-								{{ userInfo.userName }}
-							</v-card-title>
-							<v-list dense>
-								<v-list-item>
-									<v-list-item-content>参加可否:</v-list-item-content>
+				<v-col
+				v-for="(userData,index) in surveyResultAnswer"
+				:key="`${userData}_${index}`"
+				>
+				<v-card>
+					{{ userData.userName }}
+				<v-row
+				cols="12"
+				sm="6"
+				md="4"
+				lg="3">
+					<v-col>
+						<v-list dense>
+							<v-list-item>
+								<v-card>
+									<v-card-title class="subheading font-weight-bold">
+										{{ userData.surveyAnswers[0].date }}
+									</v-card-title>
+								<v-col>
 									<v-list-item-content class="align-end">
-										{{ participationInGroup }}
+										参加可否:{{ userData.surveyAnswers[0].attendance }}
 									</v-list-item-content>
-								</v-list-item>
-
-								<v-list-item>
-									<v-list-item-content>車出し:</v-list-item-content>
+								</v-col>
+								<v-col>
 									<v-list-item-content class="align-end">
-										{{ AvailabilityOfCar }}
+										車の有無:{{ userData.surveyAnswers[0].carAnswer }}
 									</v-list-item-content>
-								</v-list-item>
-
-								<v-list-item>
-									<v-list-item-content>備考:</v-list-item-content>
-									<v-list-item-content class="align-end">
-										{{ surveyResult.remark }}
-									</v-list-item-content>
-								</v-list-item>
-
-							</v-list>
-						</v-card>
+								</v-col>
+								</v-card>
+							</v-list-item>
+						</v-list>
 					</v-col>
-				</v-col>
+
+					<v-col>
+					<v-list dense>
+						<v-list-item>
+							<v-card>
+								<v-card-title class="subheading font-weight-bold">
+									{{ userData.surveyAnswers[1].date }}
+								</v-card-title>
+							<v-col>
+								<v-list-item-content class="align-end">
+									参加可否:{{ userData.surveyAnswers[1].attendance }}
+								</v-list-item-content>
+							</v-col>
+							<v-col>
+								<v-list-item-content class="align-end">
+									車の有無:{{ userData.surveyAnswers[1].carAnswer }}
+								</v-list-item-content>
+							</v-col>
+							</v-card>
+						</v-list-item>
+					</v-list>
+					</v-col>
+
+					<v-col>
+					<v-list dense>
+						<v-list-item>
+							<v-card>
+								<v-card-title class="subheading font-weight-bold">
+									{{ userData.surveyAnswers[2].date }}
+								</v-card-title>
+							<v-col>
+								<v-list-item-content class="align-end">
+									参加可否:{{ userData.surveyAnswers[2].attendance }}
+								</v-list-item-content>
+							</v-col>
+							<v-col>
+								<v-list-item-content class="align-end">
+									車の有無:{{ userData.surveyAnswers[2].carAnswer }}
+								</v-list-item-content>
+							</v-col>
+							</v-card>
+						</v-list-item>
+					</v-list>
+					</v-col>
 				</v-row>
+				</v-card>
+				</v-col>
 			</template>
 			</v-container>
 		</template>
@@ -98,17 +133,20 @@ import firebase from "@/firebase/firebase"
 				const answerRef = firebase.firestore().collection("answer").doc(doc)
 				const answerGet = await answerRef.get()
 				const answerData = answerGet.data()
-				this.surveyAnswer = answerData
-
-				let userData = {
-					userId:answerData.user_id
+				const surveyAnswer = answerData
+				let usersId = {
+					userId: answerData.user_id,
 				}
+
 				//[usersIdを取得して、各ユーザーの名前を表示させるための処理
-				const userDoc = firebase.firestore().collection("users").doc(userData.userId)
+				const userDoc = firebase.firestore().collection("users").doc(usersId.userId)
 				const userGet = await userDoc.get()
 				const user = userGet.data()
-				this.usersInfo.push(user)
-				this.surveyResultAnswer.push(answerData)
+				let userData = {
+					userName: user.userName,
+					surveyAnswers: surveyAnswer.surveyAnswers
+				}
+				this.surveyResultAnswer.push(userData)
 			})
 
 			//[schedulesの中から、questionnaireIdを探索してデータを取得]
@@ -130,6 +168,10 @@ import firebase from "@/firebase/firebase"
 
 			},
 		data: () => ({
+			usersName: [],
+			users: [],
+			userAnswer: [],
+			answerTest: [],
 			surveyAnswer: '',
 			participationInGroup: '',
 			AvailabilityOfCar: '',
