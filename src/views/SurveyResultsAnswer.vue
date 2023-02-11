@@ -198,6 +198,7 @@ import firebase from "@/firebase/firebase"
 			//roomsのドキュメントIDを作成し、フィールドの値を追加
 			const roomRef = await firebase.firestore().collection("rooms").add({
 				members_id: this.membersId,
+				createdAt: firebase.firestore.Timestamp.now(),
 			})
 
 			//roomsのドキュメントIDの中にサブコレクションmessageを追加
