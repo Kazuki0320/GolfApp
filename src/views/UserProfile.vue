@@ -9,46 +9,239 @@
 
 		<v-spacer></v-spacer>
 	</v-app-bar>
+
 	<v-main>
-		<!-- <v-simple-table
-		v-if="auth"
-		> -->
-		<v-simple-table>
-			<template v-slot:default>
-				<thead><!--基本はtableと組み合わせて、th/tr/tdなどを使う。th=table header tr=table row td=table data-->
-					<tr>
-					<th class="text-center">
-						ユーザーネーム
-					</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					<td>{{ user.userName }}</td>
-					<!--
-					・指定しているユーザーネームを出力したい
-					・ログインしてるユーザー情報は除外する
-					-->
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
-		<v-simple-table>
-			<template v-slot:default>
-				<thead>
-					<tr>
-					<th class="text-center">
-						メールアドレス
-					</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-					<td>{{ user.email }}</td>
-					</tr>
-				</tbody>
-			</template>
-		</v-simple-table>
+		<v-container class="grey lighten-5">
+			<v-row
+				no-gutters
+				style="flex-wrap: nowrap;"
+			>
+				<v-col
+					cols="1"
+					style="min-width: 100px; max-width: 100%;"
+					class="flex-grow-1 flex-shrink-0"
+				>
+					<v-card
+						class="pa-2"
+						outlined
+						tile
+					>
+					マイプロフィール
+					</v-card>
+				</v-col>
+			</v-row>
+			<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				ユーザー名
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ user.userName }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+				class="pa-2"
+				outlined
+				tile
+				>
+				メールアドレス
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+				class="pa-2"
+				outlined
+				tile
+				>
+				{{ user.email }}
+				</v-card>
+			</v-col>
+		</v-row>
+
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				年代
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ user.age }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				居住地
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ user.live }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				ゴルフ暦
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ user.golfPlayingHistory }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				車の有無
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ AvailabilityOfCar }}
+				</v-card>
+			</v-col>
+		</v-row>
+		<v-row
+			no-gutters
+			style="flex-wrap: nowrap;"
+		>
+			<v-col
+				cols="2"
+				class="flex-grow-0 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				自己紹介文
+				</v-card>
+			</v-col>
+			<v-col
+				cols="1"
+				style="min-width: 100px; max-width: 100%;"
+				class="flex-grow-1 flex-shrink-0"
+			>
+				<v-card
+					class="pa-2"
+					outlined
+					tile
+				>
+				{{ user.selfIntroductionText }}
+				</v-card>
+			</v-col>
+		</v-row>
+		</v-container>
 		<router-link to="/user">
 			<v-btn class="ma-2" color="primary" dark>戻る</v-btn>
 		</router-link>
@@ -68,60 +261,18 @@ export default {
 	async created() {
 		const userRef = firebase.firestore().collection("users").doc(this.friendId)
 		const userDoc = await userRef.get()
-		// console.log("userDoc call", userDoc);
 		const user = userDoc.data()
-		console.log("user", user);
 		this.user = user
-
-		// 	snapshot.forEach(doc => {
-		// 		console.log(doc.data())
-		// 		this.users.push(doc.data())
-		// 	// 	console.log("this.users call", this.users)
 	},
-	// async mounted() {
-	// 	this.auth = JSON.parse(sessionStorage.getItem('user'))//authをここで定義する必要があるのか？
-	// 	console.log("auth call", this.auth);
-	// 	this.email = this.auth.email
-	// 	this.displayName = this.auth.displayName
-
-		// userRef.collection('users').add({//←コメントアウトするとこ
-			// 	name: this.auth.user.displayName,
-			// 	email: this.auth.user.email,
-			// 	uid: this.auth.user.uid,
-			// 	refreshToken: this.auth.user.refreshToken
-			// })
-		
-		// const userDoc = await userRef.get()
-		// console.log("userDoc call", userDoc.data())
-	// },
 	data: () => ({
 		user: "",
 		userName: "",
 		email: "",
-		// userInfo: [{
-		// 	displayName: '',
-		// 	email: '',
-		// }]
 	}),
 	computed: {
 		friendId () {
 		return 	this.$route.query.friend_id;
 		},
 	},
-	// methods: {
-
-		// snapshot.docs.map(doc => {
-		// 	// const data = {
-		// 	// 	name: doc.data().name,
-		// 	// 	thumbnailUrl: doc.data().thumbnailUrl,
-		// 	// 	createAt: doc.data().createAt
-		// 	// }
-
-		// 	const data = {...doc.data()}
-		// 	data.id = doc.id
-		// 	console.log(data)
-		// 	this.rooms.push(data)
-		// })
-	// }
 }
 </script>
