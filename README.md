@@ -3,6 +3,8 @@
 
 *アンケート作成（メイン機能）*
  - アンケートを作成することで、各ユーザーに対して一斉送信できる。
+ ※10MB以上の動画を記載することができなかったので、分割してあります。他動画は、スクロールで確認お願いします。
+
  
 https://user-images.githubusercontent.com/107445735/216827294-a96d5751-35a9-4dc6-a3ff-bd6ca713873b.mov
 
@@ -40,12 +42,14 @@ https://user-images.githubusercontent.com/107445735/216827294-a96d5751-35a9-4dc6
  - チャットに招待されているメンバーとチャットすることができます。 
  ※メールアドレスなどはテストアドレスになります。
 
-https://user-images.githubusercontent.com/107445735/216827677-016b9d44-cbbf-49a5-be35-555830d526c0.mov
+https://user-images.githubusercontent.com/107445735/218771343-51245a0b-2a08-430f-a1b3-20aa6ae83b93.mov
+
 
 *フレンド一覧＆フレンド検索*
  - フレンドのプロフィールを拝見でき、フレンドの追加も可能。
 
-https://user-images.githubusercontent.com/107445735/216827880-5031bcf7-ad4a-4e35-a4a9-206628a62093.mov
+https://user-images.githubusercontent.com/107445735/218771398-d4fcf8f9-9cc1-43a9-b8d2-a2b900cb5534.mov
+
 
 *アンケート回答*
  - アンケートに対して、参加可否を回答。
@@ -58,11 +62,6 @@ https://user-images.githubusercontent.com/107445735/216828694-b794e853-add6-45e3
  
  https://user-images.githubusercontent.com/107445735/216828552-77fa6047-7464-4bad-852d-1d7deb1d7aa9.mov
  
-*プロフィール*
- - プロフィール画面では、自身の情報を編集が可能。
-
-https://user-images.githubusercontent.com/107445735/216828738-5ffaa149-609f-4e0d-9515-7a1ad049739b.mov
-
 
 ## 実装した機能
 1.ログイン機能
