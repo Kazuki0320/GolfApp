@@ -169,7 +169,7 @@
 					outlined
 					tile
 				>
-				{{ user.golfPlayingHistory }}
+				{{ golfPlayingHistory }}
 				</v-card>
 			</v-col>
 		</v-row>
@@ -199,7 +199,7 @@
 					outlined
 					tile
 				>
-				{{ AvailabilityOfCar }}
+				{{ is_availabilityOfCar }}
 				</v-card>
 			</v-col>
 		</v-row>
@@ -263,10 +263,25 @@ export default {
 		const user = userDoc.data()
 		this.user = user
 
-		this.AvailabilityOfCar = (this.user.AvailabilityOfCar ? '有' : '無')
+		this.is_availabilityOfCar = (this.user.is_availabilityOfCar ? '有' : '無')
+
+		if(this.user.golfPlayingHistory === 0) {
+			this.golfPlayingHistory = "数回打ちっぱなし程度";
+		} else if(this.user.golfPlayingHistory === 1) {
+			this.golfPlayingHistory = "1年未満";
+		} else if(this.user.golfPlayingHistory === 2) {
+			this.golfPlayingHistory = "1-2年";
+		} else if(this.user.golfPlayingHistory === 3) {
+			this.golfPlayingHistory = "1-2年";
+		} else if(this.user.golfPlayingHistory === 4) {
+			this.golfPlayingHistory = "3-4年";
+		} else if(this.user.golfPlayingHistory === 5) {
+			this.golfPlayingHistory = "5年以上";
+		}
 	},
 	data: () => ({
-		AvailabilityOfCar: '',
+		golfPlayingHistory: '',
+		is_availabilityOfCar: '',
 		user:'',
 		userName: '',
 		email: '',

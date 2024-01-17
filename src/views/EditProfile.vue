@@ -1,9 +1,6 @@
 <template>
 	<v-app id="inspire">
-	<v-app-bar
-		app
-		shrink-on-scroll
-	>
+	<v-app-bar app shrink-on-scroll>
 		<v-toolbar-title>マイページ編集</v-toolbar-title>
 		<v-spacer></v-spacer>
 	</v-app-bar>
@@ -55,7 +52,7 @@
 					<v-select
 						label="ゴルフ暦"
 						clearable
-						:items="golfPlayHistoryItems"
+						:items="golfPlayingHistoryItems"
 						v-model="user.golfPlayingHistory">
 					</v-select>
 				</v-col>
@@ -65,8 +62,8 @@
 					<v-select
 						label="車の有無"
 						clearable
-						:items="AvailabilityOfCarItems"
-						v-model="user.AvailabilityOfCar">
+						:items="is_availabilityOfCar"
+						v-model="user.is_availabilityOfCar">
 					</v-select>
 				</v-col>
 			</v-row>
@@ -106,17 +103,17 @@ export default {
 	data: () => ({
 		users:[],
 		user: '',
-		AvailabilityOfCarItems: [
-			{value: true, text: "○"},
-			{value: false, text: "×"},
+		is_availabilityOfCar: [
+			{value: true, text: "有"},
+			{value: false, text: "無"},
 		],
-		golfPlayHistoryItems: [
-			"数回打ちっぱなし程度",
-			"1年未満",
-			"1-2年",
-			"2-3年",
-			"3-4年",
-			"5年以上",
+		golfPlayingHistoryItems: [
+			{value: 0, text: "数回打ちっぱなし程度"},
+			{value: 1, text: "1年未満"},
+			{value: 2, text: "1-2年"},
+			{value: 3, text: "2-3年"},
+			{value: 4, text: "3-4年"},
+			{value: 5, text: "5年以上"},
 		],
 		ageGroup: [
 			"20代",
@@ -188,15 +185,15 @@ export default {
 	methods: {
 		submit () {
 			const userRef = firebase.firestore().collection("users").doc(this.user_id)
-			userRef.update({
-				email: this.user.email,
-				userName: this.user.userName,
-				age: this.user.age,
-				live: this.user.live,
-				golfPlayingHistory: this.user.golfPlayHistory,
-				AvailabilityOfCar: this.user.AvailabilityOfCar,
-				selfIntroductionText: this.user.selfIntroductionText,
-			})
+				userRef.update({
+					email: this.user.email,
+					userName: this.user.userName,
+					age: this.user.age,
+					live: this.user.live,
+					golfPlayingHistory: this.user.golfPlayingHistory,
+					is_availabilityOfCar: this.user.is_availabilityOfCar,
+					selfIntroductionText: this.user.selfIntroductionText,
+				})
 		}
 	}
 }
