@@ -3,12 +3,22 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import router from './router'
 import store from './Vuex/store'
+import { loadFirebaseModules } from './firebase/firebase'
 
 Vue.config.productionTip = true
 
-new Vue({
-  vuetify,
-  router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app')
+async function initApp() {
+  // プロダクション環境の場合、Firebaseモジュールを遅延ロード
+  if (process.env.NODE_ENV === 'production') {
+    await loadFirebaseModules();
+  }
+
+  new Vue({
+    vuetify,
+    router,
+    store,
+    render: (h) => h(App),
+  }).$mount('#app')
+}
+
+initApp();

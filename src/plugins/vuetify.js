@@ -1,35 +1,7 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify/lib'
-import {
-	VApp,
-	VAppBar,
-	VToolbarTitle,
-	VSpacer,
-	VBtn,
-	VMain,
-	VContainer,
-	VRow,
-	VCol,
-	VCard,
-	VList,
-	VListItem,
-	VListItemContent,
-	VListItemTitle,
-	VListItemSubtitle,
-	VAvatar,
-	VDivider,
-	VForm,
-	VTextField,
-	VSelect,
-	VMenu,
-	VDatePicker,
-	VCombobox,
-	VAutocomplete,
-	VAlert,
-	VTextarea,
-	VIcon
-} from 'vuetify/lib'
-
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+import '@mdi/font/css/materialdesignicons.css'
 import {
 	mdiCalendar,
 	mdiComment,
@@ -51,35 +23,6 @@ import {
 Vue.use(Vuetify)
 
 const vuetify = new Vuetify({
-	components: {
-		VApp,
-		VAppBar,
-		VToolbarTitle,
-		VSpacer,
-		VBtn,
-		VMain,
-		VContainer,
-		VRow,
-		VCol,
-		VCard,
-		VList,
-		VListItem,
-		VListItemContent,
-		VListItemTitle,
-		VListItemSubtitle,
-		VAvatar,
-		VDivider,
-		VForm,
-		VTextField,
-		VSelect,
-		VMenu,
-		VDatePicker,
-		VCombobox,
-		VAutocomplete,
-		VAlert,
-		VTextarea,
-		VIcon
-	},
 	icons: {
 		iconfont: 'mdiSvg',
 		values: {

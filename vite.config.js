@@ -1,21 +1,31 @@
-const { defineConfig } = require('vite')
-const { createVuePlugin } = require('vite-plugin-vue2')
-const path = require('path')
-const { visualizer } = require('rollup-plugin-visualizer')
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue2'
+import path from 'path'
+// import { visualizer } from 'rollup-plugin-visualizer'
 
-module.exports = defineConfig({
+export default defineConfig({
   plugins: [
-    createVuePlugin(),
-    visualizer({
-      open: true,
-      filename: 'dist/stats.html',
-      gzipSize: true,
-      brotliSize: true,
-    })
+    vue(),
+    // visualizer({
+    //   open: true,
+    //   filename: 'dist/stats.html',
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // })
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': path.resolve(__dirname, './src'),
+      'vue': 'vue/dist/vue.esm.js'
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      sass: {
+        additionalData: [
+          '@import "vuetify/src/styles/styles.sass"',
+        ]
+      }
     }
   },
   build: {

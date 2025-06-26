@@ -109,31 +109,41 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: import.meta.env.BASE_URL,
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if(requiresAuth) {
-    firebase.auth().onAuthStateChanged(async (user) => {
-      if (!user) {
-        next({
-          path: '/login',
-          query: { redirect: to.fullPath }
-        })
-      } else {
-        next()
-          let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
-          if (!userDoc.exists) {
-          await userDoc.ref.set({
-              userName: user.displayName,
-              email: user.email,
-          });
-        }
-      }
+// グローバルな認証状態
+let isAuthenticated = false
+let authInitialized = false
+
+// 認証状態の監視を設定
+firebase.auth().onAuthStateChanged((user) => {
+  isAuthenticated = !!user
+  authInitialized = true
+})
+
+router.beforeEach(async (to, from, next) => {
+  // 認証の初期化が完了するまで待機
+  if (!authInitialized) {
+    await new Promise(resolve => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(() => {
+        unsubscribe()
+        resolve()
+      })
     })
-  }else {
+  }
+
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  if (requiresAuth && !isAuthenticated) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    })
+  } else if (to.path === '/login' && isAuthenticated) {
+    next('/')
+  } else {
     next()
   }
 })
