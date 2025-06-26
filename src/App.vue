@@ -9,6 +9,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App'
+}
+</script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -44,8 +50,3 @@ nav {
   padding-top: 10px;
 }
 </style>
-
-<script>
-	export default {
-	}
-</script>

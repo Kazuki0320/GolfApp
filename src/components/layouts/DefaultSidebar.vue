@@ -5,14 +5,14 @@
 	>
 		<v-sheet color="grey lighten-4" class="pa-4">
 			<!--マイプロフィールにuserのIDをqueryとして渡している-->
-			<router-link :to="{ path: '/myProfile', query: { user_id: this.user.id } }">
+			<router-link :to="{ path: '/myProfile', query: { user_id: userId } }">
 				<v-avatar color="indigo">
 					<v-icon dark>
 						mdi-account-circle
 					</v-icon>
 				</v-avatar>
 			</router-link>
-			<div class="username">{{ userInfo.userName }}</div>
+			<div v-if="userInfo" class="username">{{ userInfo.userName }}</div>
 		</v-sheet>
 
 		<v-list>
@@ -27,7 +27,7 @@
 			</v-list-item>
 
 			<!--アンケート作成画面にユーザーIDを渡している-->
-			<router-link :to="{ path: '/newSurvey', query: { user_id: this.user.id } }">
+			<router-link :to="{ path: '/newSurvey', query: { user_id: userId } }">
 				<v-list-item>
 					<v-list-item-icon>
 						<v-icon color="blue">
@@ -76,51 +76,50 @@
 </template>
 
 <script>
-import firebase from "@/firebase/firebase"
+import { auth, firestore } from "@/firebase/firebase"
 
 export default {
-	async mounted() {
-    const currentUserId = firebase.auth().currentUser.uid
-		//collection("users")から、ログインユーザーと同じIDを検索する処理
-		const userRef = firebase.firestore().collection("users")
-			const snapshot = await userRef.get()
-			snapshot.forEach(doc => {
-				let data = {
-					id: doc.id
-				}
-				//↓コンフリクトが起きるかも？currentUserIdで比べるのが正解
-				if(currentUserId === data.id) {
-					this.user = data
-				}
-			})
-
-		//検索したIDから、user情報を取得する処理
-		const userDoc = firebase.firestore().collection("users").doc(this.user.id)
-		const userData = await userDoc.get()
-		this.userInfo = userData.data()
-	},
-	data: () => ({
-		drawer: null,
-		links: [
-			['mdi-door-open', 'ルーム', '/'],
-			['mdi-account-multiple', 'フレンド', '/user'],
-		],
-		user: '',
-		userInfo: '',
-		auth: null,
-	}),
-	methods: {
-		logout() {
-			firebase.auth()
-				.signOut()
-				.then(() => {
-					localStorage.message = "ログアウトに成功しました"
-					this.$router.push('/login')
-				})
-				.catch((error) => {
-					console.log(error)
-				})
+	data() {
+		return {
+			drawer: null,
+			links: [
+				['mdi-door-open', 'ルーム', '/'],
+				['mdi-account-multiple', 'フレンド', '/user'],
+			],
+			userId: null,
+			userInfo: null
 		}
 	},
+	async created() {
+		try {
+			const user = auth.currentUser
+			if (user) {
+				this.userId = user.uid
+				const userDoc = await firestore.collection("users").doc(user.uid).get()
+				if (userDoc.exists) {
+					this.userInfo = userDoc.data()
+				} else {
+					console.error('ユーザー情報が見つかりません')
+				}
+			} else {
+				console.error('ユーザーが認証されていません')
+				this.$router.replace('/login')
+			}
+		} catch (error) {
+			console.error('ユーザー情報の取得に失敗しました:', error)
+			this.$router.replace('/login')
+		}
+	},
+	methods: {
+		async logout() {
+			try {
+				await auth.signOut()
+				localStorage.message = "ログアウトに成功しました"
+				this.$router.replace('/login')
+			} catch (error) {
+				console.error('ログアウトに失敗しました:', error)
+			}
+		}
+	}
 }
 </script>

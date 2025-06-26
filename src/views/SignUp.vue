@@ -28,8 +28,10 @@
 
 		<v-text-field
 			v-model="password"
+			:rules="passwordRules"
 			type="password"
-			label="パスワード">
+			label="パスワード"
+			required>
 		</v-text-field>
 
 		<v-btn
@@ -63,20 +65,25 @@
 
 <script>
 import firebase from "@/firebase/firebase"
+import { auth, firestore, serverTimestamp } from "@/firebase/firebase"
 	export default {
 data: () => ({
 		valid: true,
 		name: '',
 		nameRules: [
 			v => !!v || 'ユーザー名を入力してください',
-			v => (v && v.length <= 10) || 'ユーザー名が間違えてます',
+			v => (v && v.length <= 10) || 'ユーザー名は10文字以内で入力してください',
 		],
 		email: '',
 		emailRules: [
-			v => !!v || 'メッセージを入力してください',
-			v => /.+@.+\..+/.test(v) || 'メッセージ内容が間違えてます',
+			v => !!v || 'メールアドレスを入力してください',
+			v => /.+@.+\..+/.test(v) || 'メールアドレスの形式が正しくありません',
 		],
 		password: '',
+		passwordRules: [
+			v => !!v || 'パスワードを入力してください',
+			v => v.length >= 6 || 'パスワードは6文字以上で入力してください',
+		],
 		errorMessage: "",
 }),
 computed:	{
@@ -95,33 +102,59 @@ methods: {
 		resetValidation () {
 			this.$refs.form.resetValidation()
 		},
-		submit() {
-			firebase.auth()
-			//firebaseAuthに、ユーザーの認証をするために新しくログイン情報を作成
-			.createUserWithEmailAndPassword(this.email, this.password)
-			.then(async(result) => {
-				await result.user.updateProfile(
-					{displayName: this.name}
-				);
-				localStorage.message = "新規作成に成功しました"
-			//新規作成したユーザーのログイン情報作成後、auth変数の中にユーザー情報を持たせて、それをsessionStorageで保存し、そのままホーム画面へ遷移
-			firebase.auth()
-			.signInWithEmailAndPassword(this.email, this.password)
-			.then((result) => {
-				// console.log("success result", result.user)
-				const auth = {
-					displayName: result.user.displayName,
-					email: result.user.email,
-					uid: result.user.uid,
-					password: this.password
+		async submit() {
+			try {
+				if (!this.password || this.password.length < 6) {
+					this.errorMessage = "パスワードは6文字以上で入力してください";
+					return;
 				}
-				this.$router.push('/')
+
+				// 新規ユーザー作成
+				const userCredential = await auth.createUserWithEmailAndPassword(this.email, this.password)
+				const user = userCredential.user
+
+				if (!user) {
+					throw new Error('ユーザー作成に失敗しました')
+				}
+
+				// ユーザープロフィールの更新
+				await user.updateProfile({
+					displayName: this.name
 				})
-			})
-			.catch((error) => {
-				console.log("fail", error)
-				this.errorMessage = "ユーザーの新規作成に失敗しました。";
-			})
+
+				// Firestoreにユーザー情報を保存
+				await firestore.collection('users').doc(user.uid).set({
+					uid: user.uid,
+					userName: this.name,
+					displayName: this.name,
+					email: this.email,
+					createdAt: serverTimestamp(),
+					updatedAt: serverTimestamp(),
+					lastLogin: serverTimestamp(),
+					friends: []
+				})
+
+				localStorage.message = "新規作成に成功しました"
+				this.$router.push('/')
+			} catch (error) {
+				console.error("Signup error:", error)
+				switch (error.code) {
+					case 'auth/email-already-in-use':
+						this.errorMessage = "このメールアドレスは既に使用されています"
+						break
+					case 'auth/invalid-email':
+						this.errorMessage = "メールアドレスの形式が正しくありません"
+						break
+					case 'auth/operation-not-allowed':
+						this.errorMessage = "この操作は許可されていません"
+						break
+					case 'auth/weak-password':
+						this.errorMessage = "パスワードは6文字以上で入力してください"
+						break
+					default:
+						this.errorMessage = "ユーザーの新規作成に失敗しました: " + (error.message || error)
+				}
+			}
 		}
 	},
 }

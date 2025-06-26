@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import firebase from "@/firebase/firebase"
+import { auth } from '@/firebase/firebase'
 
 Vue.use(VueRouter)
 
@@ -8,7 +8,7 @@ const routes = [
   {
     path: '/',
     name: 'roomList',
-    component: () => import(/* webpackChunkName: "room-list" */ '@/views/roomList.vue'),
+    component: () => import('@/views/RoomList.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -55,13 +55,15 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'Login',
-    component: () => import(/* webpackChunkName: "auth" */ '@/views/Login.vue'),
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
+    meta: { requiresGuest: true }
   },
   {
-    path: '/signUp',
-    name: 'SignUp',
-    component: () => import(/* webpackChunkName: "auth" */ '@/views/SignUp.vue'),
+    path: '/signup',
+    name: 'signup',
+    component: () => import('@/views/SignUp.vue'),
+    meta: { requiresGuest: true }
   },
   {
     path: '/chat',
@@ -113,35 +115,15 @@ const router = new VueRouter({
   routes
 })
 
-// グローバルな認証状態
-let isAuthenticated = false
-let authInitialized = false
-
-// 認証状態の監視を設定
-firebase.auth().onAuthStateChanged((user) => {
-  isAuthenticated = !!user
-  authInitialized = true
-})
-
-router.beforeEach(async (to, from, next) => {
-  // 認証の初期化が完了するまで待機
-  if (!authInitialized) {
-    await new Promise(resolve => {
-      const unsubscribe = firebase.auth().onAuthStateChanged(() => {
-        unsubscribe()
-        resolve()
-      })
-    })
-  }
-
+// グローバルナビゲーションガード
+router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
+  const currentUser = auth.currentUser
 
-  if (requiresAuth && !isAuthenticated) {
-    next({
-      path: '/login',
-      query: { redirect: to.fullPath }
-    })
-  } else if (to.path === '/login' && isAuthenticated) {
+  if (requiresAuth && !currentUser) {
+    next('/login')
+  } else if (requiresGuest && currentUser) {
     next('/')
   } else {
     next()

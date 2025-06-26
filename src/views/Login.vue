@@ -64,9 +64,10 @@
 </template>
 
 <script>
-import firebase from "@/firebase/firebase"
-	export default {
-data: () => ({
+import { auth, firestore, serverTimestamp } from "@/firebase/firebase"
+
+export default {
+	data: () => ({
 		valid: true,
 		email: '',
 		emailRules: [
@@ -76,19 +77,19 @@ data: () => ({
 		password: '',
 		errorMessage: "",
 		message: ''
-}),
-mounted() {
-	if(localStorage.message) {
-		this.message = localStorage.message
-		localStorage.message = ''
-	}
-},
-computed:	{
-	isValid() {
-		return !this.valid;
-	}
-},
-methods: {
+	}),
+	mounted() {
+		if(localStorage.message) {
+			this.message = localStorage.message
+			localStorage.message = ''
+		}
+	},
+	computed:	{
+		isValid() {
+			return !this.valid;
+		}
+	},
+	methods: {
 		validate () {
 			this.$refs.form.validate()
 		},
@@ -98,21 +99,50 @@ methods: {
 		resetValidation () {
 			this.$refs.form.resetValidation()
 		},
-		submit () {
-			firebase.auth()
-				.signInWithEmailAndPassword(this.email, this.password)
-				.then((result) => {
-					const auth = {
-						displayName: result.user.displayName,
-						email: result.user.email,
-						uid: result.user.uid,
-						password: this.password
-					}
-					this.$router.push('/')
-				})
-				.catch((error) => {
-					this.errorMessage = "ユーザーのログインに失敗しました"
-				})
+		async submit () {
+			try {
+				const userCredential = await auth.signInWithEmailAndPassword(this.email, this.password)
+				const user = userCredential.user
+
+				if (!user) {
+					throw new Error('ユーザー情報が取得できませんでした')
+				}
+
+				// ユーザー情報をFirestoreに保存/更新
+				const userRef = firestore.collection('users').doc(user.uid)
+				await userRef.set({
+					uid: user.uid,
+					displayName: user.displayName || '',
+					email: user.email,
+					lastLogin: serverTimestamp(),
+					updatedAt: serverTimestamp(),
+					createdAt: serverTimestamp()
+				}, { merge: true })
+
+				// ログイン成功時の処理
+				this.message = "ログインに成功しました"
+				setTimeout(() => {
+					this.$router.replace('/')
+				}, 1000)
+			} catch (error) {
+				console.error('Login error:', error)
+				switch (error.code) {
+					case 'auth/user-not-found':
+						this.errorMessage = "ユーザーが見つかりません"
+						break
+					case 'auth/wrong-password':
+						this.errorMessage = "パスワードが間違っています"
+						break
+					case 'auth/invalid-email':
+						this.errorMessage = "メールアドレスの形式が正しくありません"
+						break
+					case 'auth/too-many-requests':
+						this.errorMessage = "ログイン試行回数が多すぎます。しばらく時間をおいて再度お試しください"
+						break
+					default:
+						this.errorMessage = "ログインに失敗しました: " + error.message
+				}
+			}
 		}
 	},
 }
