@@ -1,23 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import roomList from '../views/roomList.vue'
-import Login from '../views/Login.vue'
-import SignUp from '../views/SignUp.vue'
-import ChatBoard from '../views/ChatBoard.vue'
-import UsersList from '../views/UsersList.vue'
-import UserProfile from '../views/UserProfile.vue'
-import MyProfile from '../views/MyProfile.vue'
-import EditProfile from '../views/EditProfile.vue'
-import RoomCreate from '../views/RoomCreate.vue'
-import RoomCreateConfirmed from '../views/RoomCreateConfirmed.vue'
-import NewSurvey from '../views/NewSurvey.vue'
-import SurveyConfirmed from '../views/SurveyConfirmed.vue'
-import SurveyAnswer from '../views/SurveyAnswer.vue'
-import SurveyAnswerConfirmed from '../views/SurveyAnswerConfirmed.vue'
-import SurveyResults from '../views/SurveyResults.vue'
-import SurveyResultsAnswer from '../views/SurveyResultsAnswer.vue'
-import UsersSearch from '../views/UsersSearch.vue'
-
 import firebase from "@/firebase/firebase"
 
 Vue.use(VueRouter)
@@ -26,107 +8,101 @@ const routes = [
   {
     path: '/',
     name: 'roomList',
-    component: roomList,
+    component: () => import(/* webpackChunkName: "room-list" */ '@/views/roomList.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/newSurvey',
     name: 'NewSurvey',
-    component: NewSurvey,
+    component: () => import(/* webpackChunkName: "survey" */ '@/views/NewSurvey.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/surveyConfirmed',
     name: 'SurveyConfirmed',
-    component: SurveyConfirmed,
+    component: () => import(/* webpackChunkName: "survey" */ '@/views/SurveyConfirmed.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/surveyAnswer',
     name: 'SurveyAnswer',
-    component: SurveyAnswer,
+    component: () => import(/* webpackChunkName: "survey" */ '@/views/SurveyAnswer.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/surveyAnswerConfirmed',
     name: 'SurveyAnswerConfirmed',
-    component: SurveyAnswerConfirmed,
+    component: () => import(/* webpackChunkName: "survey" */ '@/views/SurveyAnswerConfirmed.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/surveyResultsAnswer',
     name: 'SurveyResultsAnswer',
-    component: SurveyResultsAnswer,
+    component: () => import(/* webpackChunkName: "survey" */ '@/views/SurveyResultsAnswer.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/surveyResults',
     name: 'SurveyResults',
-    component: SurveyResults,
+    component: () => import(/* webpackChunkName: "survey" */ '@/views/SurveyResults.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/usersSearch',
     name: 'UsersSearch',
-    component: UsersSearch,
+    component: () => import(/* webpackChunkName: "users" */ '@/views/UsersSearch.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login,
+    component: () => import(/* webpackChunkName: "auth" */ '@/views/Login.vue'),
   },
   {
     path: '/signUp',
     name: 'SignUp',
-    component: SignUp,
+    component: () => import(/* webpackChunkName: "auth" */ '@/views/SignUp.vue'),
   },
   {
     path: '/chat',
     name: 'ChatBoard',
-    component: ChatBoard,
+    component: () => import(/* webpackChunkName: "chat" */ '@/views/ChatBoard.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/user',
     name: 'UsersList',
-    component: UsersList,
+    component: () => import(/* webpackChunkName: "users" */ '@/views/UsersList.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/profile',
     name: 'UserProfile',
-    component: UserProfile,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/surveyAnswerConfirmed',
-    name: 'SurveyAnswerConfirmed',
-    component: SurveyAnswerConfirmed,
+    component: () => import(/* webpackChunkName: "users" */ '@/views/UserProfile.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/myProfile',
     name: 'MyProfile',
-    component: MyProfile,
+    component: () => import(/* webpackChunkName: "users" */ '@/views/MyProfile.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/editProfile',
     name: 'EditProfile',
-    component: EditProfile,
+    component: () => import(/* webpackChunkName: "users" */ '@/views/EditProfile.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/roomCreate',
     name: 'RoomCreate',
-    component: RoomCreate,
+    component: () => import(/* webpackChunkName: "room" */ '@/views/RoomCreate.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/roomCreateConfirmed',
     name: 'RoomCreateConfirmed',
-    component: RoomCreateConfirmed,
+    component: () => import(/* webpackChunkName: "room" */ '@/views/RoomCreateConfirmed.vue'),
     meta: { requiresAuth: true }
   },
 ]
@@ -140,7 +116,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   if(requiresAuth) {
-    //ユーザーがログイン済みかどうか確認する処理:onAuthStateChanged
     firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
         next({
@@ -151,7 +126,6 @@ router.beforeEach((to, from, next) => {
         next()
           let userDoc = await firebase.firestore().collection('users').doc(user.uid).get();
           if (!userDoc.exists) {
-          // 新規登録時に、firestore にユーザーIDがなければ新しいIDを作る。
           await userDoc.ref.set({
               userName: user.displayName,
               email: user.email,
@@ -162,7 +136,7 @@ router.beforeEach((to, from, next) => {
   }else {
     next()
   }
-  })
+})
 
 export default router
 
