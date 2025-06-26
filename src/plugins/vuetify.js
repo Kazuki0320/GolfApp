@@ -1,11 +1,104 @@
-import '@mdi/font/css/materialdesignicons.css'
-import Vue from 'vue';
-import Vuetify from 'vuetify/lib/framework';
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
+import {
+	VApp,
+	VAppBar,
+	VToolbarTitle,
+	VSpacer,
+	VBtn,
+	VMain,
+	VContainer,
+	VRow,
+	VCol,
+	VCard,
+	VList,
+	VListItem,
+	VListItemContent,
+	VListItemTitle,
+	VListItemSubtitle,
+	VAvatar,
+	VDivider,
+	VForm,
+	VTextField,
+	VSelect,
+	VMenu,
+	VDatePicker,
+	VCombobox,
+	VAutocomplete,
+	VAlert,
+	VTextarea,
+	VIcon
+} from 'vuetify/lib'
 
-Vue.use(Vuetify);
+import {
+	mdiCalendar,
+	mdiComment,
+	mdiInboxArrowDown,
+	mdiSend,
+	mdiDelete,
+	mdiAlertOctagon,
+	mdiSquare,
+	mdiCircle,
+	mdiTriangle,
+	mdiAccountCircle,
+	mdiHandWaveOutline,
+	mdiAccountEye,
+	mdiLogout,
+	mdiDoorOpen,
+	mdiAccountMultiple
+} from '@mdi/js'
+
+Vue.use(Vuetify, {
+	components: {
+		VApp,
+		VAppBar,
+		VToolbarTitle,
+		VSpacer,
+		VBtn,
+		VMain,
+		VContainer,
+		VRow,
+		VCol,
+		VCard,
+		VList,
+		VListItem,
+		VListItemContent,
+		VListItemTitle,
+		VListItemSubtitle,
+		VAvatar,
+		VDivider,
+		VForm,
+		VTextField,
+		VSelect,
+		VMenu,
+		VDatePicker,
+		VCombobox,
+		VAutocomplete,
+		VAlert,
+		VTextarea,
+		VIcon
+	}
+})
 
 export default new Vuetify({
 	icons: {
-		iconfont: 'mdi',
-	},
-});
+		iconfont: 'mdiSvg',
+		values: {
+			calendar: mdiCalendar,
+			comment: mdiComment,
+			inboxArrowDown: mdiInboxArrowDown,
+			send: mdiSend,
+			delete: mdiDelete,
+			alertOctagon: mdiAlertOctagon,
+			square: mdiSquare,
+			circle: mdiCircle,
+			triangle: mdiTriangle,
+			accountCircle: mdiAccountCircle,
+			handWaveOutline: mdiHandWaveOutline,
+			accountEye: mdiAccountEye,
+			logout: mdiLogout,
+			doorOpen: mdiDoorOpen,
+			accountMultiple: mdiAccountMultiple
+		}
+	}
+})
