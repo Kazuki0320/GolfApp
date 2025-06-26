@@ -48,7 +48,9 @@ import {
 	mdiAccountMultiple
 } from '@mdi/js'
 
-Vue.use(Vuetify, {
+Vue.use(Vuetify)
+
+const vuetify = new Vuetify({
 	components: {
 		VApp,
 		VAppBar,
@@ -77,10 +79,7 @@ Vue.use(Vuetify, {
 		VAlert,
 		VTextarea,
 		VIcon
-	}
-})
-
-export default new Vuetify({
+	},
 	icons: {
 		iconfont: 'mdiSvg',
 		values: {
@@ -102,3 +101,5 @@ export default new Vuetify({
 		}
 	}
 })
+
+export default vuetify

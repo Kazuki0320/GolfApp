@@ -81,7 +81,7 @@
 
 <script>
 import firebase from "@/firebase/firebase"
-import DefaultSidebar from '@/components/layouts/DefaultSidebar'
+import DefaultSidebar from '@/components/layouts/DefaultSidebar.vue'
 
 	export default {
 		components: {

@@ -1,0 +1,148 @@
+以下に、**Vue 2 ＋ Vuetify 2 + Firebase v8 環境から Vite への移行計画**を段階的にまとめました。Notion にそのまま貼り付けて活用できる形式です。
+
+---
+
+## 🚀 Vite への移行計画（Vue 2 プロジェクト向け）
+
+### 🎯 移行の目的
+
+* ビルド速度の高速化（開発起動・HMR・本番ビルド）
+* モダンなツールチェーン（ESM・Rollupベース）
+* チャンク分割・キャッシュ最適化の強化
+
+---
+
+### 🗂 現在の技術スタックの前提
+
+| 項目       | 内容            |
+| -------- | ------------- |
+| Vue      | 2.6.x         |
+| Vuetify  | 2.x           |
+| Firebase | 8.x（名前空間型SDK） |
+| Vue CLI  | 使用中           |
+| Webpack  | v4ベース         |
+
+---
+
+### 🧭 ステップバイステップ移行計画
+
+#### ✅ Step 1: 準備・前提チェック
+
+* [ ] Vue 2 に Vite を導入するための対応が可能か確認
+* [ ] Composition API を使っていない場合でも移行可能（`vite-plugin-vue2` 使用）
+* [ ] Vuetify のスタイルカスタムが SCSS ベースで行われているか確認
+* [ ] webpack 固有の機能（alias、define、plugin など）をリストアップ
+
+---
+
+#### ✅ Step 2: Vite 導入
+
+1. **依存パッケージの追加**
+
+```bash
+npm install -D vite vite-plugin-vue2 vue-template-compiler @vitejs/plugin-legacy
+```
+
+2. **必要に応じて追加**
+
+```bash
+npm install -D vite-plugin-vuetify2 // SCSS カスタム用
+npm install -D @mdi/js // アイコン維持のため
+```
+
+---
+
+#### ✅ Step 3: Vite 設定ファイルの作成
+
+`vite.config.js` をプロジェクトルートに作成：
+
+```js
+import { defineConfig } from 'vite'
+import vue from 'vite-plugin-vue2'
+import vuetify from 'vite-plugin-vuetify2'
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    vuetify()
+  ],
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'vuetify'],
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore']
+        }
+      }
+    }
+  }
+})
+```
+
+---
+
+#### ✅ Step 4: `package.json` のスクリプト追加
+
+```json
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
+}
+```
+
+---
+
+#### ✅ Step 5: Vuetify / Firebase / SCSS の互換確認
+
+* Vuetify 2 を使用している場合、スタイルを SCSS ベースに再設定（`vite-plugin-vuetify2`対応）
+* Firebase v8 は ESM 非対応のため、**`vite-legacy-plugin` と `optimizeDeps.exclude`** で調整
+* カスタムテーマや `variables.scss` のパス確認
+
+---
+
+#### ✅ Step 6: 起動・検証・差分対応
+
+* [ ] `npm run dev` で開発起動確認
+* [ ] コンポーネント単位で警告やレンダリング崩れを修正
+* [ ] Firebase の動作確認（ログイン・認証処理など）
+* [ ] 本番ビルド `vite build` の成果物サイズと速度比較
+
+---
+
+### 🧪 Step 7: 差分最適化・本格移行
+
+* [ ] パフォーマンス比較（CLI vs Vite）
+* [ ] Firebase v9 への段階的移行も検討（ツリーシェイク対応）
+* [ ] webpack 用 plugin の完全削除
+
+---
+
+### 📌 備考・注意点
+
+* Vue 2 + Vite は `vite-plugin-vue2` に依存しており、Vue 3 移行も検討対象
+* Vuetify 2 の一部機能は webpack 前提の設計になっているため、慎重に互換確認が必要
+* 旧 build system のバックアップは保持しておく（即戻せる状態）
+
+---
+
+### ✅ 次のアクション
+
+| 優先度 | 内容                     | 担当 or 完了日 |
+| --- | ---------------------- | --------- |
+| ★   | Vite の基本構成導入（Step 2-4） |           |
+| ★   | `npm run dev` の確認      |           |
+| ☆   | Firebase SDK の互換性調査    |           |
+| ☆   | Vuetify のスタイル確認と調整     |           |
+| △   | Firebase v9 への移行可能性検討  |           |
+
+---
+
+必要に応じて、個別のステップをタスク化・チェックリスト形式に分解していくことも可能です。ご希望あればその形式でも再構成します。

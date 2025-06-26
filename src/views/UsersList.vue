@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import DefaultSidebar from '@/components/layouts/DefaultSidebar'
+import DefaultSidebar from '@/components/layouts/DefaultSidebar.vue'
 import firebase from "@/firebase/firebase"
 
 export default {

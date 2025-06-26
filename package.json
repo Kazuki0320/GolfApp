@@ -8,7 +8,10 @@
     "format": "prettier --write src/main.js",
     "lint": "eslint --fix src/main.js",
     "fix": "npm run format && npm run lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev:vite": "vite",
+    "build:vite": "vite build",
+    "preview:vite": "vite preview"
   },
   "lint-staged": {
     "*.js": [
@@ -17,10 +20,11 @@
     ]
   },
   "dependencies": {
+    "@mdi/js": "^7.4.47",
     "core-js": "^3.8.3",
     "eslint-plugin-vue": "^9.9.0",
     "firebase": "^8.10.1",
-    "vue": "^2.6.14",
+    "vue": "^2.7.16",
     "vue-burger-menu": "^2.0.5",
     "vue-router": "^3.5.1",
     "vuetify": "^2.6.0",
@@ -30,6 +34,7 @@
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
     "@mdi/font": "^7.0.96",
+    "@vitejs/plugin-legacy": "^4.1.1",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
@@ -39,10 +44,13 @@
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
+    "rollup-plugin-visualizer": "^6.0.3",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
+    "vite": "^4.5.14",
+    "vite-plugin-vue2": "^2.0.3",
     "vue-cli-plugin-vuetify": "~2.5.8",
-    "vue-template-compiler": "^2.6.14",
+    "vue-template-compiler": "2.7.16",
     "vuetify-loader": "^1.7.0"
   },
   "eslintConfig": {
