@@ -1,17 +1,17 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue2'
+import { createVuePlugin } from 'vite-plugin-vue2'
 import path from 'path'
-// import { visualizer } from 'rollup-plugin-visualizer'
 
 export default defineConfig({
   plugins: [
-    vue(),
-    // visualizer({
-    //   open: true,
-    //   filename: 'dist/stats.html',
-    //   gzipSize: true,
-    //   brotliSize: true,
-    // })
+    createVuePlugin({
+      jsx: true,
+      vueTemplateOptions: {
+        compilerOptions: {
+          whitespace: 'condense'
+        }
+      }
+    })
   ],
   resolve: {
     alias: {
@@ -23,26 +23,24 @@ export default defineConfig({
     preprocessorOptions: {
       sass: {
         additionalData: [
-          '@import "vuetify/src/styles/styles.sass"',
+          '@import "vuetify/src/styles/styles.sass"'
         ]
       }
     }
   },
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['vue', 'vuetify'],
-          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
-          mdi: ['@mdi/js']
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore']
         }
       }
     }
   },
   optimizeDeps: {
-    include: ['@mdi/js'],
-    exclude: ['firebase/app', 'firebase/auth', 'firebase/firestore']
+    exclude: ['vue-demi']
   }
 }) 

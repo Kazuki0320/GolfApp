@@ -3,15 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "format": "prettier --write src/main.js",
     "lint": "eslint --fix src/main.js",
     "fix": "npm run format && npm run lint",
-    "prepare": "husky install",
-    "dev:vite": "vite",
-    "build:vite": "vite build",
-    "preview:vite": "vite preview"
+    "prepare": "husky install"
   },
   "lint-staged": {
     "*.js": [
@@ -31,27 +29,23 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.28.0",
     "@babel/eslint-parser": "^7.12.16",
+    "@babel/preset-env": "^7.28.0",
     "@mdi/font": "^7.0.96",
-    "@vitejs/plugin-legacy": "^4.1.1",
     "@vitejs/plugin-vue2": "^2.3.3",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
+    "@vue/babel-preset-app": "^5.0.8",
+    "@vue/cli-plugin-babel": "^5.0.8",
     "eslint": "^7.26.0",
     "eslint-config-prettier": "^8.3.0",
     "he": "^1.2.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
-    "rollup-plugin-visualizer": "^6.0.3",
     "sass": "~1.32.0",
     "sass-loader": "^10.0.0",
     "vite": "^4.5.14",
     "vite-plugin-vue2": "^2.0.3",
-    "vue-cli-plugin-vuetify": "~2.5.8",
     "vue-template-compiler": "2.7.16",
     "vuetify-loader": "^1.7.0"
   },
