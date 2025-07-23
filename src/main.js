@@ -9,7 +9,7 @@ Vue.config.productionTip = true
 
 async function initApp() {
   // プロダクション環境の場合、Firebaseモジュールを遅延ロード
-  if (process.env.NODE_ENV === 'production') {
+  if (import.meta.env.PROD) {
     await loadFirebaseModules();
   }
 
