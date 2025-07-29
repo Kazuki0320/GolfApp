@@ -12,7 +12,7 @@ sequenceDiagram
     participant DB as データベース
 
     %% サインアップフロー
-    rect rgb(40, 60, 80)
+    rect rgb(230, 240, 255)
         note over User,DB: サインアップフロー
         User->>+Frontend: サインアップ要求
         Frontend->>Frontend: 入力バリデーション
@@ -29,7 +29,7 @@ sequenceDiagram
     end
 
     %% ログインフロー
-    rect rgb(60, 40, 80)
+    rect rgb(255, 240, 230)
         note over User,DB: ログインフロー
         User->>+Frontend: ログイン要求
         Frontend->>Frontend: 入力バリデーション
@@ -46,7 +46,7 @@ sequenceDiagram
     end
 
     %% 認証済みリクエストフロー
-    rect rgb(80, 40, 60)
+    rect rgb(230, 255, 240)
         note over User,DB: 認証済みリクエストフロー
         User->>+Frontend: 保護されたリソース要求
         Frontend->>+Security: CSRF検証
@@ -65,7 +65,7 @@ sequenceDiagram
     end
 
     %% ログアウトフロー
-    rect rgb(50, 70, 50)
+    rect rgb(255, 230, 240)
         note over User,DB: ログアウトフロー
         User->>+Frontend: ログアウト要求
         Frontend->>+JWT: トークン無効化
