@@ -119,6 +119,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresGuest = to.matched.some(record => record.meta.requiresGuest)
+
+  // firebaseの認証状態から、JWTを利用した認証へ変更予定
   const currentUser = auth.currentUser
 
   if (requiresAuth && !currentUser) {

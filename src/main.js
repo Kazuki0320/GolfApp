@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import App from './App.vue'
-import vuetify from './plugins/vuetify'
-import router from './router'
-import store from './Vuex/store'
-import { loadFirebaseModules } from './firebase/firebase'
+import App from '@/App.vue'
+import vuetify from '@/plugins/vuetify'
+import router from '@/router'
+import store from '@/Vuex/store'
+import { loadFirebaseModules } from '@/firebase/firebase'
 
 Vue.config.productionTip = true
 

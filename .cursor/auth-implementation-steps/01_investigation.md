@@ -3,9 +3,37 @@
 ## 🔍 Firebase認証の使用状況調査
 
 ### 認証関連ファイルの特定
-- [ ] Firebase初期化設定ファイルの確認
-- [ ] 認証フック・ユーティリティの使用箇所
-- [ ] 認証状態管理の実装方法
+- [x] Firebase初期化設定ファイルの確認
+  - `src/firebase/firebase.js`で初期化
+  - Firebase v8.10.1を使用
+  - auth, firestoreのモジュールを使用
+  - プロダクション環境では遅延ロードを実装
+
+- [x] 認証フック・ユーティリティの使用箇所
+  1. ルーター（`src/router/index.js`）
+     - `requiresAuth`と`requiresGuest`のメタフィールドで保護
+     - グローバルナビゲーションガードで認証状態をチェック
+  
+  2. コンポーネント
+     - `Login.vue`: ログイン処理
+     - `SignUp.vue`: 新規ユーザー登録
+     - `DefaultSidebar.vue`: ログアウト処理
+     - その他のコンポーネントで`auth.currentUser`を使用
+
+- [x] 認証状態管理の実装方法
+  1. 初期化
+     - `firebase/firebase.js`でFirebase Authを初期化
+     - シングルトンパターンで実装
+  
+  2. 状態管理
+     - Firebaseの`auth.currentUser`で現在のユーザー状態を管理
+     - ログイン状態に応じたルーティング制御
+     - ユーザー情報はFirestoreの`users`コレクションと連携
+
+  3. セキュリティ
+     - 要認証ルートは`requiresAuth`で保護
+     - 非認証ユーザー用ルートは`requiresGuest`で保護
+     - Firestoreとの連携でユーザー情報を管理
 
 ### 認証機能の利用箇所
 - [ ] ログイン/登録フローの把握
