@@ -118,7 +118,52 @@ sequenceDiagram
 
 ## 開発環境
 
-[開発環境の説明をここに追加]
+### システム要件
+- Node.js 18.x以上
+- npm 9.x以上
+- SQLite 3.x
+
+### 開発環境セットアップ
+```bash
+# リポジトリのクローン
+git clone [repository-url]
+cd [project-name]
+
+# 依存パッケージのインストール
+npm install
+
+# 開発サーバーの起動
+npm run dev
+
+# APIサーバーの起動
+npm run server
+```
+
+### 環境変数の設定
+```env
+# .env
+NODE_ENV=development
+JWT_SECRET=your-jwt-secret
+API_URL=http://localhost:3000
+
+# データベース設定
+DB_PATH=./data/development.sqlite
+```
+
+### 開発用スクリプト
+```bash
+# 開発サーバー起動
+npm run dev
+
+# ビルド
+npm run build
+
+# テスト実行
+npm run test
+
+# リント
+npm run lint
+```
 
 ## インストール方法
 
@@ -126,4 +171,48 @@ sequenceDiagram
 
 ## 使用技術
 
-[使用している技術スタックをここに追加]
+### 技術移行計画
+
+| コンポーネント | 現状 | 移行後 | 役割 |
+|------------|------|--------|------|
+| フロントエンド | Vue.js 2.7.16 + Vuetify 2.6.0 | Vue.js + Vuetify | 入力・トークン保存・UI制御 |
+| 認証基盤 | Firebase Auth 8.10.1 | Node.js + Express | APIルーティング・認証処理本体 |
+| データベース | Cloud Firestore | SQLite | ユーザー・データの永続化 |
+| トークン管理 | Firebase Token | jsonwebtoken | トークンの生成・検証 |
+| 暗号化処理 | Firebase Auth組込 | bcrypt | パスワードのハッシュ化・照合 |
+
+### 現状の技術スタック
+
+#### フロントエンド
+- Vue.js 2.7.16
+- Vuetify 2.6.0
+- Vue Router 3.5.1
+- Vuex 3.6.2
+
+#### バックエンド
+- Firebase 8.10.1
+  - Authentication
+  - Cloud Firestore
+  - Hosting
+
+### 移行後の技術スタック
+
+#### フロントエンド
+- Vue.js
+- Vuetify
+- Vue Router
+- Vuex
+
+#### バックエンド
+- Node.js + Express
+- SQLite
+- jsonwebtoken（JWT認証）
+- bcrypt（パスワードハッシュ化）
+
+
+### セキュリティ考慮事項
+- JWTトークンの適切な有効期限設定
+- パスワードの安全なハッシュ化
+- クロスサイトリクエストフォージェリ（CSRF）対策
+- レート制限の実装
+- セキュアなセッション管理
