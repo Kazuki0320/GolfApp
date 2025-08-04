@@ -23,64 +23,145 @@ src/
         └── jwtAdapter.js     # sign(), verify()
 ```
 
-## 🚀 実装ステップ
+## 🚀 実装の優先順位とステップ
 
-### 1. ドメインモデル実装
-- [ ] `models/User.js` の作成
-  - [ ] Userクラス/インターフェースの定義
-  - [ ] バリデーションメソッドの実装
-  - [ ] ファクトリメソッドの実装
+### ✅ 優先順位：ドメイン層からの実装
 
-### 2. インフラストラクチャ層の実装
-- [ ] `infrastructure/crypto/bcryptAdapter.js`
-  - [ ] パスワードハッシュ化関数
-  - [ ] パスワード照合関数
-- [ ] `infrastructure/jwt/jwtAdapter.js`
-  - [ ] トークン生成関数
-  - [ ] トークン検証関数
+ドメイン層を最初に実装する理由：
+- ビジネスルールの核であり、他層に依存せず単体で設計可能
+- 残りの層はドメインの仕様に従って実装される
+- インターフェース設計を先に決めることで後工程がブレにくい
 
-### 3. リポジトリ層の実装
-- [ ] `repositories/UserRepository.js`
-  - [ ] インターフェース定義
-  - [ ] SQLite実装
-  - [ ] CRUD操作の実装
+### 🥇 Step 1：ドメイン層の実装（最優先）
 
-### 4. サービス層の実装
-- [ ] `services/AuthService.js`
-  - [ ] register()メソッド
-  - [ ] login()メソッド
-  - [ ] verifyToken()メソッド
+#### User.js（ユーザーエンティティ）
+```typescript
+interface UserProps {
+  id?: string;
+  email: string;
+  password: string;  // ハッシュ済み
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
-### 5. バリデーション層の実装
-- [ ] `validators/authValidator.js`
-  - [ ] メールアドレスバリデーション
-  - [ ] パスワードバリデーション
-  - [ ] トークンバリデーション
+class User {
+  private props: UserProps;
 
-### 6. コントローラー層の実装
-- [ ] `controllers/registerController.js`
-  - [ ] リクエスト処理
-  - [ ] レスポンス整形
-  - [ ] エラーハンドリング
+  constructor(props: UserProps) {
+    this.validate(props);
+    this.props = props;
+  }
 
-## 📝 実装の優先順位
+  private validate(props: UserProps) {
+    // ドメインルールの検証
+  }
+}
+```
 
-1. **基盤実装（Priority: High）**
-   - [ ] User モデル
-   - [ ] bcrypt アダプター
-   - [ ] JWT アダプター
+#### UserRepository.js（インターフェース）
+```typescript
+interface IUserRepository {
+  save(user: User): Promise<User>;
+  findByEmail(email: string): Promise<User | null>;
+  findById(id: string): Promise<User | null>;
+}
+```
 
-2. **コア機能（Priority: High）**
-   - [ ] UserRepository
-   - [ ] AuthService（register機能）
+#### AuthService.js（ユースケース）
+```typescript
+class AuthService {
+  constructor(
+    private userRepo: IUserRepository,
+    private passwordHasher: IPasswordHasher,
+    private tokenGenerator: ITokenGenerator
+  ) {}
 
-3. **API層（Priority: Medium）**
-   - [ ] バリデーター
-   - [ ] registerController
+  async register(userData: UserRegistrationData): Promise<AuthResult> {
+    // 実装の流れ
+  }
+}
+```
 
-4. **拡張機能（Priority: Low）**
-   - [ ] login機能
-   - [ ] トークン検証機能
+### 🥈 Step 2：インフラ層の実装
+
+#### BcryptAdapter.js
+```typescript
+class BcryptAdapter implements IPasswordHasher {
+  async hash(password: string): Promise<string> {
+    // bcryptでのハッシュ化実装
+  }
+
+  async compare(password: string, hash: string): Promise<boolean> {
+    // パスワード照合実装
+  }
+}
+```
+
+#### JwtAdapter.js
+```typescript
+class JwtAdapter implements ITokenGenerator {
+  sign(payload: JWTPayload): string {
+    // JWT生成実装
+  }
+
+  verify(token: string): JWTPayload {
+    // トークン検証実装
+  }
+}
+```
+
+#### UserRepositoryImpl.js
+```typescript
+class SQLiteUserRepository implements IUserRepository {
+  async save(user: User): Promise<User> {
+    // DB保存実装
+  }
+
+  async findByEmail(email: string): Promise<User | null> {
+    // DB検索実装
+  }
+}
+```
+
+### 🥉 Step 3：アプリケーション層の実装
+
+#### authValidator.js
+```typescript
+class AuthValidator {
+  validate(input: unknown): ValidationResult {
+    // バリデーションルール実装
+  }
+}
+```
+
+#### registerController.js
+```typescript
+class RegisterController {
+  constructor(private authService: AuthService) {}
+
+  async register(req: Request, res: Response) {
+    // リクエスト処理実装
+  }
+}
+```
+
+## 📝 実装の優先順位まとめ
+
+1. **User Entity**（ドメインモデル）
+2. **UserRepository Interface**（永続化インターフェース）
+3. **AuthService**（ユースケース実装）
+4. **BcryptAdapter / JwtAdapter**（技術依存の実装）
+5. **UserRepositoryImpl**（DB実装）
+6. **Validator / Controller**（外部インターフェース）
+
+## 🎯 この実装順序のメリット
+
+| メリット | 解説 |
+|---------|------|
+| ✅ 仕様の安定性 | ドメイン起点で設計するため、後からの変更が少ない |
+| ✅ テスタビリティ | ドメイン層は外部依存なしでテスト可能 |
+| ✅ 段階的な実装 | 各層を独立して実装・テスト可能 |
+| ✅ 依存の制御 | 内側から外側への依存関係が明確 |
 
 ## 🧪 テスト計画
 
