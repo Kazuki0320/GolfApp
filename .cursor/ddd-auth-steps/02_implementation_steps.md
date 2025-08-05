@@ -44,39 +44,67 @@ interface UserProps {
   updatedAt?: Date;
 }
 
-class User {
-  private props: UserProps;
-
-  constructor(props: UserProps) {
-    this.validate(props);
-    this.props = props;
+  static create(props) {
+    if (!User.isEmailValid(props.email)) {
+      return { isSuccess: false, error: 'Invalid email format' };
+    }
+    if (!User.isPasswordValid(props.password)) {
+      return { isSuccess: false, error: 'Invalid password format' };
+    }
+    return { isSuccess: true, value: new User(props) };
   }
 
-  private validate(props: UserProps) {
-    // ドメインルールの検証
+  static isEmailValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  static isPasswordValid(password) {
+    return password.length >= 8 && 
+           /[A-Z]/.test(password) && 
+           /[0-9]/.test(password);
+  }
+
+  get id() {
+    return this.props.id;
+  }
+
+  get email() {
+    return this.props.email;
+  }
+
+  get hashedPassword() {
+    return this.props.password;
   }
 }
 ```
 
 #### UserRepository.js（インターフェース）
-```typescript
-interface IUserRepository {
-  save(user: User): Promise<User>;
-  findByEmail(email: string): Promise<User | null>;
-  findById(id: string): Promise<User | null>;
+```javascript
+class UserRepository {
+  async save(user) {
+    throw new Error('Method not implemented');
+  }
+
+  async findByEmail(email) {
+    throw new Error('Method not implemented');
+  }
+
+  async findById(id) {
+    throw new Error('Method not implemented');
+  }
 }
 ```
 
 #### AuthService.js（ユースケース）
-```typescript
+```javascript
 class AuthService {
-  constructor(
-    private userRepo: IUserRepository,
-    private passwordHasher: IPasswordHasher,
-    private tokenGenerator: ITokenGenerator
-  ) {}
+  constructor(userRepo, passwordHasher, tokenGenerator) {
+    this.userRepo = userRepo;
+    this.passwordHasher = passwordHasher;
+    this.tokenGenerator = tokenGenerator;
+  }
 
-  async register(userData: UserRegistrationData): Promise<AuthResult> {
+  async register(userData) {
     // 実装の流れ
   }
 }
@@ -85,39 +113,54 @@ class AuthService {
 ### 🥈 Step 2：インフラ層の実装
 
 #### BcryptAdapter.js
-```typescript
-class BcryptAdapter implements IPasswordHasher {
-  async hash(password: string): Promise<string> {
-    // bcryptでのハッシュ化実装
+```javascript
+const bcrypt = require('bcrypt');
+
+class BcryptAdapter {
+  async hash(password) {
+    return bcrypt.hash(password, 10);
   }
 
-  async compare(password: string, hash: string): Promise<boolean> {
-    // パスワード照合実装
+  async compare(password, hash) {
+    return bcrypt.compare(password, hash);
   }
 }
 ```
 
 #### JwtAdapter.js
-```typescript
-class JwtAdapter implements ITokenGenerator {
-  sign(payload: JWTPayload): string {
-    // JWT生成実装
+```javascript
+const jwt = require('jsonwebtoken');
+
+class JwtAdapter {
+  constructor(secret) {
+    this.secret = secret;
   }
 
-  verify(token: string): JWTPayload {
-    // トークン検証実装
+  sign(payload) {
+    return jwt.sign(payload, this.secret, { expiresIn: '1h' });
+  }
+
+  verify(token) {
+    return jwt.verify(token, this.secret);
   }
 }
 ```
 
 #### UserRepositoryImpl.js
-```typescript
-class SQLiteUserRepository implements IUserRepository {
-  async save(user: User): Promise<User> {
+```javascript
+const sqlite3 = require('sqlite3');
+
+class SQLiteUserRepository extends UserRepository {
+  constructor() {
+    super();
+    this.db = new sqlite3.Database('./auth.db');
+  }
+
+  async save(user) {
     // DB保存実装
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email) {
     // DB検索実装
   }
 }
@@ -126,21 +169,28 @@ class SQLiteUserRepository implements IUserRepository {
 ### 🥉 Step 3：アプリケーション層の実装
 
 #### authValidator.js
-```typescript
+```javascript
 class AuthValidator {
-  validate(input: unknown): ValidationResult {
+  validate(input) {
     // バリデーションルール実装
   }
 }
 ```
 
 #### registerController.js
-```typescript
+```javascript
 class RegisterController {
-  constructor(private authService: AuthService) {}
+  constructor(authService) {
+    this.authService = authService;
+  }
 
-  async register(req: Request, res: Response) {
-    // リクエスト処理実装
+  async register(req, res) {
+    try {
+      const result = await this.authService.register(req.body);
+      res.json(result);
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
   }
 }
 ```
