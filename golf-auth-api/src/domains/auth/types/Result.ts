@@ -11,7 +11,7 @@ export type Result<T> =
  */
 export const resultSuccess = <T>(data: T): Result<T> => ({
   success: true,
-  data,
+  data: data,
   error: null,
 });
 

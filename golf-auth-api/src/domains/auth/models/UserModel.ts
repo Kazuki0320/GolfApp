@@ -41,25 +41,43 @@ class UserModel {
 	 * @param email 検証するメールアドレス
 	 * @returns boolean
 	 */
-	isEmailValid(email: string): boolean {
+	private static isEmailValid(email: string): boolean {
 		const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		return pattern.test(email);
 	}
 
-	/**
-	 * パスワードが有効かどうかを検証する
-	 * @param password 
-	 * @returns 
-	 */
-	isPasswordValide(password: string): boolean  {
-		const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-		return pattern.test(password);
-	}
+  /**
+   * パスワードが有効かどうかを検証する
+   * @param password 
+   * @returns boolean
+   */
+  private static isPasswordValid(password: string): boolean {
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return pattern.test(password);
+  }
 
-		/**
-	 * factoryメソッドを導入
-	 **/ 
-		create(userData: User): Result<User> {
-			
-		}
+  /**
+   * ユーザーデータを取得
+   */
+  getUser(): User {
+    return { ...this.user };
+  }
+
+  /**
+   * ファクトリーメソッド
+   * @param userData ユーザーデータ
+   * @returns Result<User>
+   */
+  static create(userData: User): Result<User> {
+    if (!UserModel.isEmailValid(userData.email)) {
+      return resultError(new Error("メールアドレスが無効です"));
+    }
+
+    if (!UserModel.isPasswordValid(userData.password)) {
+      return resultError(new Error("パスワードが無効です"));
+    }
+
+    const model = new UserModel(userData);
+    return resultSuccess(model.getUser());
+  }
 }
