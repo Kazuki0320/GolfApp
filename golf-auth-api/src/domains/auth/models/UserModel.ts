@@ -1,28 +1,12 @@
-/**
- * Q.ユーザーのモデルはどの属性を持つべきか？
- * A.ユーザーのモデルは以下の属性を持つべきです。
- * - ユーザーID
- * - ユーザー名
- * -　メールアドレス
- * - パスワード
- * - 作成日時
- * - 更新日時
- * 
- * Q.ユーザーのモデルはどのような振る舞いを持つべきか？
- * - isEmailValid()
- * 	- メールアドレスが有効かどうかを検証する
- * - isPasswordValid()
- * 	- パスワードが有効かどうかを検証する
- */
-
 import { CreateUser, User } from "@/domains/auth/types/User";
 import { Result, resultError, resultSuccess } from "@/domains/auth/types/Result";
 import { generateId } from "@/infrastructure/adapters/generateId";
+
 /**
  * ユーザーモデルの定義
  */
 
-class UserModel {
+class UserEntity {
 	private readonly user: User;
 
 	private constructor(userData: User) {
@@ -66,9 +50,17 @@ class UserModel {
   /**
    * ファクトリーメソッド
    * @param userData ユーザーデータ
-   * @returns Result<User>
+   * @returns Result<UserEntity>
    */
-  static create(userData: CreateUser): Result<UserModel> {
+  static create(userData: CreateUser): Result<UserEntity> {
+
+    if (!UserEntity.isEmailValid(userData.email)) {
+      return resultError(new Error("メールアドレスが無効です"));
+    }
+
+    if (!UserEntity.isPasswordValid(userData.password)) {
+      return resultError(new Error("パスワードが無効です"));
+    }
 
 		const user: User = {
 			id: generateId(),
@@ -79,15 +71,7 @@ class UserModel {
 			updatedAt: new Date(),
 		}
 
-    if (!UserModel.isEmailValid(userData.email)) {
-      return resultError(new Error("メールアドレスが無効です"));
-    }
-
-    if (!UserModel.isPasswordValid(userData.password)) {
-      return resultError(new Error("パスワードが無効です"));
-    }
-
-    const model = new UserModel(user);
+    const model = new UserEntity(user);
     return resultSuccess(model);
   }
 }
