@@ -16,7 +16,7 @@
  */
 
 import { User } from "@/domains/auth/types/User";
-import { Result } from "@/domains/auth/types/Result";
+import { Result, resultError, resultSuccess } from "@/domains/auth/types/Result";
 
 /**
  * ユーザーモデルの定義
@@ -37,12 +37,13 @@ class UserModel {
 	}
 
 	/**
-	 * メールアドレスが有効かどうかを検証する
-	 * @param email 
-	 * @returns 
+	 * メールアドレスのバリデーション
+	 * @param email 検証するメールアドレス
+	 * @returns boolean
 	 */
 	isEmailValid(email: string): boolean {
-
+		const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return pattern.test(email);
 	}
 
 	/**
@@ -50,8 +51,9 @@ class UserModel {
 	 * @param password 
 	 * @returns 
 	 */
-	isPasswordValide(password: string): boolean {
-
+	isPasswordValide(password: string): boolean  {
+		const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+		return pattern.test(password);
 	}
 
 		/**
