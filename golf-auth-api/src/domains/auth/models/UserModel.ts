@@ -6,7 +6,7 @@ import { generateId } from "@/infrastructure/adapters/generateId";
  * ユーザーモデルの定義
  */
 
-class UserEntity {
+export class UserEntity {
 	private readonly user: User;
 
 	private constructor(userData: User) {
@@ -35,9 +35,23 @@ class UserEntity {
    * @param password 
    * @returns boolean
    */
-  private static isPasswordValid(password: string): boolean {
-    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    return pattern.test(password);
+  private static isPasswordValid(password: string): Result<void> {
+    // 空文字チェック
+    if (!password) {
+      return resultError(new Error("パスワードは数字のみで入力してください"));
+    }
+
+    // 数字のみであることを確認（先にチェック）
+    if (!/^\d+$/.test(password)) {
+      return resultError(new Error("パスワードは数字のみで入力してください"));
+    }
+
+    // 8文字以上であることを確認（後でチェック）
+    if (password.length < 8) {
+      return resultError(new Error("パスワードは8文字以上で入力してください"));
+    }
+
+    return resultSuccess(undefined);
   }
 
   /**
@@ -58,18 +72,19 @@ class UserEntity {
       return resultError(new Error("メールアドレスが無効です"));
     }
 
-    if (!UserEntity.isPasswordValid(userData.password)) {
-      return resultError(new Error("パスワードが無効です"));
+    const passwordValidation = UserEntity.isPasswordValid(userData.password);
+    if (!passwordValidation.success) {
+      return resultError(passwordValidation.error);
     }
 
-		const user: User = {
-			id: generateId(),
-			name: userData.name,
-			email: userData.email,
-			password: userData.password,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		}
+    const user: User = {
+      id: generateId(),
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
 
     const model = new UserEntity(user);
     return resultSuccess(model);

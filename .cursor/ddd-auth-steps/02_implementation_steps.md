@@ -43,39 +43,6 @@ interface UserProps {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-  static create(props) {
-    if (!User.isEmailValid(props.email)) {
-      return { isSuccess: false, error: 'Invalid email format' };
-    }
-    if (!User.isPasswordValid(props.password)) {
-      return { isSuccess: false, error: 'Invalid password format' };
-    }
-    return { isSuccess: true, value: new User(props) };
-  }
-
-  static isEmailValid(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  static isPasswordValid(password) {
-    return password.length >= 8 && 
-           /[A-Z]/.test(password) && 
-           /[0-9]/.test(password);
-  }
-
-  get id() {
-    return this.props.id;
-  }
-
-  get email() {
-    return this.props.email;
-  }
-
-  get hashedPassword() {
-    return this.props.password;
-  }
-}
 ```
 
 #### UserRepository.js（インターフェース）
@@ -213,13 +180,4 @@ class RegisterController {
 | ✅ 段階的な実装 | 各層を独立して実装・テスト可能 |
 | ✅ 依存の制御 | 内側から外側への依存関係が明確 |
 
-## 🧪 テスト計画
 
-### ユニットテスト
-- [ ] User モデル
-- [ ] AuthService
-- [ ] バリデーター
-
-### 統合テスト
-- [ ] リポジトリ層
-- [ ] API エンドポイント
