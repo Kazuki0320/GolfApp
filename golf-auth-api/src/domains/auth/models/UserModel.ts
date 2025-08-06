@@ -15,9 +15,9 @@
  * 	- パスワードが有効かどうかを検証する
  */
 
-import { User } from "@/domains/auth/types/User";
+import { CreateUser, User } from "@/domains/auth/types/User";
 import { Result, resultError, resultSuccess } from "@/domains/auth/types/Result";
-
+import { generateId } from "@/infrastructure/adapters/generateId";
 /**
  * ユーザーモデルの定義
  */
@@ -68,7 +68,17 @@ class UserModel {
    * @param userData ユーザーデータ
    * @returns Result<User>
    */
-  static create(userData: User): Result<User> {
+  static create(userData: CreateUser): Result<UserModel> {
+
+		const user: User = {
+			id: generateId(),
+			name: userData.name,
+			email: userData.email,
+			password: userData.password,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		}
+
     if (!UserModel.isEmailValid(userData.email)) {
       return resultError(new Error("メールアドレスが無効です"));
     }
@@ -77,7 +87,7 @@ class UserModel {
       return resultError(new Error("パスワードが無効です"));
     }
 
-    const model = new UserModel(userData);
-    return resultSuccess(model.getUser());
+    const model = new UserModel(user);
+    return resultSuccess(model);
   }
 }

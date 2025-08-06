@@ -2,7 +2,7 @@
  * ユーザーモデルの定義
  */
 export interface User {
-  id: number;
+  id: string;  // UUIDを使用するためstring型に
   name: string;
   email: string;
   password: string;
@@ -10,9 +10,11 @@ export interface User {
   updatedAt: Date;
 }
 
-// ユーザー作成時に必要なプロパティ
+/**
+ * ユーザー作成時に必要なデータ
+ */
 export interface CreateUser {
-	name: string;
-	email: string;
-	password: string;
+  name: string;
+  email: string;
+  password: string;
 }
