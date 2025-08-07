@@ -1,32 +1,41 @@
-import { Result, resultError, resultSuccess } from "../types/Result";
-
 export class Password {
-	private readonly password: string;
-
-	private constructor(value: string) {
-		this.password = value;
-	}
-
-	static create(password: string): Result<Password> {
-    // 空文字チェック
-    if (!password) {
-      return resultError(new Error("パスワードは数字のみで入力してください"));
-    }
-
-    // 数字のみであることを確認（先にチェック）
-    if (!/^\d+$/.test(password)) {
-      return resultError(new Error("パスワードは数字のみで入力してください"));
-    }
-
-    // 8文字以上であることを確認（後でチェック）
-    if (password.length < 8) {
-      return resultError(new Error("パスワードは8文字以上で入力してください"));
-    }
-
-    return resultSuccess(new Password(password));
+  private constructor(private readonly value: string) {
+    this.validate(value);
   }
 
-	getValue(): string {
-		return this.password;
-	}
+  /**
+   * ファクトリーメソッド
+   * @throws {Error} バリデーションエラー時
+   */
+  static create(password: string): Password {
+    return new Password(password);
+  }
+
+  private validate(password: string): void {
+    if (!password) {
+      throw new Error("パスワードは必須です");
+    }
+    if (!this.isNumericOnly(password)) {
+      throw new Error("パスワードは数字のみで入力してください");
+    }
+    if (!this.isValidLength(password)) {
+      throw new Error("パスワードは8文字以上で入力してください");
+    }
+  }
+
+  private isNumericOnly(password: string): boolean {
+    return /^\d+$/.test(password);
+  }
+
+  private isValidLength(password: string): boolean {
+    return password.length >= 8;
+  }
+
+  toString(): string {
+    return this.value;
+  }
+
+  equals(other: Password): boolean {
+    return this.value === other.value;
+  }
 }

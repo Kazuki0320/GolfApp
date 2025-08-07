@@ -2,7 +2,7 @@
  * ユーザーモデルの定義
  */
 export interface User {
-  id: string;  // UUIDを使用するためstring型に
+  id: string;
   name: string;
   email: string;
   password: string;

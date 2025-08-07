@@ -1,5 +1,4 @@
-import { CreateUser } from "@/domains/auth/types/User";
-import { Result, resultError, resultSuccess } from "@/domains/auth/types/Result";
+import { CreateUser, User } from "@/domains/auth/types/User";
 import { generateId } from "@/infrastructure/adapters/generateId";
 import { Email } from "@/domains/auth/valueObjects/Email";
 import { Password } from "@/domains/auth/valueObjects/Password";
@@ -34,30 +33,32 @@ export class UserEntity {
 
   /**
    * ファクトリーメソッド
-   * @param userData ユーザーデータ
-   * @returns Result<UserEntity>
+   * @throws {Error} バリデーションエラー時
    */
-  static create(userData: CreateUser): Result<UserEntity> {
+  static create(userData: CreateUser): UserEntity {
+    
+    const email = Email.create(userData.email);
+    const password = Password.create(userData.password);
 
-    const emailValidation = Email.create(userData.email);
-    if (!emailValidation.success) {
-      return resultError(emailValidation.error);
-    }
-
-    const passwordValidation = Password.create(userData.password);
-    if (!passwordValidation.success) {
-      return resultError(passwordValidation.error);
-    }
-
-    const userEntity = new UserEntity({
+    return new UserEntity({
       id: generateId(),
       name: "",
-      email: emailValidation.data,
-      password: passwordValidation.data,
+      email: email,
+      password: password,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+  }
 
-    return resultSuccess(userEntity);
+  // データ取得用メソッド
+  toObject(): User {
+    return {
+      id: this.id,
+      name: this.name,
+      email: this.email.toString(),
+      password: this.password.toString(),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
   }
 }
