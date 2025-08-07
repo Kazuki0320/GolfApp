@@ -14,7 +14,6 @@ export interface User {
  * ユーザー作成時に必要なデータ
  */
 export interface CreateUser {
-  name: string;
   email: string;
   password: string;
 }
