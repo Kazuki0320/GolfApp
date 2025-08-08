@@ -39,7 +39,7 @@ src/
 interface UserProps {
   id?: string;
   email: string;
-  password: string;  // ハッシュ済み
+  password: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
