@@ -31,6 +31,14 @@ export class UserEntity {
     this.updatedAt = params.updatedAt;
 	}
 
+  getId(): string {
+    return this.id;
+  }
+
+  getEmail(): Email {
+    return this.email;
+  }
+
   /**
    * ファクトリーメソッド
    * @throws {Error} バリデーションエラー時
