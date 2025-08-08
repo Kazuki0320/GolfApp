@@ -1,5 +1,32 @@
 # 認証ドメイン設計ドキュメント
 
+## 🛠 技術スタック
+
+### バックエンド基盤
+- **ランタイム**: Node.js
+- **フレームワーク**: Express
+- **開発言語**: JavaScript
+
+### データベース
+- **RDBMS**: SQLite
+- **ORM**: なし（Raw SQLiteを使用）
+
+### 認証・セキュリティ
+- **パスワードハッシュ化**: bcrypt
+- **トークン管理**: jsonwebtoken (JWT)
+
+### 依存パッケージ
+```json
+{
+  "dependencies": {
+    "express": "^4.x.x",
+    "bcrypt": "^5.x.x",
+    "jsonwebtoken": "^9.x.x",
+    "sqlite3": "^5.x.x"
+  }
+}
+```
+
 ## 📝 ドメインの定義
 
 ### ユースケース
