@@ -1,5 +1,5 @@
 import { Email } from "@/domains/auth/valueObjects/Email";
-
+import { Password } from "@/domains/auth/valueObjects/Password";
 /**
  * 1. ユーザー作成時の入力データ
  */
@@ -14,7 +14,7 @@ export interface CreateUser {
 export interface UserProps {
   id: string;
   email: Email;
-  password: string;
+  password: Password;
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,7 +1,7 @@
 import { UserEntity } from "@/domains/auth/models/UserEntity";
 import { Email } from "@/domains/auth/valueObjects/Email";
 import { UserProps } from "@/domains/auth/types/UserEntity";
-
+import { Password } from "@/domains/auth/valueObjects/Password";
 describe("UserEntity", () => {
   let baseUserData: UserProps;
 
@@ -10,7 +10,7 @@ describe("UserEntity", () => {
     baseUserData = {
       id: "1",
       email: Email.create("test@example.com"),
-      password: mockHashedPassword,
+      password: Password.create(mockHashedPassword),
       createdAt: new Date(),
       updatedAt: new Date(),
     };

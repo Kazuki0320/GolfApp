@@ -31,7 +31,7 @@ export class AuthService {
     const user = UserEntity.create({
       id: generateId(),
       email: emailVO,
-      password: hashedPassword,
+      password: Password.create(hashedPassword),
       createdAt: new Date(),
       updatedAt: new Date()
     });
