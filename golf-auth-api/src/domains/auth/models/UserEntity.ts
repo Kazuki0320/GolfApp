@@ -1,72 +1,36 @@
-import { CreateUser, User } from "@/domains/auth/types/User";
-import { generateId } from "@/infrastructure/adapters/generateId";
 import { Email } from "@/domains/auth/valueObjects/Email";
-import { Password } from "@/domains/auth/valueObjects/Password";
-
-/**
- * ユーザーモデルの定義
- */
+import { UserResponseDTO } from "@/domains/auth/types/dto";
 
 export class UserEntity {
-	private readonly id: string;
-  private readonly name: string;
-  private readonly email: Email;
-  private readonly password: Password;
-  private readonly createdAt: Date;
-  private readonly updatedAt: Date;
+  private constructor(
+    private readonly id: string,
+    private readonly email: Email,
+    private readonly password: string,
+    private readonly createdAt: Date,
+    private readonly updatedAt: Date,
+  ) {}
 
-	private constructor(params: {
-    id: string;
-    name: string;
-    email: Email;
-    password: Password;
-    createdAt: Date;
-    updatedAt: Date;
-  }) {
-    this.id = params.id;
-    this.name = params.name;
-    this.email = params.email;
-    this.password = params.password;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
-	}
-
-  getId(): string {
-    return this.id;
+  static create(data: { id: string, email: Email, password: string, createdAt: Date, updatedAt: Date }): UserEntity {
+    return new UserEntity(
+      data.id,
+      data.email,
+      data.password,
+      data.createdAt,
+      data.updatedAt
+    );
   }
 
-  getEmail(): Email {
-    return this.email;
-  }
+  getId(): string { return this.id; }
+  getEmail(): Email { return this.email; }
+  getPassword(): string { return this.password; }
 
-  /**
-   * ファクトリーメソッド
-   * @throws {Error} バリデーションエラー時
-   */
-  static create(userData: CreateUser): UserEntity {
-    
-    const email = Email.create(userData.email);
-    const password = Password.create(userData.password);
-
-    return new UserEntity({
-      id: generateId(),
-      name: "",
-      email: email,
-      password: password,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-  }
-
-  // データ取得用メソッド
-  toObject(): User {
+  // データ取得用
+  toResponse(): UserResponseDTO {
     return {
       id: this.id,
-      name: this.name,
       email: this.email.toString(),
-      password: this.password.toString(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
-    };
+    }
   }
 }

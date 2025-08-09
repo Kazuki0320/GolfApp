@@ -1,4 +1,4 @@
-import { Password } from "../Password";
+import { Password } from "@/domains/auth/valueObjects/Password";
 
 describe("Password", () => {
   describe("create", () => {
