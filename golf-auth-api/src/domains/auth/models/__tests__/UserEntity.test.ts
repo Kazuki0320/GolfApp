@@ -1,32 +1,36 @@
 import { UserEntity } from "@/domains/auth/models/UserEntity";
-import { Email } from "@/domains/auth/valueObjects/Email";
-import { UserProps } from "@/domains/auth/types/UserEntity";
-import { Password } from "@/domains/auth/valueObjects/Password";
-describe("UserEntity", () => {
-  let baseUserData: UserProps;
+import { CreateUserDTO } from "@/domains/auth/types/dto";
+import { PasswordHasher } from "@/domains/auth/types/PasswordHasher";
 
-  beforeEach(() => {
-    const mockHashedPassword = "$2b$10$abcdefghijklmnopqrstuvwxyz123456";
+const createMockPasswordHasher = (): jest.Mocked<PasswordHasher> => ({
+  hash: jest.fn().mockResolvedValue("mocked_hashed_password"),
+  compare: jest.fn().mockResolvedValue(true),
+});
+
+describe("UserEntity", () => {
+  let baseUserData: CreateUserDTO;
+  let mockHasher: jest.Mocked<PasswordHasher>;
+
+  beforeEach(async () => {
+    mockHasher = createMockPasswordHasher();
+
     baseUserData = {
-      id: "1",
-      email: Email.create("test@example.com"),
-      password: Password.create(mockHashedPassword),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      email: "test@example.com",
+      password: "12345678",
     };
   });
 
   describe("create", () => {
     describe("正常系", () => {
-      it("有効なemail/passwordでユーザーが作成できること", () => {
-        const user = UserEntity.create(baseUserData);
+      it("有効なemail/passwordでユーザーが作成できること", async () => {
+        const user = await UserEntity.create(baseUserData, mockHasher);
         const dto = user.toResponse();
 
         expect(dto).toEqual({
-          id: baseUserData.id,
-          email: baseUserData.email.toString(),
-          createdAt: baseUserData.createdAt,
-          updatedAt: baseUserData.updatedAt,
+          id: expect.any(String),
+          email: baseUserData.email,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         });
       });
     });

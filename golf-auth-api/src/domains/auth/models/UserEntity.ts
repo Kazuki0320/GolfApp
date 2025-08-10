@@ -1,6 +1,8 @@
 import { Email } from "@/domains/auth/valueObjects/Email";
-import { UserResponseDTO } from "@/domains/auth/types/dto";
+import { UserResponseDTO, CreateUserDTO } from "@/domains/auth/types/dto";
 import { Password } from "@/domains/auth/valueObjects/Password";
+import { generateId } from "@/infrastructure/adapters/generateId";
+import { PasswordHasher } from "../types/PasswordHasher";
 
 export class UserEntity {
   private constructor(
@@ -11,13 +13,17 @@ export class UserEntity {
     private readonly updatedAt: Date,
   ) {}
 
-  static create(data: { id: string, email: Email, password: Password, createdAt: Date, updatedAt: Date }): UserEntity {
+  static async create(
+    data: CreateUserDTO,
+    passwordHasher: PasswordHasher,
+  ): Promise<UserEntity> {
+    
     return new UserEntity(
-      data.id,
-      data.email,
-      data.password,
-      data.createdAt,
-      data.updatedAt
+      generateId(),
+      Email.create(data.email),
+      await Password.create(data.password, passwordHasher),
+      new Date(),
+      new Date()
     );
   }
 

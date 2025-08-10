@@ -1,41 +1,35 @@
+import { PasswordHasher } from "@/domains/auth/types/PasswordHasher";
+
 export class Password {
-  private constructor(private readonly value: string) {
-    this.validate(value);
+  private constructor(
+    private readonly hashedValue: string,
+  ) {}
+
+  static async create(
+    plainPassword: string,
+    hasher: PasswordHasher
+  ): Promise<Password> {
+    if (!plainPassword) { throw new Error("パスワードは必須です") }
+    if (!this.isNumericOnly(plainPassword)) { throw new Error("パスワードは数字のみで入力してください") }
+    if (!this.isValidLength(plainPassword) ) { throw new Error("パスワードは8文字以上で入力してください") }
+
+    const hashedValue = await hasher.hash(plainPassword);
+    return new Password(hashedValue);
   }
 
-  /**
-   * ファクトリーメソッド
-   * @throws {Error} バリデーションエラー時
-   */
-  static create(password: string): Password {
-    return new Password(password);
-  }
-
-  private validate(password: string): void {
-    if (!password) {
-      throw new Error("パスワードは必須です");
-    }
-    if (!this.isNumericOnly(password)) {
-      throw new Error("パスワードは数字のみで入力してください");
-    }
-    if (!this.isValidLength(password)) {
-      throw new Error("パスワードは8文字以上で入力してください");
-    }
-  }
-
-  private isNumericOnly(password: string): boolean {
+  private static isNumericOnly(password: string): boolean {
     return /^\d+$/.test(password);
   }
 
-  private isValidLength(password: string): boolean {
+  private static isValidLength(password: string): boolean {
     return password.length >= 8;
   }
 
   toString(): string {
-    return this.value;
+    return this.hashedValue;
   }
 
   equals(other: Password): boolean {
-    return this.value === other.value;
+    return this.hashedValue === other.hashedValue;
   }
 }
