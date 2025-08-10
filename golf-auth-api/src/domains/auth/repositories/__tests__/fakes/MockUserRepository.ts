@@ -1,6 +1,5 @@
 import { UserRepository } from "@/domains/auth/types/UserRepository";
 import { UserEntity } from "@/domains/auth/models/UserEntity";
-import { Email } from "@/domains/auth/valueObjects/Email";
 
 export class MockUserRepository implements UserRepository {
   private byId = new Map<string, UserEntity>();
@@ -15,8 +14,8 @@ export class MockUserRepository implements UserRepository {
     return this.byId.get(id) ?? null;
   }
   
-  async findByEmail(email: Email): Promise<UserEntity | null> {
-    return this.byEmail.get(email.toString()) ?? null;
+  async findByEmail(email: string): Promise<UserEntity | null> {
+    return this.byEmail.get(email) ?? null;
   }
 
   clear(): void {

@@ -1,12 +1,16 @@
 import { AuthService } from "@/domains/auth/services/AuthService";
 import { MockUserRepository } from "@/domains/auth/repositories/__tests__/fakes/MockUserRepository";
 import { Email } from "@/domains/auth/valueObjects/Email";
-import { PasswordHasher } from "@/domains/auth/types/Password";
+import { PasswordHasher } from "@/domains/auth/types/PasswordHasher";
 
 // モックパスワードハッシャー
 class MockPasswordHasher implements PasswordHasher {
   async hash(password: string): Promise<string> {
     return `hashed_${password}`;
+  }
+
+  async compare(plain: string, hash: string): Promise<boolean> {
+    return hash === `hashed_${plain}`;
   }
 }
 
@@ -51,8 +55,8 @@ describe("AuthService", () => {
     it("パスワードがハッシュ化されて保存されること", async () => {
       await authService.register(validInput);
 
-      const savedUser = await userRepo.findByEmail(Email.create(validInput.email));
-      expect(savedUser?.getPassword()).toBe(`hashed_${validInput.password}`);
+      const savedUser = await userRepo.findByEmail(validInput.email);
+      expect(savedUser!.getPassword().toString()).toBe(`hashed_${validInput.password}`);
     });
   });
 }); 
