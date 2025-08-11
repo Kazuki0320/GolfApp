@@ -1,72 +1,43 @@
-import { CreateUser, User } from "@/domains/auth/types/User";
-import { generateId } from "@/infrastructure/adapters/generateId";
 import { Email } from "@/domains/auth/valueObjects/Email";
+import { UserResponseDTO, CreateUserDTO } from "@/domains/auth/types/dto";
 import { Password } from "@/domains/auth/valueObjects/Password";
-
-/**
- * ユーザーモデルの定義
- */
+import { generateId } from "@/infrastructure/adapters/generateId";
+import { PasswordHasher } from "../types/PasswordHasher";
 
 export class UserEntity {
-	private readonly id: string;
-  private readonly name: string;
-  private readonly email: Email;
-  private readonly password: Password;
-  private readonly createdAt: Date;
-  private readonly updatedAt: Date;
+  private constructor(
+    private readonly id: string,
+    private readonly email: Email,
+    private readonly password: Password,
+    private readonly createdAt: Date,
+    private readonly updatedAt: Date,
+  ) {}
 
-	private constructor(params: {
-    id: string;
-    name: string;
-    email: Email;
-    password: Password;
-    createdAt: Date;
-    updatedAt: Date;
-  }) {
-    this.id = params.id;
-    this.name = params.name;
-    this.email = params.email;
-    this.password = params.password;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
-	}
-
-  getId(): string {
-    return this.id;
-  }
-
-  getEmail(): Email {
-    return this.email;
-  }
-
-  /**
-   * ファクトリーメソッド
-   * @throws {Error} バリデーションエラー時
-   */
-  static create(userData: CreateUser): UserEntity {
+  static async create(
+    data: CreateUserDTO,
+    passwordHasher: PasswordHasher,
+  ): Promise<UserEntity> {
     
-    const email = Email.create(userData.email);
-    const password = Password.create(userData.password);
-
-    return new UserEntity({
-      id: generateId(),
-      name: "",
-      email: email,
-      password: password,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    return new UserEntity(
+      generateId(),
+      Email.create(data.email),
+      await Password.create(data.password, passwordHasher),
+      new Date(),
+      new Date()
+    );
   }
 
-  // データ取得用メソッド
-  toObject(): User {
+  getId(): string { return this.id; }
+  getEmail(): Email { return this.email; }
+  getPassword(): Password { return this.password; }
+
+  // データ取得用
+  toResponse(): UserResponseDTO {
     return {
       id: this.id,
-      name: this.name,
       email: this.email.toString(),
-      password: this.password.toString(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
-    };
+    }
   }
 }
