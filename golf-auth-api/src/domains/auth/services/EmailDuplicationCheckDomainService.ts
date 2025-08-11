@@ -7,7 +7,7 @@ export class EmailDuplicationCheckDomainService {
 	) {}
 
 	async isDuplicated(email: Email): Promise<boolean> {
-		const userRepo = await this.usersRepo.findByEmail(email.toString());
-		return userRepo !== null;
+		const foundUser = await this.usersRepo.findByEmail(email.toString());
+		return foundUser !== null;
 	}
 }
