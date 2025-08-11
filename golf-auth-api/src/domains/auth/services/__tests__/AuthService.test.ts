@@ -2,7 +2,7 @@ import { AuthService } from "@/domains/auth/services/AuthService";
 import { MockUserRepository } from "@/domains/auth/repositories/__tests__/fakes/MockUserRepository";
 import { Email } from "@/domains/auth/valueObjects/Email";
 import { PasswordHasher } from "@/domains/auth/types/PasswordHasher";
-
+import { EmailDuplicationCheckDomainService } from "@/domains/auth/services/EmailDuplicationCheckDomainService";
 // モックパスワードハッシャー
 class MockPasswordHasher implements PasswordHasher {
   async hash(password: string): Promise<string> {
@@ -18,11 +18,13 @@ describe("AuthService", () => {
   let userRepo: MockUserRepository;
   let passwordHasher: MockPasswordHasher;
   let authService: AuthService;
+  let emailDuplicationCheckDomainService: EmailDuplicationCheckDomainService;
 
   beforeEach(() => {
     userRepo = new MockUserRepository();
     passwordHasher = new MockPasswordHasher();
-    authService = new AuthService(userRepo, passwordHasher);
+    emailDuplicationCheckDomainService = new EmailDuplicationCheckDomainService(userRepo);
+    authService = new AuthService(userRepo, passwordHasher, emailDuplicationCheckDomainService);
   });
 
   describe("register", () => {
