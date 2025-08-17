@@ -3,8 +3,8 @@
 ## 1. BcryptPasswordHasher実装
 
 ### 1-1. 基本設定
-- [ ] bcryptパッケージのインストール確認
-- [ ] `src/infrastructure/crypto/BcryptPasswordHasher.ts`の作成
+- [⭕️] bcryptパッケージのインストール確認
+- [⭕️] `src/infrastructure/crypto/BcryptPasswordHasher.ts`の作成
 
 ### 1-2. 実装
 ```typescript
